@@ -1,0 +1,174 @@
+.home_body {
+    background: #000;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+.home_content {
+    background: #000;
+    height: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding-left: 250px;
+    justify-items: center;
+    overflow-y: auto;
+
+    /*border: 1px solid white;*/
+}
+
+@media (max-width: 1250px){
+    .home_content {
+        padding-left: 83px;
+    }
+}
+
+.home_item {
+    /*border: 1px solid white;*/
+    width: 450px;
+}
+
+.home_item hr {
+    border: none;
+    border-top: 1px solid #363636;
+    margin-top: 20px;
+}
+
+.user_of_item {
+    color: white;
+    display: flex;
+    margin-top: 20px;
+    align-items: center;
+    /*border: 1px solid white;*/
+}
+
+.user_of_item img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.type_post {
+    font-size: 13px;
+}
+
+.username_created_follow {
+    display: flex;
+}
+
+.username_created_follow .username {
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.username_created_follow .created_at {
+    margin-left: 5px;
+    color: #A8A8A8;
+}
+
+.username_created_follow .follow {
+    color: #0095F6;
+    font-weight: bold;
+    margin-left: 5px;
+    font-size: 15px;
+}
+
+.username_created_follow .follow:hover {
+    color: white;
+    cursor: pointer;
+}
+
+.main_post_content {
+    height: 600px;
+    display: flex;
+    /*border: 1px solid white;*/
+}
+
+.main_post_content img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    margin-top: 10px;
+    border: 1px solid #363636;
+}
+
+.post_reaction {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.icon_left {
+    display: flex;
+}
+
+.icon_left .reaction_icon {
+    margin-right: 20px;
+}
+
+.reaction_icon {
+    font-size: 25px;
+    display: block;
+    color: white;
+    cursor: pointer;
+}
+
+.reaction_icon:hover {
+    color: #A8A8A8;
+}
+
+.info_post_reaction {
+    color: white;
+    margin-top: 10px;
+}
+
+.information_post {
+    margin-top: 10px;
+}
+
+.information_post .username_description {
+    display: flex;
+    color: white;
+}
+
+.information_post .hashtag {
+    margin-top: 10px;
+    color: #2facff;
+    cursor: pointer;
+}
+
+.view_comment {
+    color: #A8A8A8;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.add_comment {
+    margin-top: 10px;
+}
+
+.add_comment input {
+    color: #A8A8A8;
+    background-color: black;
+    border: none;
+    outline: none;
+    height: 20px;
+    width: 90%;
+}
+
+.add_comment input:focus  {
+    border: none;
+    outline: none;
+}
+
+
+
+
+
+

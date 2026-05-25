@@ -1,0 +1,371 @@
+Dưới đây là tài liệu API cho chức năng ATS Resume Screening.
+Tổng Quan
+Chức năng ATS gồm 2 phần:
+Quarkus Backend: http://localhost:8081
+Python AI Worker: http://localhost:8000
+Backend Quarkus là API chính cho frontend/Postman gọi.
+AI Worker Python chỉ nên gọi trực tiếp khi test AI riêng.
+Flow Thực Tế
+1.
+Candidate apply job bằng API resume hiện có:
+POST /api/v1/resumes
+Backend lưu Resume gồm:
+resumeId
+jobId
+candidateId
+url = đường dẫn file CV
+2.
+Recruiter bấm Screen Resume.
+Frontend/Postman gọi:
+POST /api/v1/recruiter/screenings
+Body chỉ gồm:
+{
+  "resumeId": 1,
+  "jobId": 2
+}
+3.
+Quarkus backend kiểm tra:
+Resume có tồn tại không
+Job có tồn tại không
+Resume có thuộc job này không
+Recruiter có quyền screen job thuộc company của mình không
+Resume/job này đã được screen chưa
+File CV trong resume.url có tồn tại không
+4.
+Quarkus lấy file CV từ resume.url.
+5.
+Quarkus gửi multipart request sang Python AI Worker:
+POST http://localhost:8000/api/v1/ai/resume/screen
+Gồm:
+file
+job_description
+required_skills
+candidate_level
+expected_experience
+6.
+Python AI Worker xử lý:
+Parse PDF/DOCX
+Extract raw text
+Extract skills
+Match skills với job
+Tính skillScore
+Tính semanticScore
+Tính experienceScore
+Tính totalScore
+Sinh aiSummary
+Sinh recommendation
+7.
+Python trả kết quả về Quarkus.
+8.
+Quarkus lưu vào bảng:
+tbl_screening_results
+9.
+Recruiter xem ranking ứng viên theo job:
+GET /api/v1/recruiter/jobs/{jobId}/screening-results
+API Document
+1. Python AI Worker Health Check
+Dùng để kiểm tra AI Worker có chạy không.
+GET http://localhost:8000/health
+Response mong đợi
+{
+  "status": "ok"
+}
+2. Python AI Worker Screen Resume Directly
+API này dùng để test riêng AI Worker. Bình thường frontend không cần gọi trực tiếp API này.
+POST http://localhost:8000/api/v1/ai/resume/screen
+Body
+Dạng form-data.
+Key
+Type
+Bắt buộc
+Ví dụ
+file
+File
+Có
+sample_cv.pdf
+job_description
+Text
+Có
+We need Java Quarkus MySQL Docker...
+required_skills
+Text
+Có
+Java,Quarkus,MySQL,Docker
+candidate_level
+Text
+Không
+Junior
+expected_experience
+Text/Number
+Không
+1
+Response mong đợi
+{
+  "rawText": "Candidate resume text...",
+  "resumeSkills": ["Java", "Quarkus", "MySQL"],
+  "jobSkills": ["Java", "Quarkus", "MySQL", "Docker"],
+  "matchedSkills": ["Java", "Quarkus", "MySQL"],
+  "missingSkills": ["Docker"],
+  "skillScore": 75.0,
+  "semanticScore": 72.4,
+  "experienceScore": 100.0,
+  "totalScore": 76.09,
+  "aiSummary": "Candidate is a reasonable fit and should be reviewed by the recruiter. Matched skills: Java, Quarkus, MySQL. Missing important skills: Docker. Target level: Junior.",
+  "recommendation": "RECOMMENDED"
+}
+Lỗi thường gặp
+Thiếu file:
+{
+  "detail": [
+    {
+      "type": "missing",
+      "loc": ["body", "file"],
+      "msg": "Field required",
+      "input": null
+    }
+  ]
+}
+File sai định dạng:
+{
+  "detail": "Unsupported file format. Only PDF and DOCX are supported"
+}
+3. Quarkus Screen Resume
+Đây là API chính recruiter dùng để screen resume.
+POST http://localhost:8081/api/v1/recruiter/screenings
+Headers
+Authorization: Bearer <recruiter_token>
+Content-Type: application/json
+Body
+Dạng raw JSON, không dùng form-data.
+{
+  "resumeId": 1,
+  "jobId": 2
+}
+Response mong đợi
+{
+  "success": true,
+  "meta": {
+    "code": 201,
+    "path": "/api/v1/recruiter/screenings"
+  },
+  "data": {
+    "id": 1,
+    "resumeId": 1,
+    "jobId": 2,
+    "jobName": "Java Backend Developer",
+    "candidateId": 5,
+    "candidateName": "candidate01",
+    "recruiterId": 3,
+    "recruiterName": "recruiter01",
+    "totalScore": 76.09,
+    "skillScore": 75.0,
+    "semanticScore": 72.4,
+    "experienceScore": 100.0,
+    "matchedSkills": ["Java", "Quarkus", "MySQL"],
+    "missingSkills": ["Docker"],
+    "aiSummary": "Candidate is a reasonable fit and should be reviewed by the recruiter.",
+    "recommendation": "RECOMMENDED",
+    "createdAt": "2026-05-22T07:20:00Z",
+    "updatedAt": "2026-05-22T07:20:00Z"
+  },
+  "error": null,
+  "timestamp": "2026-05-22T14:20:00"
+}
+Lỗi có thể gặp
+Sai method/path/content-type:
+Unable to find matching target resource method
+Cách gọi đúng:
+POST + /api/v1/recruiter/screenings + application/json
+Không dùng:
+GET
+form-data
+multipart/form-data
+/api/v1/recruiter/screenings/
+Duplicate screening:
+{
+  "code": 9001,
+  "message": "Screening result already exists for this resume and job",
+  "path": "api/v1/recruiter/screenings"
+}
+Resume không tồn tại:
+{
+  "code": 6001,
+  "message": "Resume not found",
+  "path": "api/v1/recruiter/screenings"
+}
+Job không tồn tại:
+{
+  "code": 6006,
+  "message": "Job not found",
+  "path": "api/v1/recruiter/screenings"
+}
+File CV không tồn tại:
+{
+  "code": 1002,
+  "message": "Resume file path does not exist: sample_cv.pdf",
+  "path": "api/v1/recruiter/screenings"
+}
+4. Recruiter Xem Ranking Theo Job
+API này trả danh sách ứng viên đã được screen cho một job, sắp xếp theo totalScore giảm dần.
+GET http://localhost:8081/api/v1/recruiter/jobs/{jobId}/screening-results
+Ví dụ:
+GET http://localhost:8081/api/v1/recruiter/jobs/2/screening-results
+Headers
+Authorization: Bearer <recruiter_token>
+Response mong đợi
+{
+  "success": true,
+  "meta": {
+    "code": 200,
+    "path": "/api/v1/recruiter/jobs/2/screening-results"
+  },
+  "data": [
+    {
+      "screeningResultId": 1,
+      "resumeId": 1,
+      "candidateId": 5,
+      "candidateName": "candidate01",
+      "candidateEmail": "candidate01@gmail.com",
+      "jobId": 2,
+      "jobName": "Java Backend Developer",
+      "totalScore": 76.09,
+      "skillScore": 75.0,
+      "semanticScore": 72.4,
+      "experienceScore": 100.0,
+      "matchedSkills": ["Java", "Quarkus", "MySQL"],
+      "missingSkills": ["Docker"],
+      "recommendation": "RECOMMENDED",
+      "aiSummary": "Candidate is a reasonable fit and should be reviewed by the recruiter.",
+      "screenedAt": "2026-05-22T07:20:00Z"
+    }
+  ],
+  "error": null,
+  "timestamp": "2026-05-22T14:20:00"
+}
+5. Candidate Xem Kết Quả Screening Của Mình
+Candidate xem các kết quả screening của chính mình.
+GET http://localhost:8081/api/v1/candidate/screening-results
+Headers
+Authorization: Bearer <candidate_token>
+Response mong đợi
+{
+  "success": true,
+  "meta": {
+    "code": 200,
+    "path": "/api/v1/candidate/screening-results"
+  },
+  "data": [
+    {
+      "id": 1,
+      "resumeId": 1,
+      "jobId": 2,
+      "jobName": "Java Backend Developer",
+      "candidateId": 5,
+      "candidateName": "candidate01",
+      "recruiterId": 3,
+      "recruiterName": "recruiter01",
+      "totalScore": 76.09,
+      "skillScore": 75.0,
+      "semanticScore": 72.4,
+      "experienceScore": 100.0,
+      "matchedSkills": ["Java", "Quarkus", "MySQL"],
+      "missingSkills": ["Docker"],
+      "aiSummary": "Candidate is a reasonable fit and should be reviewed by the recruiter.",
+      "recommendation": "RECOMMENDED",
+      "createdAt": "2026-05-22T07:20:00Z",
+      "updatedAt": "2026-05-22T07:20:00Z"
+    }
+  ],
+  "error": null,
+  "timestamp": "2026-05-22T14:20:00"
+}
+6. Admin Xem Tất Cả Kết Quả Screening
+GET http://localhost:8081/api/v1/admin/screening-results
+Headers
+Authorization: Bearer <admin_token>
+Response mong đợi
+{
+  "success": true,
+  "meta": {
+    "code": 200,
+    "path": "/api/v1/admin/screening-results"
+  },
+  "data": [
+    {
+      "id": 1,
+      "resumeId": 1,
+      "jobId": 2,
+      "jobName": "Java Backend Developer",
+      "candidateId": 5,
+      "candidateName": "candidate01",
+      "recruiterId": 3,
+      "recruiterName": "recruiter01",
+      "totalScore": 76.09,
+      "skillScore": 75.0,
+      "semanticScore": 72.4,
+      "experienceScore": 100.0,
+      "matchedSkills": ["Java", "Quarkus", "MySQL"],
+      "missingSkills": ["Docker"],
+      "aiSummary": "Candidate is a reasonable fit and should be reviewed by the recruiter.",
+      "recommendation": "RECOMMENDED",
+      "createdAt": "2026-05-22T07:20:00Z",
+      "updatedAt": "2026-05-22T07:20:00Z"
+    }
+  ],
+  "error": null,
+  "timestamp": "2026-05-22T14:20:00"
+}
+API Phụ Thuộc Trước Khi Screen
+Candidate Apply Job / Tạo Resume
+API này đã có sẵn trong hệ thống.
+POST http://localhost:8081/api/v1/resumes
+Headers
+Authorization: Bearer <candidate_token>
+Content-Type: application/json
+Body
+{
+  "email": "candidate01@gmail.com",
+  "url": "sample_cv.pdf",
+  "jobId": 2
+}
+Nếu chạy local, url nên là đường dẫn file mà backend đọc được, ví dụ:
+{
+  "email": "candidate01@gmail.com",
+  "url": "C:\\Users\\DELL\\Downloads\\sample_cv.pdf",
+  "jobId": 2
+}
+Nếu chạy Docker, nên đặt file trong folder uploads/ ở project root, rồi lưu:
+{
+  "email": "candidate01@gmail.com",
+  "url": "sample_cv.pdf",
+  "jobId": 2
+}
+Vì docker-compose.yml đang map:
+./uploads -> /app/uploads
+và backend dùng:
+RESUME_STORAGE_BASE_PATH=/app/uploads
+Checklist Test Đúng Thứ Tự
+1.
+Chạy MySQL.
+2.
+Chạy AI Worker:
+cd ai-worker
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+3.
+Test:
+GET http://localhost:8000/health
+4.
+Chạy Quarkus:
+cd base
+.\mvnw.cmd quarkus:dev
+5.
+Login lấy candidate_token, recruiter_token, admin_token.
+6.
+Candidate tạo resume/apply job:
+POST /api/v1/resumes
+7.
+Recruiter screen resume:
+POST /api/v1/recruiter/screenings
+8.
+Recruiter xem ranking:
+GET /api/v1/recruiter/jobs/{jobId}/screening-results

@@ -1,0 +1,19 @@
+.page {
+    display: grid;
+    min-height: 100vh;
+    align-content: center;
+    justify-items: center;
+    gap: 12px;
+    padding: 24px;
+    text-align: center;
+}
+
+.page h1 {
+    font-size: 28px;
+}
+
+.page a {
+    color: #0f6bff;
+    font-weight: 600;
+}
+

@@ -1,0 +1,202 @@
+ User API Documentation
+
+  ---
+  1. CREATE User (Admin only)
+
+  POST /api/v1/users
+  Authorization: Bearer <token>                                                                                           Content-Type: application/json
+                                                                                                                          Request Body:
+  {
+    "username": "johndoe",
+    "email": "john@example.com",
+    "password": "password123",
+    "age": 25,
+    "phone": "0912345678",
+    "gender": "MALE",
+    "address": "Hà Nội",
+    "role": "ROLE_CANDIDATE",
+    "companyId": null
+  }
+
+  Response (201):
+  {
+    "success": true,
+    "meta": {
+        "code": 201,
+        "path": "/api/v1/users"
+    },
+    "data": {
+        "id": 2,
+        "username": "johndoe",
+        "email": "john@example.com",
+        "age": 25,
+        "phone": "0912345678",
+        "gender": "MALE",
+        "dob": null,
+        "address": "Hà Nội",
+        "enabled": true,
+        "accountNonLocked": true,
+        "deleted": false,
+        "role": "ROLE_CANDIDATE",
+        "companyId": null,
+        "companyName": null,
+        "createdAt": "2026-05-09T15:54:02.8899333",
+        "updatedAt": "2026-05-09T15:54:02.8899333",
+        "createdBy": 1,
+        "updatedBy": 1
+    },
+    "error": null,
+    "timestamp": "2026-05-09T15:54:02.918857"
+}
+
+  ---
+  2. GET User by ID
+
+  GET /api/v1/users/{id}
+  Authorization: Bearer <token>
+Response
+{
+    "success": true,
+    "meta": {
+        "code": 200,
+        "path": "/api/v1/users/1"
+    },
+    "data": {
+        "id": 1,
+        "username": "admin",
+        "email": "admin@gmail.com",
+        "age": null,
+        "phone": null,
+        "gender": null,
+        "dob": null,
+        "address": null,
+        "enabled": true,
+        "accountNonLocked": true,
+        "deleted": false,
+        "role": "ROLE_ADMIN",
+        "companyId": null,
+        "companyName": null,
+        "createdAt": "2026-05-09T15:53:15.116064",
+        "updatedAt": "2026-05-09T15:53:15.116064",
+        "createdBy": null,
+        "updatedBy": null
+    },
+    "error": null,
+    "timestamp": "2026-05-09T15:55:05.2203037"
+}
+  ---
+  3. UPDATE User
+
+  PUT /api/v1/users/{id}
+  Authorization: Bearer <token>
+  Content-Type: application/json
+	 Request Body:
+                                                                                                                          {
+    "username": "newname",
+    "email": "newemail@example.com",
+    "newPassword": "newpassword123",
+    "age": 26,
+    "phone": "0912345679",
+    "gender": "MALE",
+    "dob": "1995-05-15",
+    "address": "TP.HCM, Việt Nam",
+    "companyId": 1
+  }
+Response
+{
+    "success": true,
+    "meta": {
+        "code": 200,
+        "path": "/api/v1/users/1"
+    },
+    "data": {
+        "id": 1,
+        "username": "newname",
+        "email": "newemail@example.com",
+        "age": 26,
+        "phone": "0912345679",
+        "gender": "MALE",
+        "dob": "1995-05-15",
+        "address": "TP.HCM, Việt Nam",
+        "enabled": true,
+        "accountNonLocked": true,
+        "deleted": false,
+        "role": "ROLE_ADMIN",
+        "companyId": null,
+        "companyName": null,
+        "createdAt": "2026-05-09T15:53:15.116064",
+        "updatedAt": "2026-05-09T15:53:15.116064",
+        "createdBy": null,
+        "updatedBy": 1
+    },
+    "error": null,
+    "timestamp": "2026-05-09T15:59:28.9214798"
+}
+  Business Rules:
+  - ADMIN: có thể update bất kỳ user nào
+  - CANDIDATE/RECRUITER: chỉ update chính mình
+
+  ---
+  4. DELETE User (Admin only, soft delete)
+
+  DELETE /api/v1/users/{id}
+  Authorization: Bearer <token>
+
+  Business Rules:
+  - Không thể xóa chính mình
+  - Không thể xóa admin cuối cùng
+
+  ---
+  5. LOCK User (Admin only)
+
+  PATCH /api/v1/users/{id}/lock
+  Authorization: Bearer <token>
+
+  ---
+  6. UNLOCK User (Admin only)
+
+  PATCH /api/v1/users/{id}/unlock
+  Authorization: Bearer <token>
+
+  ---
+  7. DISABLE User (Admin only)
+
+  PATCH /api/v1/users/{id}/disable
+  Authorization: Bearer <token>
+
+  ---
+  8. ENABLE User (Admin only)
+
+  PATCH /api/v1/users/{id}/enable
+  Authorization: Bearer <token>
+
+  ---
+  9. LIST Users (Admin only)
+
+  GET /api/v1/users?page=1&size=10&sortBy=createdAt&direction=DESC&keyword=john
+  Authorization: Bearer <token>
+
+  Query Parameters:
+
+  ┌───────────┬───────────┬────────────────────────┐
+  │   Param   │  Default  │      Description       │
+  ├───────────┼───────────┼────────────────────────┤
+  │ page      │ 1         │ Page number            │
+  ├───────────┼───────────┼────────────────────────┤
+  │ size      │ 10        │ Items per page         │
+  ├───────────┼───────────┼────────────────────────┤
+  │ sortBy    │ createdAt │ Sort field             │
+  ├───────────┼───────────┼────────────────────────┤
+  │ direction │ DESC      │ ASC/DESC               │
+  ├───────────┼───────────┼────────────────────────┤
+  │ keyword   │ null      │ Search username, email │
+  ├───────────┼───────────┼────────────────────────┤
+  │ filter    │ null      │ Advanced filter        │
+  └───────────┴───────────┴────────────────────────┘
+
+  ---
+  10. FILTER Examples
+
+  GET /api/v1/users?filter=role:ROLE_ADMIN
+  GET /api/v1/users?filter=enabled=true,username:*john*
+  GET /api/v1/users?filter=(role:ROLE_ADMIN|role:ROLE_RECRUITER),enabled=true

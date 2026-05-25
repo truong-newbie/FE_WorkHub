@@ -1,0 +1,613 @@
+ Subscriber API Documentation
+
+  1. POST /api/v1/subscribers - Tạo Subscriber mới
+
+  Roles: ADMIN, CANDIDATE
+
+  Request:
+  {
+      "name": "Truong",
+      "email": "truong@gmail.com",
+      "skillIds": [1, 2, 3]
+  }
+
+  Response (201 Created):
+  {
+    "success": true,
+    "meta": {
+        "code": 201,
+        "path": "/api/v1/subscribers"
+    },
+    "data": {
+        "id": 1,
+        "name": "Truong",
+        "email": "truong@gmail.com",
+        "enabled": true,
+        "deleted": false,
+        "skills": [
+            {
+                "id": 1,
+                "name": "Java1",
+                "level": "senior",
+                "deleted": false,
+                "createdAt": "2026-05-09T18:42:30.964598",
+                "updatedAt": "2026-05-09T18:42:30.964598",
+                "createdBy": null,
+                "updatedBy": null
+            },
+            {
+                "id": 2,
+                "name": "Java2",
+                "level": "senior",
+                "deleted": false,
+                "createdAt": "2026-05-09T18:42:34.82028",
+                "updatedAt": "2026-05-09T18:42:34.82028",
+                "createdBy": null,
+                "updatedBy": null
+            },
+            {
+                "id": 3,
+                "name": "Java3",
+                "level": "senior",
+                "deleted": false,
+                "createdAt": "2026-05-09T18:42:38.256088",
+                "updatedAt": "2026-05-09T18:42:38.256088",
+                "createdBy": null,
+                "updatedBy": null
+            }
+        ],
+        "lastSentAt": null,
+        "emailSentCount": 0,
+        "createdAt": "2026-05-09T15:57:28.784069100Z",
+        "updatedAt": "2026-05-09T15:57:28.784069100Z",
+        "createdBy": 151,
+        "updatedBy": 151
+    },
+    "error": null,
+    "timestamp": "2026-05-09T22:57:28.8620039"
+}
+
+  ---
+  2. GET /api/v1/subscribers/{id} - Lấy chi tiết Subscriber
+
+  Roles: ADMIN, CANDIDATE
+
+  Response (200 OK):
+  {
+    "success": true,
+    "meta": {
+        "code": 200,
+        "path": "/api/v1/subscribers/1"
+    },
+    "data": {
+        "id": 1,
+        "name": "Truong",
+        "email": "truong@gmail.com",
+        "enabled": true,
+        "deleted": false,
+        "skills": [
+            {
+                "id": 1,
+                "name": "Java1",
+                "level": "senior",
+                "deleted": false,
+                "createdAt": "2026-05-09T18:42:30.964598",
+                "updatedAt": "2026-05-09T18:42:30.964598",
+                "createdBy": null,
+                "updatedBy": null
+            },
+            {
+                "id": 2,
+                "name": "Java2",
+                "level": "senior",
+                "deleted": false,
+                "createdAt": "2026-05-09T18:42:34.82028",
+                "updatedAt": "2026-05-09T18:42:34.82028",
+                "createdBy": null,
+                "updatedBy": null
+            },
+            {
+                "id": 3,
+                "name": "Java3",
+                "level": "senior",
+                "deleted": false,
+                "createdAt": "2026-05-09T18:42:38.256088",
+                "updatedAt": "2026-05-09T18:42:38.256088",
+                "createdBy": null,
+                "updatedBy": null
+            }
+        ],
+        "lastSentAt": null,
+        "emailSentCount": 0,
+        "createdAt": "2026-05-09T15:57:28.784069Z",
+        "updatedAt": "2026-05-09T15:57:28.784069Z",
+        "createdBy": 151,
+        "updatedBy": 151
+    },
+    "error": null,
+    "timestamp": "2026-05-09T22:58:46.1493803"
+}
+
+  ---
+  3. PUT /api/v1/subscribers/{id} - Cập nhật Subscriber
+
+  Roles: ADMIN, CANDIDATE
+
+  Request:
+  {
+      "name": "Truong Nguyen",
+      "skillIds": [1, 2, 4, 5],
+      "enabled": true
+  }
+
+  Response (200 OK): Giống endpoint 2
+{
+    "success": true,
+    "meta": {
+        "code": 200,
+        "path": "/api/v1/subscribers/1"
+    },
+    "data": {
+        "id": 1,
+        "name": "Truong Nguyen",
+        "email": "truong@gmail.com",
+        "enabled": true,
+        "deleted": false,
+        "skills": [
+            {
+                "id": 1,
+                "name": "Java1",
+                "level": "senior",
+                "deleted": false,
+                "createdAt": "2026-05-09T18:42:30.964598",
+                "updatedAt": "2026-05-09T18:42:30.964598",
+                "createdBy": null,
+                "updatedBy": null
+            },
+            {
+                "id": 2,
+                "name": "Java2",
+                "level": "senior",
+                "deleted": false,
+                "createdAt": "2026-05-09T18:42:34.82028",
+                "updatedAt": "2026-05-09T18:42:34.82028",
+                "createdBy": null,
+                "updatedBy": null
+            }
+        ],
+        "lastSentAt": "2026-05-09T16:00:00.321815Z",
+        "emailSentCount": 1,
+        "createdAt": "2026-05-09T15:57:28.784069Z",
+        "updatedAt": "2026-05-09T16:00:00.324787Z",
+        "createdBy": 151,
+        "updatedBy": 151
+    },
+    "error": null,
+    "timestamp": "2026-05-09T23:00:11.4416663"
+}
+
+  ---
+  4. DELETE /api/v1/subscribers/{id} - Xóa Subscriber (Soft Delete)
+
+  Roles: ADMIN, CANDIDATE
+
+  Response (200 OK):
+ {
+    "success": true,
+    "meta": {
+        "code": 200,
+        "path": "/api/v1/subscribers/1"
+    },
+    "data": "Subscriber deleted successfully",
+    "error": null,
+    "timestamp": "2026-05-09T23:01:52.3519184"
+}
+
+  ---
+  5. PATCH /api/v1/subscribers/{id}/enable - Enable Subscriber
+
+  Roles: ADMIN only
+
+  Response (200 OK): Subscriber với enabled = true
+{
+    "success": true,
+    "meta": {
+        "code": 200,
+        "path": "/api/v1/subscribers/2/enable"
+    },
+    "data": {
+        "id": 2,
+        "name": "Truong",
+        "email": "truong@gmail.com",
+        "enabled": true,
+        "deleted": false,
+        "skills": [
+            {
+                "id": 1,
+                "name": "Java1",
+                "level": "senior",
+                "deleted": false,
+                "createdAt": "2026-05-09T18:42:30.964598",
+                "updatedAt": "2026-05-09T18:42:30.964598",
+                "createdBy": null,
+                "updatedBy": null
+            },
+            {
+                "id": 2,
+                "name": "Java2",
+                "level": "senior",
+                "deleted": false,
+                "createdAt": "2026-05-09T18:42:34.82028",
+                "updatedAt": "2026-05-09T18:42:34.82028",
+                "createdBy": null,
+                "updatedBy": null
+            },
+            {
+                "id": 3,
+                "name": "Java3",
+                "level": "senior",
+                "deleted": false,
+                "createdAt": "2026-05-09T18:42:38.256088",
+                "updatedAt": "2026-05-09T18:42:38.256088",
+                "createdBy": null,
+                "updatedBy": null
+            }
+        ],
+        "lastSentAt": null,
+        "emailSentCount": 0,
+        "createdAt": "2026-05-09T16:07:27.576090Z",
+        "updatedAt": "2026-05-09T16:07:27.576090Z",
+        "createdBy": 151,
+        "updatedBy": 151
+    },
+    "error": null,
+    "timestamp": "2026-05-09T23:07:57.177112"
+}
+
+  ---
+  6. PATCH /api/v1/subscribers/{id}/disable - Disable Subscriber
+
+  Roles: ADMIN only
+
+  Response (200 OK): Subscriber với enabled = false
+{
+    "success": true,
+    "meta": {
+        "code": 200,
+        "path": "/api/v1/subscribers/2/disable"
+    },
+    "data": {
+        "id": 2,
+        "name": "Truong",
+        "email": "truong@gmail.com",
+        "enabled": false,
+        "deleted": false,
+        "skills": [
+            {
+                "id": 1,
+                "name": "Java1",
+                "level": "senior",
+                "deleted": false,
+                "createdAt": "2026-05-09T18:42:30.964598",
+                "updatedAt": "2026-05-09T18:42:30.964598",
+                "createdBy": null,
+                "updatedBy": null
+            },
+            {
+                "id": 2,
+                "name": "Java2",
+                "level": "senior",
+                "deleted": false,
+                "createdAt": "2026-05-09T18:42:34.82028",
+                "updatedAt": "2026-05-09T18:42:34.82028",
+                "createdBy": null,
+                "updatedBy": null
+            },
+            {
+                "id": 3,
+                "name": "Java3",
+                "level": "senior",
+                "deleted": false,
+                "createdAt": "2026-05-09T18:42:38.256088",
+                "updatedAt": "2026-05-09T18:42:38.256088",
+                "createdBy": null,
+                "updatedBy": null
+            }
+        ],
+        "lastSentAt": null,
+        "emailSentCount": 0,
+        "createdAt": "2026-05-09T16:07:27.576090Z",
+        "updatedAt": "2026-05-09T16:07:27.576090Z",
+        "createdBy": 151,
+        "updatedBy": 151
+    },
+    "error": null,
+    "timestamp": "2026-05-09T23:09:14.9467052"
+}
+
+  ---
+  7. GET /api/v1/subscribers - Danh sách Subscribers (Paginated)
+
+  Roles: ADMIN only
+{
+    "success": true,
+    "meta": {
+        "code": 200,
+        "path": "/api/v1/subscribers"
+    },
+    "data": {
+        "meta": {
+            "totalElements": 1,
+            "totalPages": 1,
+            "currentPage": 1,
+            "pageSize": 10,
+            "pageNumber": 0,
+            "sortBy": "createdAt",
+            "direction": "DESC",
+            "hasNext": false,
+            "hasPrevious": false
+        },
+        "items": [
+            {
+                "id": 2,
+                "name": "Truong",
+                "email": "truong@gmail.com",
+                "enabled": false,
+                "deleted": false,
+                "skills": [
+                    {
+                        "id": 1,
+                        "name": "Java1",
+                        "level": "senior",
+                        "deleted": false,
+                        "createdAt": "2026-05-09T18:42:30.964598",
+                        "updatedAt": "2026-05-09T18:42:30.964598",
+                        "createdBy": null,
+                        "updatedBy": null
+                    },
+                    {
+                        "id": 2,
+                        "name": "Java2",
+                        "level": "senior",
+                        "deleted": false,
+                        "createdAt": "2026-05-09T18:42:34.82028",
+                        "updatedAt": "2026-05-09T18:42:34.82028",
+                        "createdBy": null,
+                        "updatedBy": null
+                    },
+                    {
+                        "id": 3,
+                        "name": "Java3",
+                        "level": "senior",
+                        "deleted": false,
+                        "createdAt": "2026-05-09T18:42:38.256088",
+                        "updatedAt": "2026-05-09T18:42:38.256088",
+                        "createdBy": null,
+                        "updatedBy": null
+                    }
+                ],
+                "lastSentAt": null,
+                "emailSentCount": 0,
+                "createdAt": "2026-05-09T16:07:27.576090Z",
+                "updatedAt": "2026-05-09T16:09:14.933740Z",
+                "createdBy": 151,
+                "updatedBy": 151
+            }
+        ]
+    },
+    "error": null,
+    "timestamp": "2026-05-09T23:09:48.4158317"
+}
+
+  Query Parameters:
+
+  ┌───────────┬───────────┬──────────────────────────┐
+  │   Param   │  Default  │       Description        │
+  ├───────────┼───────────┼──────────────────────────┤
+  │ page      │ 1         │ Trang hiện tại           │
+  ├───────────┼───────────┼──────────────────────────┤
+  │ size      │ 10        │ Số items/trang           │
+  ├───────────┼───────────┼──────────────────────────┤
+  │ sortBy    │ createdAt │ Trường sắp xếp           │
+  ├───────────┼───────────┼──────────────────────────┤
+  │ direction │ DESC      │ ASC hoặc DESC            │
+  ├───────────┼───────────┼──────────────────────────┤
+  │ keyword   │ null      │ Tìm kiếm theo name/email │
+  ├───────────┼───────────┼──────────────────────────┤
+  │ filter    │ null      │ Filter động              │
+  └───────────┴───────────┴──────────────────────────┘
+
+  Examples:
+  GET /api/v1/subscribers?page=1&size=10
+  GET /api/v1/subscribers?keyword=gmail
+  GET /api/v1/subscribers?filter=enabled:true
+  GET /api/v1/subscribers?filter=(name:*truong*|email:*gmail.com),enabled:true
+
+  Response (200 OK):
+  {
+      "success": true,
+      "data": {
+          "meta": {
+              "totalElements": 25,
+              "totalPages": 3,
+              "currentPage": 1,
+              "pageSize": 10,
+              "sortBy": "createdAt",
+              "direction": "DESC"
+          },
+          "items": [
+              {
+                  "id": 1,
+                  "name": "Truong",
+                  "email": "truong@gmail.com",
+                  "enabled": true,
+                  "skills": [...],
+                  "lastSentAt": "2026-05-09T10:00:00Z",
+                  "emailSentCount": 5,
+                  "createdAt": "2026-05-09T08:00:00Z"
+              }
+          ]
+      },
+      "code": 200,
+      "path": "/api/v1/subscribers"
+  }
+
+  ---
+  Email Scheduler
+
+  Cron Expression: 0 */30 * * * ? (chạy mỗi 30 phút)
+
+  Flow:
+  1. Scheduler trigger mỗi 30 phút
+  2. Lấy tất cả subscribers đang active và enabled
+  3. Với mỗi subscriber, tìm jobs matching với skills của họ
+  4. Gửi email với danh sách jobs (tối đa 10 jobs)
+  5. Update lastSentAt và emailSentCount
+
+  Email Format:
+  Subject: New Jobs Matching Your Skills
+
+  Hello Truong,
+
+  We found new jobs matching your skills:
+
+  1. Senior Java Developer
+     Company: FPT Software
+     Location: Ha Noi
+     Salary: $2000
+     Level: SENIOR
+     Apply: https://workhub.example.com/jobs/1
+
+  2. Spring Boot Engineer
+     Company: Viettel
+     Location: Ho Chi Minh
+     Salary: $1500
+     Level: MIDDLE
+     Apply: https://workhub.example.com/jobs/5
+
+  ---
+  Best regards,
+  WorkHub Team
+
+  To manage your subscription, visit: https://workhub.example.com/subscribers
+  To unsubscribe, reply with 'UNSUBSCRIBE' in the subject.
+
+ test cron email:
+
+  Cách test
+
+  1. Chuẩn bị dữ liệu test
+
+  Tạo Subscriber (đăng ký nhận email):
+  POST /api/v1/subscribers
+  {                                                                                                                           "name": "Test User",
+      "email": "test@example.com",                                                                                            "skillIds": [1, 2, 3]
+  }
+
+  Tạo Job với skills matching:
+  POST /api/v1/jobs
+  {
+      "name": "Senior Java Developer",
+      "location": "Ha Noi",
+      "salary": 2000,
+      "quantity": 5,
+      "level": "SENIOR",
+      "description": "Java Spring Boot",
+      "startDate": "2026-05-01T00:00:00Z",
+      "endDate": "2026-06-01T00:00:00Z",
+      "companyId": 1,
+      "skillIds": [1, 2]
+  }
+
+  2. Test bằng Postman
+
+  Trigger email thủ công (ADMIN only):
+  POST http://localhost:8080/api/v1/test/trigger-job-matching-email
+  Authorization: Bearer <admin_jwt_token>
+
+  Test xem jobs match như thế nào (ADMIN only):
+  POST http://localhost:8080/api/v1/test/test-matching-jobs
+  Authorization: Bearer <admin_jwt_token>
+
+  3. Cron tự động
+
+  Cron chạy mỗi 30 phút với expression: 0 */30 * * * ?
+
+  Để thay đổi schedule, sửa trong JobMatchingScheduler.java:
+
+  // Mỗi 30 phút (mặc định)
+  @Scheduled(cron = "0 */30 * * * ?")
+
+  // Mỗi 1 giờ
+  @Scheduled(cron = "0 0 * * * ?")
+
+  // Mỗi ngày lúc 9h sáng
+  @Scheduled(cron = "0 0 9 * * ?")
+
+  // Mỗi ngày lúc 8h, 12h, 6h
+  @Scheduled(cron = "0 0 8,12,18 * * ?")
+
+  4. Check logs
+  // Mỗi 1 giờ
+  @Scheduled(cron = "0 0 * * * ?")
+
+  // Mỗi ngày lúc 9h sáng
+  @Scheduled(cron = "0 0 9 * * ?")
+
+  // Mỗi ngày lúc 8h, 12h, 6h
+  @Scheduled(cron = "0 0 8,12,18 * * ?")
+
+  4. Check logs
+
+  # Chạy dev mode
+  mvn quarkus:dev
+
+  # Trong console sẽ thấy log:
+  # INFO: Job Matching Scheduler triggered
+  # INFO: Found X active subscribers
+  # INFO: Sent job matching email to: test@example.com
+
+  5. Verify email đã gửi
+
+  Kiểm tra:
+  - Email inbox của subscriber
+  - Console log trong Quarkus
+  - Trường lastSentAt và emailSentCount trong bảng tbl_subscribers
+  ---
+  Error Responses
+
+  404 Not Found:
+  {
+      "success": false,
+      "data": {
+          "code": 8001,
+          "message": "Subscriber not found",
+          "path": "/api/v1/subscribers/999"
+      },
+      "code": 404,
+      "path": "/api/v1/subscribers/999"
+  }
+
+  409 Conflict (Email Exists):
+  {
+      "success": false,
+      "data": {
+          "code": 8002,
+          "message": "Email already subscribed",
+          "path": "/api/v1/subscribers"
+      },
+      "code": 409,
+      "path": "/api/v1/subscribers"
+  }
+
+  400 Bad Request (Skill Not Found):
+  {
+      "success": false,
+      "data": {
+          "code": 8004,
+          "message": "Skill not found",
+          "path": "/api/v1/subscribers"
+      },
+      "code": 400,
+      "path": "/api/v1/subscribers"
+  }

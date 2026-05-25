@@ -1,0 +1,80 @@
+Dưới đây là cách test end-to-end RabbitMQ background queue vừa thêm.
+1. Start RabbitMQ Chạy:
+docker compose up -d rabbitmq
+Mở RabbitMQ UI:
+http://localhost:15672
+Login:
+guest / guest
+Vào tab Queues and Streams, bạn nên thấy các queue:( đã start mvn spring boot rồi mới thấy)
+email.queue
+ats.screening.queue
+resume.parsing.queue
+notification.queue
+email.dlq
+ats.screening.dlq
+resume.parsing.dlq
+notification.dlq
+2. Start backend Chạy backend:
+mvn spring-boot:run
+Hoặc nếu dùng Docker backend thì cần start cả MySQL/RabbitMQ:
+docker compose up -d mysql rabbitmq
+mvn spring-boot:run
+3. Test subscriber email queue Login bằng user ADMIN hoặc RECRUITER, lấy JWT token.
+Gọi API:
+POST http://localhost:8080/api/v1/subscribers/mail/send
+Authorization: Bearer <token>
+Kết quả mong đợi:
+{
+  "queuedEmails": 1,
+  "sentEmails": 0,
+  "matchedJobs": 1
+}
+Sau đó kiểm tra:
+•
+RabbitMQ UI: email.queue có message rồi consumer consume.
+•
+Database: bảng tbl_email_queues có record mới.
+•
+Nếu mail gửi thành công: status = SENT.
+•
+Bảng table_subscribers: last_email_sent_at được update.
+Lưu ý: để có email được queue, DB phải có subscriber enabled, có skill, và có job published/non-deleted/not expired match skill đó.
+4. Test ATS queue Gọi API bằng RECRUITER hoặc ADMIN:
+POST http://localhost:8080/api/v1/recruiter/applications/{applicationId}/screen
+Authorization: Bearer <token>
+Kết quả mong đợi:
+{
+  "applicationId": 10,
+  "resumeId": 3,
+  "jobId": 5,
+  "screeningStatus": "PROCESSING",
+  "message": "ATS screening job has been queued",
+  "eventId": "..."
+}
+Kiểm tra RabbitMQ UI:
+ats.screening.queue
+Message sẽ được consumer xử lý. Hiện ATS consumer là skeleton an toàn vì source hiện chưa có Java ATS screening service/entity thật.
+5. Test resume parsing queue Upload resume như flow cũ:
+POST http://localhost:8080/api/v1/resume
+Authorization: Bearer <token>
+Content-Type: multipart/form-data
+Sau khi upload thành công, kiểm tra RabbitMQ UI:
+resume.parsing.queue
+Consumer sẽ load resume và log thông tin. Nếu parsedContent đã có thì nó skip.
+6. Test retry + DLQ Cách dễ nhất để test DLQ email:
+1.
+Tắt hoặc cấu hình sai SMTP trong application-dev.properties, ví dụ đổi password mail sai.
+2.
+Restart backend.
+3.
+Trigger:
+POST /api/v1/subscribers/mail/send
+4.
+Message sẽ retry tối đa 3 lần.
+5.
+Sau đó kiểm tra:
+email.dlq
+Nếu muốn xem message trong UI: vào queue email.dlq → Get messages.
+7. Build verification
+mvn clean package -DskipTests
+Build hiện đã pass.

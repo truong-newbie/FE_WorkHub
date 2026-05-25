@@ -1,0 +1,107 @@
+ Đã rõ. Tôi tóm tắt những gì đã xác nhận:
+
+  ┌──────────────┬───────────────────────────────────────────────┐
+  │  Thông tin   │                    Giá trị                    │
+  ├──────────────┼───────────────────────────────────────────────┤
+  │ Profile      │ Không chia (dev only)                         │
+  ├──────────────┼───────────────────────────────────────────────┤
+  │ Package type │ JVM mode (đơn giản nhất)                      │
+  ├──────────────┼───────────────────────────────────────────────┤
+  │ Redis        │ Không dùng                                    │
+  ├──────────────┼───────────────────────────────────────────────┤
+  │ Migration    │ Hibernate update (hiện tại)                   │
+  ├──────────────┼───────────────────────────────────────────────┤
+  │ Frontend     │ Repo riêng, kết nối qua http://localhost:8080 │
+  └──────────────┴───────────────────────────────────────────────┘
+
+  ---
+  Đề xuất kiến trúc & Plan
+
+  1. Kiến trúc Docker
+
+  ┌─────────────────────────────────────────────────────────┐
+  │                    Docker Network                        │
+  │  ┌──────────────────┐    ┌──────────────────────────┐    │
+  │  │   MySQL Container │◄───│   Backend Container     │    │
+  │  │   (port 3306)     │    │   (port 8080)           │    │
+  │  └──────────────────┘    └──────────────────────────┘    │
+  └─────────────────────────────────────────────────────────┘
+             │                              │
+             ▼                              ▼
+      Volume: mysql_data              Expose: 8080
+
+  2. Files cần tạo
+
+  ┌────────────────────┬──────────────────────────────────────────────────┐
+  │        File        │                     Mục đích                     │
+  ├────────────────────┼──────────────────────────────────────────────────┤
+  │ docker-compose.yml │ Define MySQL + Backend services                  │
+  ├────────────────────┼──────────────────────────────────────────────────┤
+  │ .env               │ Biến môi trường (DB credentials)                 │
+  ├────────────────────┼──────────────────────────────────────────────────┤
+  │ Dockerfile.dev     │ JVM Dockerfile cho dev (dựa trên Dockerfile.jvm) │
+  ├────────────────────┼──────────────────────────────────────────────────┤
+  │ README.md          │ Hướng dẫn cho FE dev                             │
+  └────────────────────┴──────────────────────────────────────────────────┘
+
+  3. Cấu hình cần điều chỉnh
+
+  - application.properties: Đổi DB host từ localhost → mysql (container name)
+  - CORS đã OK (origins=*)
+
+  4. Flow chạy hệ thống
+
+  FE dev (localhost:FE_PORT)
+      │
+      ▼
+  Backend Container (localhost:8080)
+      │
+      ▼
+  MySQL Container (mysql:3306)
+
+  5. Ưu/Nhược điểm
+
+  ┌───────┬────────────────────────────────┐
+  │       │            JVM Mode            │
+  ├───────┼────────────────────────────────┤
+  │ Ưu    │ Đơn giản, quen thuộc, debug dễ │
+  ├───────┼────────────────────────────────┤
+  │ Nhược │ Image lớn hơn native (~500MB)  │
+  └───────┴────────────────────────────────┘
+
+  6. Checklist triển khai
+
+  - Tạo docker-compose.yml
+  - Tạo .env file
+  - Tạo Dockerfile.dev (hoặc dùng lại Dockerfile.jvm)
+  - Cập nhật application.properties cho Docker
+  - Tạo README cho FE team
+
+  Cách sử dụng
+
+  # Build và chạy
+  docker-compose up -d --build
+
+  # Kiểm tra
+  curl http://localhost:8080/q/health
+
+  # Swagger UI
+  open http://localhost:8080/q/swagger-ui
+
+  # Xem logs
+  docker-compose logs -f backend
+
+  # Dừng
+  docker-compose down
+
+  FE dev workflow
+
+  1. Clone repo
+  2. Chạy docker-compose up -d --build
+  3. FE kết nối http://localhost:8080
+  4. Access Swagger http://localhost:8080/q/swagger-ui để test API
+
+  FE team không cần cài Java/Maven - chỉ cần Docker!
+
+.\mvnw.cmd clean package -DskipTests
+docker compose down -v

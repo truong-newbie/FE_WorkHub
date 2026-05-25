@@ -1,0 +1,211 @@
+Dưới đây là flow test Hybrid Recommendation Engine v2 kèm API doc để bạn chạy theo thứ tự.
+Base URL:
+http://localhost:8080/api/v1
+Tất cả API /candidate/** cần header:
+Authorization: Bearer <access_token>
+Content-Type: application/json
+1. Tạo Preference
+POST /candidate/job-preference
+Request body:
+{
+  "desiredJobTitle": "Java Developer",
+  "preferredLocation": "Ha Noi",
+  "workMode": "ONSITE",
+  "employmentType": "FULL_TIME",
+  "candidateLevel": "JUNIOR",
+  "experienceYears": 2,
+  "expectedSalaryMin": 1000,
+  "expectedSalaryMax": 2500,
+  "skillIds": [1, 2]
+}
+Response mong đợi:
+{
+  "status": "SUCCESS",
+  "data": {
+    "id": 1,
+    "desiredJobTitle": "Java Developer",
+    "preferredLocation": "Ha Noi",
+    "workMode": "ONSITE",
+    "employmentType": "FULL_TIME",
+    "candidateLevel": "JUNIOR",
+    "experienceYears": 2
+  }
+}
+2. Track Job View
+POST /candidate/jobs/{jobId}/view
+Ví dụ:
+POST /candidate/jobs/10/view
+Request body optional:
+{
+  "source": "HOME_RECOMMENDATION",
+  "sessionId": "session-abc-123"
+}
+Response mong đợi:
+{
+  "status": "SUCCESS",
+  "data": null
+}
+3. Track Job Click
+POST /candidate/jobs/{jobId}/click
+Ví dụ:
+POST /candidate/jobs/10/click
+Request body:
+{
+  "source": "RECOMMENDATION",
+  "position": 3
+}
+Response mong đợi:
+{
+  "status": "SUCCESS",
+  "data": null
+}
+4. Track Search Keyword
+POST /candidate/jobs/search-track
+Request body:
+{
+  "keyword": "java developer",
+  "filtersJson": "{\"location\":\"hanoi\",\"workMode\":\"ONSITE\"}"
+}
+Response mong đợi:
+{
+  "status": "SUCCESS",
+  "data": null
+}
+5. Save Favorite Job
+Dùng API cũ có sẵn:
+POST /job/{jobId}/favorite
+Ví dụ:
+POST /job/10/favorite
+Request body: không có.
+Response mong đợi:
+{
+  "status": "SUCCESS",
+  "data": {
+    "id": 1,
+    "jobId": 10,
+    "jobTitle": "Java Developer"
+  }
+}
+Favorite sẽ được engine dùng làm behavior signal SAVE.
+6. Apply Job
+Dùng API cũ có sẵn:
+POST /job/{jobId}/apply
+Ví dụ:
+POST /job/10/apply
+Request body tùy theo flow hiện tại của project, thường là:
+{
+  "resumeId": 1,
+  "coverLetter": "I am interested in this position."
+}
+Response mong đợi:
+{
+  "status": "SUCCESS",
+  "data": {
+    "id": 1,
+    "jobId": 10,
+    "status": "PENDING"
+  }
+}
+Job đã apply sẽ không còn xuất hiện trong recommended jobs.
+7. Get Recommended Jobs v2
+GET /candidate/jobs/recommended?pageNum=1&pageSize=10&explain=true
+Optional query params:
+pageNum=1
+pageSize=10
+location=Ha Noi
+refresh=false
+explain=true
+Response mong đợi:
+{
+  "status": "SUCCESS",
+  "data": {
+    "meta": {
+      "totalElements": 5,
+      "totalPages": 1,
+      "pageNum": 1,
+      "pageSize": 10,
+      "sortBy": "hybridScore",
+      "sortType": "DESC"
+    },
+    "items": [
+      {
+        "id": 12,
+        "jobId": 12,
+        "title": "Senior Java Developer",
+        "slug": "senior-java-developer",
+        "companyId": 2,
+        "companyName": "WorkHub Labs",
+        "companyLogo": "https://example.com/logo.png",
+        "location": "Ha Noi",
+        "salaryMin": "1000",
+        "salaryMax": "2500",
+        "negotiableSalary": false,
+        "level": "JUNIOR",
+        "employmentType": "FULL_TIME",
+        "experienceYears": 2,
+        "skillNames": ["Java", "Spring Boot", "MySQL"],
+        "contentScore": 84.5,
+        "behaviorScore": 72.0,
+        "collaborativeScore": 40.0,
+        "hybridScore": 71.9,
+        "matchScore": 71.9,
+        "matchedSkills": ["Java", "Spring Boot"],
+        "missingSkills": ["MySQL"],
+        "reasonCodes": [
+          "MATCHED_SKILL",
+          "MATCHED_TITLE",
+          "MATCHED_LOCATION",
+          "BASED_ON_CLICK_HISTORY",
+          "BASED_ON_SEARCH_KEYWORD",
+          "USERS_LIKE_YOU_APPLIED"
+        ],
+        "reasonText": "Recommended because you match 2 required skill(s), and your recent behavior points to similar jobs, and similar candidates engaged with this job.",
+        "createdDate": "2026-05-24T22:00:00"
+      }
+    ]
+  }
+}
+8. Get Behavior Summary
+GET /candidate/recommendation/behavior-summary
+Response mong đợi:
+{
+  "status": "SUCCESS",
+  "data": {
+    "totalViewed": 5,
+    "totalClicked": 3,
+    "totalSaved": 2,
+    "totalApplied": 1,
+    "topSkillInterests": ["Java", "Spring Boot", "React"],
+    "topTitleKeywords": ["java", "developer", "backend"],
+    "topLocations": ["Ha Noi", "Remote"]
+  }
+}
+Flow Test Đề Xuất
+1.
+Login candidate lấy token.
+2.
+Tạo preference Java/Spring.
+3.
+Tạo hoặc publish vài jobs: Java Developer, React Developer, DevOps Engineer.
+4.
+Candidate view/click/search nhiều job React hoặc Java.
+5.
+Candidate save một vài job.
+6.
+Candidate gọi recommended jobs.
+7.
+Kiểm tra behaviorScore tăng với nhóm job giống hành vi.
+8.
+Tạo user khác có skill tương tự.
+9.
+User khác apply/save job Java.
+10.
+Candidate gọi lại recommended jobs.
+11.
+Kiểm tra job đó có collaborativeScore > 0.
+12.
+Candidate apply một job.
+13.
+Gọi lại recommended jobs.
+14.
+Kiểm tra job đã apply không còn xuất hiện.

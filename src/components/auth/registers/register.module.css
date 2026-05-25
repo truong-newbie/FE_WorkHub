@@ -1,0 +1,149 @@
+.register_body {
+    background: #000;
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.content {
+    border: 1px solid #555555;
+    width: 350px;
+    text-align: center;
+}
+
+.logo {
+    margin-top: 30px;
+    height: 50px;
+}
+
+.preview {
+    width: 70%;
+    justify-self: center;
+    color: rgb(206, 204, 204);
+}
+
+.login_fb {
+    margin-top: 10px;
+    width: 79%;
+    height: 30px;
+    border-radius: 5px;
+    background-color: #0188e2;
+    border: 1px solid #0069AD;
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.login_fb:hover {
+    background-color: #0069AD;
+}
+
+.login_fb img {
+    height: 20px;
+    margin-right: 10px;
+}
+
+.or {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.username {
+    height: 35px;
+    margin-top: 10px;
+    width: 78%;
+    border-radius: 5px;
+    background-color: #121212;
+    border: 1px solid #555555;
+    font-size: 11.5px;
+    padding-left: 10px;
+    color: white;
+    outline-style: none;
+}
+
+.password {
+    margin-top: 5px;
+    height: 35px;
+    width: 78%;
+    border-radius: 5px;
+    background-color: #121212;
+    border: 1px solid #555555;
+    font-size: 11.5px;
+    padding-left: 10px;
+    color: white;
+    outline-style: none;
+}
+
+.fullname {
+    margin-top: 5px;
+    height: 35px;
+    width: 78%;
+    border-radius: 5px;
+    background-color: #121212;
+    border: 1px solid #555555;
+    font-size: 11.5px;
+    padding-left: 10px;
+    color: white;
+    outline-style: none;
+}
+
+.email {
+    margin-top: 5px;
+    height: 35px;
+    width: 78%;
+    border-radius: 5px;
+    background-color: #121212;
+    border: 1px solid #555555;
+    font-size: 11.5px;
+    padding-left: 10px;
+    color: white;
+    outline-style: none;
+}
+
+.policy {
+    color: rgb(189, 184, 184);
+    font-size: 12px;
+    width: 79%;
+    justify-self: center;
+    margin-top: 10px;
+}
+
+.btn_register {
+    width: 79%;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    height: 30px;
+    border-radius: 5px;
+    background-color: #0069AD;
+    color: white;
+    border: 1px solid #0069AD;
+}
+
+.btn_register:hover {
+    background-color: #0188e2;
+}
+
+.login {
+    margin-top: 10px;
+    width: 350px;
+    border: 1px solid #555555;
+    justify-items: center;
+    padding-bottom: 15px;
+}
+
+.login p {
+    color: white;
+    margin: 0;
+    margin-top: 15px;
+}
+
+.login a {
+    text-decoration: none;
+    color: #2facff;
+    font-weight: bold;
+    font-size: 15px;
+}

@@ -1,0 +1,14 @@
+.shell {
+    min-height: 100vh;
+}
+
+.mainContent {
+    padding-left: 250px;
+}
+
+@media (max-width: 1250px) {
+    .mainContent {
+        padding-left: 83px;
+    }
+}
+

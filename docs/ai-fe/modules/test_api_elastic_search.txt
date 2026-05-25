@@ -1,0 +1,324 @@
+Dưới đây là flow + API document cho chức năng Elasticsearch Job Search.
+1. Flow Tổng Quan
+Recruiter/Admin tạo hoặc sửa Job
+        |
+        v
+Job lưu vào MySQL
+        |
+        v
+Publish event sau khi transaction commit
+        |
+        v
+JobIndexEventListener nhận event
+        |
+        v
+JobSearchService index dữ liệu sang Elasticsearch
+        |
+        v
+Frontend gọi /api/v1/jobs/search để search
+MySQL vẫn là nguồn dữ liệu chính. Elasticsearch chỉ dùng để search.
+2. Start Elasticsearch
+docker compose up -d elasticsearch
+Check Elasticsearch:
+GET http://localhost:9200
+API 1: Search Jobs
+URL
+GET http://localhost:8080/api/v1/jobs/search
+Auth
+Authorization: Bearer <access_token>
+Query Params
+keyword          optional
+location         optional
+skillIds         optional, repeatable
+skillNames       optional, repeatable
+level            optional
+companyId        optional
+salaryMin        optional
+salaryMax        optional
+employmentType   optional
+pageNum          default 1
+pageSize         default 10
+sortBy           optional
+isAscending      default false
+Example
+GET /api/v1/jobs/search?keyword=jav develper&location=hanoi&pageNum=1&pageSize=10
+Expected Response
+{
+  "status": "SUCCESS",
+  "data": {
+    "meta": {
+      "totalElements": 1,
+      "totalPages": 1,
+      "pageNum": 1,
+      "pageSize": 10,
+      "sortBy": "_score",
+      "sortType": "DESC"
+    },
+    "items": [
+      {
+        "id": 1,
+        "title": "Java Developer",
+        "slug": "java-developer",
+        "location": "Ha Noi",
+        "companyId": 1,
+        "companyName": "WorkHub",
+        "companyLogo": "https://...",
+        "salaryMin": 1000,
+        "salaryMax": 2500,
+        "negotiableSalary": false,
+        "experienceYears": 2,
+        "level": "MIDDLE",
+        "employmentType": "FULL_TIME",
+        "skillNames": ["Java", "Spring Boot"],
+        "expiredAt": "2026-06-30T00:00:00Z",
+        "createdDate": "2026-05-24T12:00:00",
+        "matchScore": 12.3,
+        "highlightTitle": "<em>Java</em> Developer",
+        "highlightDescription": null
+      }
+    ]
+  }
+}
+API 2: Autocomplete Jobs
+URL
+GET http://localhost:8080/api/v1/jobs/search/autocomplete
+Auth
+Authorization: Bearer <access_token>
+Query Params
+keyword required
+limit   optional, default 10
+Example
+GET /api/v1/jobs/search/autocomplete?keyword=jav&limit=10
+Expected Response
+{
+  "status": "SUCCESS",
+  "data": [
+    {
+      "text": "Java Developer",
+      "type": "JOB_TITLE",
+      "jobId": 1,
+      "skillId": null,
+      "companyId": 1
+    },
+    {
+      "text": "Java",
+      "type": "SKILL",
+      "jobId": null,
+      "skillId": 1,
+      "companyId": null
+    },
+    {
+      "text": "WorkHub",
+      "type": "COMPANY",
+      "jobId": null,
+      "skillId": null,
+      "companyId": 1
+    }
+  ]
+}
+API 3: Reindex All Jobs
+Dùng khi deploy lần đầu, index lỗi, hoặc muốn rebuild lại toàn bộ dữ liệu search.
+URL
+POST http://localhost:8080/api/v1/jobs/search/reindex
+Auth
+Authorization: Bearer <admin_access_token>
+Role
+ADMIN only
+Request Body
+Không cần body.
+Expected Response
+{
+  "status": "SUCCESS",
+  "data": {
+    "indexedCount": 100,
+    "startedAt": "2026-05-24T12:00:00",
+    "finishedAt": "2026-05-24T12:00:02",
+    "durationMs": 2000
+  }
+}
+Nếu user không phải ADMIN:
+{
+  "status": "ERROR",
+  "message": "Sorry, you do not have the necessary permissions to access this resource"
+}
+API 4: Create Job
+API này là API cũ, nhưng bây giờ sau khi tạo Job thành công sẽ tự sync sang Elasticsearch.
+URL
+POST http://localhost:8080/api/v1/job
+Auth
+Authorization: Bearer <recruiter_or_admin_token>
+Request Body
+{
+  "title": "Java Developer",
+  "description": "Build backend services for recruitment platform",
+  "requirement": "Java, Spring Boot, MySQL, REST API",
+  "benefit": "Good salary and flexible working time",
+  "location": "Ha Noi",
+  "salaryMin": "1000",
+  "salaryMax": "2500",
+  "negotiableSalary": false,
+  "level": "MIDDLE",
+  "employmentType": "FULL_TIME",
+  "experienceYears": 2,
+  "quantity": 1,
+  "expiredAt": "2026-06-30",
+  "startDate": "2026-05-24",
+  "published": true,
+  "skillIds": [1, 2]
+}
+Expected Response
+{
+  "status": "SUCCESS",
+  "data": {
+    "id": 1,
+    "title": "Java Developer",
+    "slug": "java-developer",
+    "description": "Build backend services for recruitment platform",
+    "requirement": "Java, Spring Boot, MySQL, REST API",
+    "benefit": "Good salary and flexible working time",
+    "location": "Ha Noi",
+    "salaryMin": "1000",
+    "salaryMax": "2500",
+    "negotiableSalary": false,
+    "level": "MIDDLE",
+    "employmentType": "FULL_TIME",
+    "experienceYears": 2,
+    "quantity": 1,
+    "expiredAt": "2026-06-30",
+    "startDate": "2026-05-24",
+    "published": true,
+    "deleted": false
+  }
+}
+Sau khi tạo xong, hệ thống publish:
+JobCreatedEvent
+rồi listener gọi:
+JobSearchService.indexJob(jobId)
+API 5: Update Job
+Sau khi update Job, index cũng được cập nhật.
+URL
+PUT http://localhost:8080/api/v1/job/{id}
+Example
+PUT /api/v1/job/1
+Auth
+Authorization: Bearer <recruiter_or_admin_token>
+Request Body
+{
+  "title": "Senior Java Developer",
+  "requirement": "Java 17, Spring Boot 3, MySQL, Elasticsearch",
+  "salaryMin": "2000",
+  "salaryMax": "4000",
+  "skillIds": [1, 2, 3]
+}
+Expected Response
+{
+  "status": "SUCCESS",
+  "data": {
+    "id": 1,
+    "title": "Senior Java Developer",
+    "slug": "senior-java-developer",
+    "requirement": "Java 17, Spring Boot 3, MySQL, Elasticsearch",
+    "salaryMin": "2000",
+    "salaryMax": "4000"
+  }
+}
+Sau khi update:
+JobUpdatedEvent -> reindex job
+API 6: Publish Job
+Publish xong thì job có thể xuất hiện trong search nếu:
+published = true
+deleted = false
+expiredAt > now
+company active = true
+company verified = true
+URL
+PUT http://localhost:8080/api/v1/job/{id}/publish
+Auth
+Authorization: Bearer <recruiter_or_admin_token>
+Request Body
+Không cần body.
+Expected Response
+{
+  "status": "SUCCESS",
+  "data": {
+    "id": 1,
+    "title": "Java Developer",
+    "published": true,
+    "deleted": false
+  }
+}
+Sau khi publish:
+JobPublishedEvent -> reindex job
+API 7: Unpublish Job
+Unpublish xong job không còn hiện trong search.
+URL
+PUT http://localhost:8080/api/v1/job/{id}/unpublish
+Auth
+Authorization: Bearer <recruiter_or_admin_token>
+Request Body
+Không cần body.
+Expected Response
+{
+  "status": "SUCCESS",
+  "data": {
+    "id": 1,
+    "title": "Java Developer",
+    "published": false,
+    "deleted": false
+  }
+}
+Sau khi unpublish:
+JobUnpublishedEvent -> reindex job
+Search API filter published=true, nên job này không xuất hiện nữa.
+API 8: Delete Job
+Delete là soft delete trong MySQL và xóa document khỏi Elasticsearch.
+URL
+DELETE http://localhost:8080/api/v1/job/{id}
+Auth
+Authorization: Bearer <recruiter_or_admin_token>
+Request Body
+Không cần body.
+Expected Response
+{
+  "status": "SUCCESS",
+  "data": "Job deleted successfully"
+}
+Sau khi delete:
+JobDeletedEvent -> delete document khỏi Elasticsearch
+Flow Test Đầy Đủ
+1.
+Start Elasticsearch:
+docker compose up -d elasticsearch
+2.
+Start backend:
+mvn spring-boot:run
+3.
+Login admin/recruiter.
+4.
+Tạo job:
+POST /api/v1/job
+5.
+Publish job:
+PUT /api/v1/job/{id}/publish
+6.
+Reindex toàn bộ:
+POST /api/v1/jobs/search/reindex
+7.
+Search đúng:
+GET /api/v1/jobs/search?keyword=java developer&pageNum=1&pageSize=10
+8.
+Search sai chính tả:
+GET /api/v1/jobs/search?keyword=jav develper&pageNum=1&pageSize=10
+9.
+Test autocomplete:
+GET /api/v1/jobs/search/autocomplete?keyword=jav&limit=10
+10.
+Unpublish job rồi search lại, job không còn xuất hiện.
+Các Điều Kiện Một Job Được Trả Về Trong Search
+Job chỉ được trả về nếu:
+published = true
+deleted = false
+expiredAt is null hoặc expiredAt > now
+companyActive = true
+companyVerified = true
+Nếu job không hiện trong search, kiểm tra các field này trước.

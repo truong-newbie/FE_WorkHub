@@ -1,0 +1,264 @@
+
+
+Base URL:
+http://localhost:8080
+Header cho các API candidate:
+Authorization: Bearer <candidate_access_token>
+Content-Type: application/json
+Response wrapper chung:
+{
+  "success": true,
+  "meta": {
+    "code": 200,
+    "path": "/api/v1/..."
+  },
+  "data": {},
+  "error": null,
+  "timestamp": "2026-05-19T..."
+}
+1. Latest Jobs
+GET /api/v1/jobs/latest?page=1&size=10&sortBy=createdAt&sortDir=DESC
+Auth: Không cần login.
+Request body: Không có.
+Query params:
+page: default 1
+size: default 10, max 100
+sortBy: id | title | name | location | salary | createdAt
+sortDir/direction: ASC | DESC
+Response:
+{
+  "success": true,
+  "meta": {
+    "code": 200,
+    "path": "/api/v1/jobs/latest"
+  },
+  "data": {
+    "meta": {
+      "totalElements": 20,
+      "totalPages": 2,
+      "currentPage": 1,
+      "pageSize": 10,
+      "pageNumber": 0,
+      "sortBy": "createdAt",
+      "direction": "DESC",
+      "hasNext": true,
+      "hasPrevious": false
+    },
+    "items": [
+      {
+        "jobId": 1,
+        "title": "Java Backend Developer",
+        "companyName": "WorkHub",
+        "location": "Ha Noi",
+        "salaryMin": 1500,
+        "salaryMax": 1500,
+        "experienceYears": 2,
+        "createdDate": "2026-05-19T08:00:00Z"
+      }
+    ]
+  },
+  "error": null,
+  "timestamp": "2026-05-19T..."
+}
+2. Candidate Onboarding Status
+GET /api/v1/candidate/onboarding-status
+Auth: ROLE_CANDIDATE.
+Request body: Không có.
+Response:
+{
+  "success": true,
+  "meta": {
+    "code": 200,
+    "path": "/api/v1/candidate/onboarding-status"
+  },
+  "data": {
+    "hasJobPreference": false,
+    "requiredPreference": true
+  },
+  "error": null,
+  "timestamp": "2026-05-19T..."
+}
+3. Create Job Preference
+POST /api/v1/candidate/job-preference
+Auth: ROLE_CANDIDATE.
+Request body:
+{
+  "desiredJobTitle": "Java Backend Developer",
+  "preferredLocation": "Ha Noi",
+  "workMode": "HYBRID",
+  "employmentType": "FULL_TIME",
+  "candidateLevel": "JUNIOR",
+  "experienceYears": 1,
+  "expectedSalaryMin": 800,
+  "expectedSalaryMax": 1500,
+  "skillIds": [1, 2, 3]
+}
+Enum hợp lệ:
+workMode: ONSITE | REMOTE | HYBRID
+employmentType: FULL_TIME | PART_TIME | INTERNSHIP | FREELANCE | CONTRACT
+candidateLevel: STUDENT | INTERN | FRESHER | JUNIOR | MIDDLE | SENIOR
+Response 201:
+{
+  "success": true,
+  "meta": {
+    "code": 201,
+    "path": "/api/v1/candidate/job-preference"
+  },
+  "data": {
+    "id": 1,
+    "candidateId": 10,
+    "desiredJobTitle": "Java Backend Developer",
+    "preferredLocation": "Ha Noi",
+    "workMode": "HYBRID",
+    "employmentType": "FULL_TIME",
+    "candidateLevel": "JUNIOR",
+    "experienceYears": 1,
+    "expectedSalaryMin": 800,
+    "expectedSalaryMax": 1500,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Java",
+        "level": "Advanced",
+        "deleted": false,
+        "createdAt": "2026-05-19T...",
+        "updatedAt": "2026-05-19T...",
+        "createdBy": 1,
+        "updatedBy": 1
+      }
+    ],
+    "createdAt": "2026-05-19T...",
+    "updatedAt": "2026-05-19T..."
+  },
+  "error": null,
+  "timestamp": "2026-05-19T..."
+}
+4. Get My Job Preference
+GET /api/v1/candidate/job-preference
+Auth: ROLE_CANDIDATE.
+Request body: Không có.
+Response 200: giống object data của API create preference.
+{
+  "success": true,
+  "meta": {
+    "code": 200,
+    "path": "/api/v1/candidate/job-preference"
+  },
+  "data": {
+    "id": 1,
+    "candidateId": 10,
+    "desiredJobTitle": "Java Backend Developer",
+    "preferredLocation": "Ha Noi",
+    "workMode": "HYBRID",
+    "employmentType": "FULL_TIME",
+    "candidateLevel": "JUNIOR",
+    "experienceYears": 1,
+    "expectedSalaryMin": 800,
+    "expectedSalaryMax": 1500,
+    "skills": []
+  },
+  "error": null,
+  "timestamp": "2026-05-19T..."
+}
+5. Update Job Preference
+PUT /api/v1/candidate/job-preference
+Auth: ROLE_CANDIDATE.
+Request body:
+{
+  "desiredJobTitle": "Backend Developer",
+  "preferredLocation": "Remote",
+  "workMode": "REMOTE",
+  "employmentType": "FULL_TIME",
+  "candidateLevel": "MIDDLE",
+  "experienceYears": 3,
+  "expectedSalaryMin": 1000,
+  "expectedSalaryMax": 2000,
+  "skillIds": [1, 2, 3]
+}
+Response 200: giống API get/create preference, trả về preference sau khi update.
+6. Recommended Jobs
+GET /api/v1/candidate/jobs/recommended?page=1&size=10
+Auth: ROLE_CANDIDATE.
+Request body: Không có.
+Query params:
+page: default 1
+size: default 10, max 100
+Response:
+{
+  "success": true,
+  "meta": {
+    "code": 200,
+    "path": "/api/v1/candidate/jobs/recommended"
+  },
+  "data": {
+    "meta": {
+      "totalElements": 5,
+      "totalPages": 1,
+      "currentPage": 1,
+      "pageSize": 10,
+      "pageNumber": 0,
+      "sortBy": "matchScore",
+      "direction": "DESC",
+      "hasNext": false,
+      "hasPrevious": false
+    },
+    "items": [
+      {
+        "jobId": 1,
+        "title": "Java Backend Developer",
+        "companyName": "WorkHub",
+        "location": "Ha Noi",
+        "salaryMin": 1500,
+        "salaryMax": 1500,
+        "experienceYears": 2,
+        "matchScore": 86.5,
+        "matchedSkills": [
+          {
+            "id": 1,
+            "name": "Java",
+            "level": "Advanced",
+            "deleted": false
+          }
+        ],
+        "missingSkills": [
+          {
+            "id": 4,
+            "name": "Docker",
+            "level": "Basic",
+            "deleted": false
+          }
+        ],
+        "matchReasonCodes": [
+          "MATCHED_SKILLS",
+          "MATCHED_TITLE",
+          "MATCHED_LOCATION",
+          "MATCHED_EXPERIENCE",
+          "MATCHED_SALARY"
+        ],
+        "createdDate": "2026-05-19T08:00:00Z"
+      }
+    ]
+  },
+  "error": null,
+  "timestamp": "2026-05-19T..."
+}
+Rule chính của recommend:
+Chỉ lấy job chưa hết hạn, chưa deleted.
+Không recommend job candidate đã apply.
+Sort theo matchScore DESC, nếu bằng nhau sort createdDate DESC.
+Candidate phải có job preference trước.
+Error response mẫu:
+{
+  "code": 9003,
+  "message": "Candidate job preference is required",
+  "path": "api/v1/candidate/jobs/recommended",
+  "timestamp": 1779177600000
+}
+Một số error code liên quan:
+9001: Candidate job preference already exists
+9002: Candidate job preference not found
+9003: Candidate job preference is required
+9004: Expected salary max must be greater than or equal to salary min
+9005: One or more skills were not found
+9006: Only candidates can use this feature
+1002: Invalid input

@@ -1,0 +1,30 @@
+.tableWrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.table th {
+    background: #f7f7f7;
+    color: #333333;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.empty {
+    color: #777777;
+    text-align: center;
+}
+

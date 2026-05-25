@@ -1,0 +1,38 @@
+.region {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 2000;
+    display: grid;
+    width: min(360px, calc(100vw - 32px));
+    gap: 10px;
+}
+
+.toast {
+    width: 100%;
+    border: 0;
+    border-radius: 6px;
+    padding: 12px 14px;
+    color: white;
+    font: inherit;
+    text-align: left;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    cursor: pointer;
+}
+
+.info {
+    background: #155eef;
+}
+
+.success {
+    background: #067647;
+}
+
+.error {
+    background: #b42318;
+}
+
+.warning {
+    background: #b54708;
+}
+

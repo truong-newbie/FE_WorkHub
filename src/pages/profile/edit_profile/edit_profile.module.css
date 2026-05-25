@@ -1,0 +1,165 @@
+.edit_profile_body {
+    background: #000;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    color: white;
+    padding-top: 60px;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+.nav {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.infor {
+    margin-top: 40px;
+    background-color: #262626;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100px;
+}
+
+.infor_left {
+    display: flex;
+    align-items: center;
+}
+
+.infor_left img {
+    height: 80px;
+    margin-left: 30px;
+    width: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.infor_left p {
+    margin-left: 20px;
+}
+
+.name {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.fullname {
+    font-size: 15px;
+    margin-top: 3px;
+    color: #A8A8A8;
+}
+
+.infor_right button {
+    margin-right: 20px;
+    background-color: #2facff;
+    border: 0px;
+    color: white;
+    width: 100px;
+    height: 30px;
+    border-radius: 10px;
+}
+
+.infor_right button:hover {
+    background-color: #0188e2;
+}
+
+
+
+.bio p {
+    margin-top: 30px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.bio input {
+    margin-top: 15px;
+    width: 100%;
+    height: 50px;
+    padding-left: 10px;
+    color: white;
+    border-radius: 10px;
+    background-color: #000;
+    border: 1px solid #2B3036;
+    transition: all 0.3s ease;
+
+}
+
+.bio input:focus {
+    border: 1px solid white;
+    outline: none;
+}
+
+.connect_link p {
+    margin-top: 30px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.connect_link input {
+    margin-top: 15px;
+    width: 100%;
+    height: 50px;
+    padding-left: 10px;
+    color: white;
+    border-radius: 10px;
+    background-color: #000;
+    border: 1px solid #2B3036;
+    transition: all 0.3s ease;
+
+}
+
+.connect_link input:focus {
+    border: 1px solid white;
+    outline: none;
+}
+
+.gender_header {
+    margin-top: 30px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.gender_select {
+    margin-top: 20px;
+    width: 100%;
+    background-color: #000;
+    color: white;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid #2B3036;
+    padding-left: 10px;
+}
+
+.gender_select:focus {
+    border: 1px solid white;
+    outline: none;
+}
+
+.gender .des {
+    margin-top: 10px;
+    color: #A8A8A8;
+    font-size: 13px;
+}
+
+.submit {
+    margin-top: 80px;
+    display: flex;
+    justify-content: end;
+}
+
+.submit button {
+    height: 40px;
+    width: 207px;
+    border-radius: 10px;
+    color: white;
+    background-color: #2facff;
+    border: none;
+    font-size: 17px;
+}
+
+.submit button:hover {
+    background-color: #0188e2;
+}

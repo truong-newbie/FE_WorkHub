@@ -1,0 +1,24 @@
+.field {
+    display: grid;
+    gap: 6px;
+}
+
+.label {
+    color: #262626;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.input {
+    min-height: 38px;
+    border: 1px solid #d7d7d7;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font: inherit;
+}
+
+.error {
+    color: #d92d20;
+    font-size: 13px;
+}
+

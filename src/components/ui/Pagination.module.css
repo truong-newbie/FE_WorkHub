@@ -1,0 +1,11 @@
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.status {
+    color: #555555;
+    font-size: 14px;
+}
+
