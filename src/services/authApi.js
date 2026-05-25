@@ -31,3 +31,24 @@ export async function completeOAuthCallback({code, state}) {
 
     return unwrapResult(response);
 }
+
+export async function forgotPassword(payload) {
+    const response = await apiClient.post(`/forgot-password/email-verification/${encodeURIComponent(payload.email)}`);
+    return unwrapResult(response);
+}
+
+export async function verifyForgotPasswordOtp(payload) {
+    const response = await apiClient.post('/forgot-password/otp-verification', {
+        email: payload.email,
+        otp: Number(payload.otp),
+    });
+    return unwrapResult(response);
+}
+
+export async function resetPassword(payload) {
+    const response = await apiClient.post(`/forgot-password/password-update/${encodeURIComponent(payload.email)}`, {
+        password: payload.password,
+        repeatPassword: payload.repeatPassword,
+    });
+    return unwrapResult(response);
+}

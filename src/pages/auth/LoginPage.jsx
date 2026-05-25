@@ -115,6 +115,9 @@ export default function LoginPage() {
                 <p className={styles.footer}>
                     Do not have an account? <Link to="/register">Register</Link>
                 </p>
+                <p className={styles.footer}>
+                    <Link to="/forgot-password">Forgot password?</Link>
+                </p>
             </section>
         </main>
     );

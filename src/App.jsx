@@ -9,6 +9,9 @@ import UnauthorizedPage from './pages/unauthorized/UnauthorizedPage.jsx';
 import LoginPage from './pages/auth/LoginPage.jsx';
 import RegisterPage from './pages/auth/RegisterPage.jsx';
 import OAuthCallbackPage from './pages/auth/OAuthCallbackPage.jsx';
+import ForgotPasswordPage from './pages/auth/ForgotPasswordPage.jsx';
+import VerifyOtpPage from './pages/auth/VerifyOtpPage.jsx';
+import ResetPasswordPage from './pages/auth/ResetPasswordPage.jsx';
 import RoleDashboard from './pages/dashboard/RoleDashboard.jsx';
 import './App.module.css';
 
@@ -18,6 +21,9 @@ function App() {
             <Routes>
                 <Route path="/login" element={<LoginPage/>}/>
                 <Route path="/register" element={<RegisterPage/>}/>
+                <Route path="/forgot-password" element={<ForgotPasswordPage/>}/>
+                <Route path="/verify-otp" element={<VerifyOtpPage/>}/>
+                <Route path="/reset-password" element={<ResetPasswordPage/>}/>
                 <Route path="/auth/oauth/callback" element={<OAuthCallbackPage/>}/>
                 <Route path="/unauthorized" element={<UnauthorizedPage/>}/>
 

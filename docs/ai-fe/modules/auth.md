@@ -6,6 +6,9 @@ Public:
 
 - `/login` -> `src/pages/auth/LoginPage.jsx`
 - `/register` -> `src/pages/auth/RegisterPage.jsx`
+- `/forgot-password` -> `src/pages/auth/ForgotPasswordPage.jsx`
+- `/verify-otp` -> `src/pages/auth/VerifyOtpPage.jsx`
+- `/reset-password` -> `src/pages/auth/ResetPasswordPage.jsx`
 - `/auth/oauth/callback` -> `src/pages/auth/OAuthCallbackPage.jsx`
 - `/unauthorized` -> `src/pages/unauthorized/UnauthorizedPage.jsx`
 
@@ -33,6 +36,9 @@ Implemented endpoints:
 - `GET /auth/oauth2/authorize?login_type=google`
 - `GET /auth/oauth2/authorize?login_type=facebook`
 - Backend-owned callback: `GET /auth/oauth2/callback?code=...&state=google|facebook`
+- `POST /forgot-password/email-verification/{email}`
+- `POST /forgot-password/otp-verification`
+- `POST /forgot-password/password-update/{email}`
 
 The app base URL is `VITE_API_BASE_URL`, with local fallback `/api/v1`.
 
@@ -63,6 +69,51 @@ Register sends the documented request body:
 ```
 
 On success, the user is redirected to `/login`.
+
+## Forgot Password Flow
+
+Pages:
+
+- `src/pages/auth/ForgotPasswordPage.jsx`
+- `src/pages/auth/VerifyOtpPage.jsx`
+- `src/pages/auth/ResetPasswordPage.jsx`
+
+Service methods:
+
+- `forgotPassword(payload)`
+- `verifyForgotPasswordOtp(payload)`
+- `resetPassword(payload)`
+
+Flow:
+
+1. User opens `/forgot-password` and submits email.
+2. Frontend calls `POST /forgot-password/email-verification/{email}` with no request body.
+3. On success, frontend stores email in `sessionStorage.forgotPasswordEmail` and navigates to `/verify-otp`.
+4. User submits 6-digit OTP.
+5. Frontend calls `POST /forgot-password/otp-verification` with `{ email, otp }`, where `otp` is sent as a number.
+6. On success, frontend navigates to `/reset-password` with `{ email, otp }` in router location state.
+7. User submits `newPassword` and `confirmPassword`.
+8. Frontend calls `POST /forgot-password/password-update/{email}` with `{ password, repeatPassword }`.
+9. On success, temporary email state is cleared and user is redirected to `/login`.
+
+State transfer strategy:
+
+- Email is stored in sessionStorage so `/verify-otp` can survive refresh.
+- OTP is only passed through router location state to require the user to complete the verify page before reset. The current backend password update endpoint does not require OTP in the reset request.
+- Passwords are never stored.
+
+Validation:
+
+- Email is required and must be valid.
+- OTP is required and must be 6 digits.
+- New password is required and must be at least 6 characters.
+- Confirm password must match new password.
+
+Known TODOs:
+
+- Add backend-driven password pattern if backend exposes stricter rules.
+- Add countdown UI for `expiresInSeconds` if needed.
+- Backend currently does not enforce verified OTP in `password-update/{email}`; fix backend before production.
 
 ## Logout Flow
 
@@ -163,5 +214,4 @@ Unauthorized role access redirects to `/unauthorized`.
 
 - Add real dashboard pages for candidate, recruiter, and admin.
 - Add refresh-token endpoint support when backend exposes it.
-- Add forgot/reset password routes when API docs are available.
 - Replace legacy profile token decoding with auth-store selectors in a later profile-module cleanup.
