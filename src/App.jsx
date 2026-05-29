@@ -1,6 +1,4 @@
 import Home from './pages/home/home.jsx';
-import Profile from "./pages/profile/profile.jsx";
-import Edit_Profile from "./pages/profile/edit_profile/edit_profile.jsx";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import MainLayout from './layouts/MainLayout.jsx';
 import ProtectedRoute from './routes/ProtectedRoute.jsx';
@@ -14,7 +12,10 @@ import VerifyOtpPage from './pages/auth/VerifyOtpPage.jsx';
 import ResetPasswordPage from './pages/auth/ResetPasswordPage.jsx';
 import RoleDashboard from './pages/dashboard/RoleDashboard.jsx';
 import AdminUserManagementPage from './features/user/pages/AdminUserManagementPage.jsx';
-import UserProfilePage from './features/user/pages/UserProfilePage.jsx';
+import ProfileViewPage from './features/user/pages/ProfileViewPage.jsx';
+import EditProfilePage from './features/user/pages/EditProfilePage.jsx';
+import UploadAvatarPage from './features/user/pages/UploadAvatarPage.jsx';
+import ChangePasswordPage from './features/user/pages/ChangePasswordPage.jsx';
 import './App.module.css';
 
 function App() {
@@ -32,9 +33,10 @@ function App() {
                 <Route element={<ProtectedRoute/>}>
                     <Route element={<MainLayout/>}>
                         <Route path="/" element={<Home/>}/>
-                        <Route path="/profile" element={<UserProfilePage/>}/>
-                        <Route path="/profile/:idFromAnother" element={<Profile/>}/>
-                        <Route path="/edit_profile" element={<Edit_Profile/>}/>
+                        <Route path="/profile" element={<ProfileViewPage/>}/>
+                        <Route path="/profile/edit" element={<EditProfilePage/>}/>
+                        <Route path="/profile/avatar" element={<UploadAvatarPage/>}/>
+                        <Route path="/profile/change-password" element={<ChangePasswordPage/>}/>
                     </Route>
                 </Route>
 
@@ -54,7 +56,6 @@ function App() {
                 <Route element={<RoleBasedRoute allowedRoles={['CANDIDATE']}/>}>
                     <Route element={<MainLayout/>}>
                         <Route path="/candidate/dashboard" element={<RoleDashboard title="Candidate Dashboard"/>}/>
-                        <Route path="/candidate/profile" element={<UserProfilePage/>}/>
                     </Route>
                 </Route>
             </Routes>

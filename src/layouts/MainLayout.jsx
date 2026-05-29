@@ -1,14 +1,11 @@
 import {Outlet} from 'react-router-dom';
-import Sidebar from '../components/sidebar.jsx';
-import {useAuth} from '../stores/useAuth.js';
+import AppHeader from '../components/AppHeader.jsx';
 import styles from './MainLayout.module.css';
 
 export default function MainLayout() {
-    const {logout} = useAuth();
-
     return (
         <div className={styles.shell}>
-            <Sidebar onLogout={logout}/>
+            <AppHeader/>
             <main className={styles.mainContent}>
                 <Outlet/>
             </main>
