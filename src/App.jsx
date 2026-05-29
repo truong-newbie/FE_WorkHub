@@ -13,6 +13,8 @@ import ForgotPasswordPage from './pages/auth/ForgotPasswordPage.jsx';
 import VerifyOtpPage from './pages/auth/VerifyOtpPage.jsx';
 import ResetPasswordPage from './pages/auth/ResetPasswordPage.jsx';
 import RoleDashboard from './pages/dashboard/RoleDashboard.jsx';
+import AdminUserManagementPage from './features/user/pages/AdminUserManagementPage.jsx';
+import UserProfilePage from './features/user/pages/UserProfilePage.jsx';
 import './App.module.css';
 
 function App() {
@@ -30,7 +32,7 @@ function App() {
                 <Route element={<ProtectedRoute/>}>
                     <Route element={<MainLayout/>}>
                         <Route path="/" element={<Home/>}/>
-                        <Route path="/profile" element={<Profile/>}/>
+                        <Route path="/profile" element={<UserProfilePage/>}/>
                         <Route path="/profile/:idFromAnother" element={<Profile/>}/>
                         <Route path="/edit_profile" element={<Edit_Profile/>}/>
                     </Route>
@@ -39,6 +41,7 @@ function App() {
                 <Route element={<RoleBasedRoute allowedRoles={['ADMIN']}/>}>
                     <Route element={<MainLayout/>}>
                         <Route path="/admin/dashboard" element={<RoleDashboard title="Admin Dashboard"/>}/>
+                        <Route path="/admin/users" element={<AdminUserManagementPage/>}/>
                     </Route>
                 </Route>
 
@@ -51,6 +54,7 @@ function App() {
                 <Route element={<RoleBasedRoute allowedRoles={['CANDIDATE']}/>}>
                     <Route element={<MainLayout/>}>
                         <Route path="/candidate/dashboard" element={<RoleDashboard title="Candidate Dashboard"/>}/>
+                        <Route path="/candidate/profile" element={<UserProfilePage/>}/>
                     </Route>
                 </Route>
             </Routes>

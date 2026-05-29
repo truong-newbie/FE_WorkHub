@@ -1,8 +1,7 @@
 import {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
-import Button from '../../components/ui/Button.jsx';
+import {FaEnvelope} from 'react-icons/fa';
 import ErrorMessage from '../../components/ui/ErrorMessage.jsx';
-import Input from '../../components/ui/Input.jsx';
 import {useToast} from '../../components/ui/useToast.js';
 import {forgotPassword} from '../../services/authApi.js';
 import styles from './AuthPage.module.css';
@@ -22,12 +21,12 @@ export default function ForgotPasswordPage() {
         setErrorMessage('');
 
         if (!email) {
-            setErrorMessage('Email is required');
+            setErrorMessage('Vui lòng nhập email');
             return;
         }
 
         if (!isValidEmail(email)) {
-            setErrorMessage('Enter a valid email address');
+            setErrorMessage('Email không hợp lệ');
             return;
         }
 
@@ -37,7 +36,7 @@ export default function ForgotPasswordPage() {
             const result = await forgotPassword({email});
             saveForgotPasswordEmail(email);
             showToast({
-                message: result?.message || 'OTP sent to your email',
+                message: result?.message || 'Mã OTP đã được gửi đến email của bạn',
                 type: 'success',
             });
             navigate('/verify-otp', {
@@ -48,7 +47,7 @@ export default function ForgotPasswordPage() {
                 },
             });
         } catch (error) {
-            const message = error.message || 'Failed to send OTP';
+            const message = error.message || 'Gửi mã OTP thất bại';
             setErrorMessage(message);
             showToast({message, type: 'error'});
         } finally {
@@ -57,35 +56,54 @@ export default function ForgotPasswordPage() {
     };
 
     return (
-        <main className={styles.authPage}>
-            <section className={styles.panel}>
+        <main className={styles.authPageSimple}>
+            <section className={styles.panelSimple}>
+                <div className={styles.stepIndicator}>
+                    <div className={`${styles.step} ${styles.stepActive}`}>1</div>
+                    <div className={styles.stepLine}></div>
+                    <div className={styles.step}>2</div>
+                    <div className={styles.stepLine}></div>
+                    <div className={styles.step}>3</div>
+                </div>
+
                 <div className={styles.header}>
-                    <h1>Forgot Password</h1>
-                    <p>Enter your email to receive a 6-digit OTP.</p>
+                    <h1>Quên mật khẩu</h1>
+                    <p>Nhập email của bạn để nhận mã xác thực OTP</p>
                 </div>
 
                 <form className={styles.form} onSubmit={handleSubmit}>
-                    <Input
-                        className={styles.field}
-                        label="Email"
-                        name="email"
-                        type="email"
-                        autoComplete="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        required
-                    />
-                    <ErrorMessage message={errorMessage}/>
-                    <Button className={styles.fullWidth} type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? 'Sending OTP...' : 'Send OTP'}
-                    </Button>
+                    <div className={styles.field}>
+                        <label htmlFor="email">
+                            <FaEnvelope style={{display: 'inline', marginRight: '6px'}}/>
+                            Email
+                        </label>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            autoComplete="email"
+                            placeholder="your.email@example.com"
+                            value={email}
+                            onChange={(event) => setEmail(event.target.value)}
+                            required
+                        />
+                    </div>
+
+                    {errorMessage && <ErrorMessage message={errorMessage}/>}
+
+                    <button
+                        type="submit"
+                        className={styles.submitButton}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? 'Đang gửi mã OTP...' : 'Gửi mã OTP'}
+                    </button>
                 </form>
 
                 <p className={styles.footer}>
-                    Remember your password? <Link to="/login">Log in</Link>
+                    Nhớ mật khẩu? <Link to="/login">Đăng nhập</Link>
                 </p>
             </section>
         </main>
     );
 }
-

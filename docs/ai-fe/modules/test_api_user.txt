@@ -1,202 +1,308 @@
- User API Documentation
+User API Documentation
+Module: User Management
 
-  ---
-  1. CREATE User (Admin only)
+Base URL: /api/v1/users
+Authentication: Bearer Token (JWT)
+Content-Type: application/json
 
-  POST /api/v1/users
-  Authorization: Bearer <token>                                                                                           Content-Type: application/json
-                                                                                                                          Request Body:
-  {
+1. Create User
+Create new user (Admin only)
+Endpoint
+POST /api/v1/users
+Authorization
+Required
+Role: ROLE_ADMIN
+Request Body
+{
+  "username": "johndoe",
+  "email": "john@example.com",
+  "password": "password123",
+  "age": 25,
+  "phone": "0912345678",
+  "gender": "MALE",
+  "address": "Hà Nội",
+  "role": "ROLE_CANDIDATE",
+  "companyId": null
+}
+Request Fields
+Field	Type	Required	Description
+username	String	Yes	Username
+email	String	Yes	User email
+password	String	Yes	User password
+age	Integer	No	User age
+phone	String	No	Phone number
+gender	Enum	No	MALE, FEMALE, OTHER
+address	String	No	User address
+role	Enum	Yes	ROLE_ADMIN, ROLE_RECRUITER, ROLE_CANDIDATE
+companyId	Long	No	Company ID for recruiter
+Success Response (201)
+{
+  "success": true,
+  "meta": {
+    "code": 201,
+    "path": "/api/v1/users"
+  },
+  "data": {
+    "id": 2,
     "username": "johndoe",
     "email": "john@example.com",
-    "password": "password123",
     "age": 25,
     "phone": "0912345678",
     "gender": "MALE",
+    "dob": null,
     "address": "Hà Nội",
+    "enabled": true,
+    "accountNonLocked": true,
+    "deleted": false,
     "role": "ROLE_CANDIDATE",
-    "companyId": null
-  }
-
-  Response (201):
-  {
-    "success": true,
-    "meta": {
-        "code": 201,
-        "path": "/api/v1/users"
-    },
-    "data": {
-        "id": 2,
-        "username": "johndoe",
-        "email": "john@example.com",
-        "age": 25,
-        "phone": "0912345678",
-        "gender": "MALE",
-        "dob": null,
-        "address": "Hà Nội",
-        "enabled": true,
-        "accountNonLocked": true,
-        "deleted": false,
-        "role": "ROLE_CANDIDATE",
-        "companyId": null,
-        "companyName": null,
-        "createdAt": "2026-05-09T15:54:02.8899333",
-        "updatedAt": "2026-05-09T15:54:02.8899333",
-        "createdBy": 1,
-        "updatedBy": 1
-    },
-    "error": null,
-    "timestamp": "2026-05-09T15:54:02.918857"
+    "companyId": null,
+    "companyName": null,
+    "createdAt": "2026-05-09T15:54:02.8899333",
+    "updatedAt": "2026-05-09T15:54:02.8899333",
+    "createdBy": 1,
+    "updatedBy": 1
+  },
+  "error": null,
+  "timestamp": "2026-05-09T15:54:02.918857"
 }
-
-  ---
-  2. GET User by ID
-
-  GET /api/v1/users/{id}
-  Authorization: Bearer <token>
-Response
+2. Get User By ID
+Get detail information of a user
+Endpoint
+GET /api/v1/users/{id}
+Authorization
+Required
+Roles:
+ROLE_ADMIN
+Owner of account
+Path Variables
+Variable	Type	Description
+id	Long	User ID
+Success Response (200)
 {
-    "success": true,
-    "meta": {
-        "code": 200,
-        "path": "/api/v1/users/1"
-    },
-    "data": {
-        "id": 1,
-        "username": "admin",
-        "email": "admin@gmail.com",
-        "age": null,
-        "phone": null,
-        "gender": null,
-        "dob": null,
-        "address": null,
-        "enabled": true,
-        "accountNonLocked": true,
-        "deleted": false,
-        "role": "ROLE_ADMIN",
-        "companyId": null,
-        "companyName": null,
-        "createdAt": "2026-05-09T15:53:15.116064",
-        "updatedAt": "2026-05-09T15:53:15.116064",
-        "createdBy": null,
-        "updatedBy": null
-    },
-    "error": null,
-    "timestamp": "2026-05-09T15:55:05.2203037"
+  "success": true,
+  "meta": {
+    "code": 200,
+    "path": "/api/v1/users/1"
+  },
+  "data": {
+    "id": 1,
+    "username": "admin",
+    "email": "admin@gmail.com",
+    "age": null,
+    "phone": null,
+    "gender": null,
+    "dob": null,
+    "address": null,
+    "enabled": true,
+    "accountNonLocked": true,
+    "deleted": false,
+    "role": "ROLE_ADMIN",
+    "companyId": null,
+    "companyName": null,
+    "createdAt": "2026-05-09T15:53:15.116064",
+    "updatedAt": "2026-05-09T15:53:15.116064",
+    "createdBy": null,
+    "updatedBy": null
+  },
+  "error": null,
+  "timestamp": "2026-05-09T15:55:05.2203037"
 }
-  ---
-  3. UPDATE User
-
-  PUT /api/v1/users/{id}
-  Authorization: Bearer <token>
-  Content-Type: application/json
-	 Request Body:
-                                                                                                                          {
+3. Update User
+Update user information
+Endpoint
+PUT /api/v1/users/{id}
+Authorization
+Required
+Business Rules
+ROLE_ADMIN:
+Can update any user
+ROLE_CANDIDATE / ROLE_RECRUITER:
+Can update only their own account
+Path Variables
+Variable	Type	Description
+id	Long	User ID
+Request Body
+{
+  "username": "newname",
+  "email": "newemail@example.com",
+  "newPassword": "newpassword123",
+  "age": 26,
+  "phone": "0912345679",
+  "gender": "MALE",
+  "dob": "1995-05-15",
+  "address": "TP.HCM, Việt Nam",
+  "companyId": 1
+}
+Request Fields
+Field	Type	Required	Description
+username	String	No	New username
+email	String	No	New email
+newPassword	String	No	New password
+age	Integer	No	User age
+phone	String	No	Phone number
+gender	Enum	No	MALE, FEMALE, OTHER
+dob	Date	No	Format: yyyy-MM-dd
+address	String	No	User address
+companyId	Long	No	Company ID
+Success Response (200)
+{
+  "success": true,
+  "meta": {
+    "code": 200,
+    "path": "/api/v1/users/1"
+  },
+  "data": {
+    "id": 1,
     "username": "newname",
     "email": "newemail@example.com",
-    "newPassword": "newpassword123",
     "age": 26,
     "phone": "0912345679",
     "gender": "MALE",
     "dob": "1995-05-15",
     "address": "TP.HCM, Việt Nam",
-    "companyId": 1
-  }
-Response
-{
-    "success": true,
-    "meta": {
-        "code": 200,
-        "path": "/api/v1/users/1"
-    },
-    "data": {
-        "id": 1,
-        "username": "newname",
-        "email": "newemail@example.com",
-        "age": 26,
-        "phone": "0912345679",
-        "gender": "MALE",
-        "dob": "1995-05-15",
-        "address": "TP.HCM, Việt Nam",
-        "enabled": true,
-        "accountNonLocked": true,
-        "deleted": false,
-        "role": "ROLE_ADMIN",
-        "companyId": null,
-        "companyName": null,
-        "createdAt": "2026-05-09T15:53:15.116064",
-        "updatedAt": "2026-05-09T15:53:15.116064",
-        "createdBy": null,
-        "updatedBy": 1
-    },
-    "error": null,
-    "timestamp": "2026-05-09T15:59:28.9214798"
+    "enabled": true,
+    "accountNonLocked": true,
+    "deleted": false,
+    "role": "ROLE_ADMIN",
+    "companyId": null,
+    "companyName": null,
+    "createdAt": "2026-05-09T15:53:15.116064",
+    "updatedAt": "2026-05-09T15:53:15.116064",
+    "createdBy": null,
+    "updatedBy": 1
+  },
+  "error": null,
+  "timestamp": "2026-05-09T15:59:28.9214798"
 }
-  Business Rules:
-  - ADMIN: có thể update bất kỳ user nào
-  - CANDIDATE/RECRUITER: chỉ update chính mình
+4. Delete User
+Soft delete user (Admin only)
+Endpoint
+DELETE /api/v1/users/{id}
+Authorization
+Required
+Role: ROLE_ADMIN
+Path Variables
+Variable	Type	Description
+id	Long	User ID
+Business Rules
+Cannot delete current logged-in admin
+Cannot delete the last remaining admin
+Soft delete only (deleted = true)
+5. Lock User
+Lock user account (Admin only)
+Endpoint
+PATCH /api/v1/users/{id}/lock
+Authorization
+Required
+Role: ROLE_ADMIN
+Business Rules
+Locked user cannot login
+accountNonLocked = false
+6. Unlock User
+Unlock user account (Admin only)
+Endpoint
+PATCH /api/v1/users/{id}/unlock
+Authorization
+Required
+Role: ROLE_ADMIN
+Business Rules
+accountNonLocked = true
+7. Disable User
+Disable user account (Admin only)
+Endpoint
+PATCH /api/v1/users/{id}/disable
+Authorization
+Required
+Role: ROLE_ADMIN
+Business Rules
+Disabled user cannot access system
+enabled = false
+8. Enable User
+Enable user account (Admin only)
+Endpoint
+PATCH /api/v1/users/{id}/enable
+Authorization
+Required
+Role: ROLE_ADMIN
+Business Rules
+enabled = true
+9. List Users
+Get paginated user list (Admin only)
+Endpoint
+GET /api/v1/users
+Example Request
+GET /api/v1/users?page=1&size=10&sortBy=createdAt&direction=DESC&keyword=john
+Authorization
+Required
+Role: ROLE_ADMIN
+Query Parameters
+Parameter	Default	Description
+page	1	Current page number
+size	10	Number of items per page
+sortBy	createdAt	Sort field
+direction	DESC	Sort direction (ASC or DESC)
+keyword	null	Search by username or email
+filter	null	Advanced filtering
+Supported Search
 
-  ---
-  4. DELETE User (Admin only, soft delete)
+Keyword search supports:
 
-  DELETE /api/v1/users/{id}
-  Authorization: Bearer <token>
-
-  Business Rules:
-  - Không thể xóa chính mình
-  - Không thể xóa admin cuối cùng
-
-  ---
-  5. LOCK User (Admin only)
-
-  PATCH /api/v1/users/{id}/lock
-  Authorization: Bearer <token>
-
-  ---
-  6. UNLOCK User (Admin only)
-
-  PATCH /api/v1/users/{id}/unlock
-  Authorization: Bearer <token>
-
-  ---
-  7. DISABLE User (Admin only)
-
-  PATCH /api/v1/users/{id}/disable
-  Authorization: Bearer <token>
-
-  ---
-  8. ENABLE User (Admin only)
-
-  PATCH /api/v1/users/{id}/enable
-  Authorization: Bearer <token>
-
-  ---
-  9. LIST Users (Admin only)
-
-  GET /api/v1/users?page=1&size=10&sortBy=createdAt&direction=DESC&keyword=john
-  Authorization: Bearer <token>
-
-  Query Parameters:
-
-  ┌───────────┬───────────┬────────────────────────┐
-  │   Param   │  Default  │      Description       │
-  ├───────────┼───────────┼────────────────────────┤
-  │ page      │ 1         │ Page number            │
-  ├───────────┼───────────┼────────────────────────┤
-  │ size      │ 10        │ Items per page         │
-  ├───────────┼───────────┼────────────────────────┤
-  │ sortBy    │ createdAt │ Sort field             │
-  ├───────────┼───────────┼────────────────────────┤
-  │ direction │ DESC      │ ASC/DESC               │
-  ├───────────┼───────────┼────────────────────────┤
-  │ keyword   │ null      │ Search username, email │
-  ├───────────┼───────────┼────────────────────────┤
-  │ filter    │ null      │ Advanced filter        │
-  └───────────┴───────────┴────────────────────────┘
-
-  ---
-  10. FILTER Examples
-
-  GET /api/v1/users?filter=role:ROLE_ADMIN
-  GET /api/v1/users?filter=enabled=true,username:*john*
-  GET /api/v1/users?filter=(role:ROLE_ADMIN|role:ROLE_RECRUITER),enabled=true
+Username
+Email
+Success Response (200)
+{
+  "success": true,
+  "meta": {
+    "code": 200,
+    "path": "/api/v1/users"
+  },
+  "data": {
+    "content": [],
+    "page": 1,
+    "size": 10,
+    "totalElements": 100,
+    "totalPages": 10
+  },
+  "error": null,
+  "timestamp": "2026-05-09T16:00:00"
+}
+10. Advanced Filter
+Filter Syntax
+field:value
+Multiple Conditions
+field1:value1,field2:value2
+OR Condition
+(field1:value1|field2:value2)
+Wildcard Search
+username:*john*
+Filter Examples
+Filter by role
+GET /api/v1/users?filter=role:ROLE_ADMIN
+Filter enabled users with username contains "john"
+GET /api/v1/users?filter=enabled=true,username:*john*
+Filter admin or recruiter and enabled users
+GET /api/v1/users?filter=(role:ROLE_ADMIN|role:ROLE_RECRUITER),enabled=true
+User Entity Overview
+Field	Description
+enabled	User activation status
+accountNonLocked	Account lock status
+deleted	Soft delete status
+role	System role
+companyId	Associated company
+createdBy	User who created record
+updatedBy	Last user who updated record
+Roles
+Role	Description
+ROLE_ADMIN	System administrator
+ROLE_RECRUITER	Recruiter user
+ROLE_CANDIDATE	Candidate user
+Common HTTP Status Codes
+Status	Meaning
+200	Success
+201	Created successfully
+400	Validation error
+401	Unauthorized
+403	Forbidden
+404	User not found
+409	Conflict
+500	Internal server error

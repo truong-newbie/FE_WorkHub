@@ -40,6 +40,10 @@ export function setUserId(userId) {
     localStorage.setItem(USER_ID_KEY, userId);
 }
 
+export function clearUserId() {
+    localStorage.removeItem(USER_ID_KEY);
+}
+
 export function clearAccessToken() {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(LEGACY_TOKEN_KEY);

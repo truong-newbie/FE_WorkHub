@@ -149,6 +149,7 @@ Actions:
 - `logout`
 - `clearSession`
 - `hydrateAuthFromStorage`
+- `updateCurrentUser`
 
 ## Token Strategy
 
@@ -210,8 +211,52 @@ Roles are normalized by removing `ROLE_` and uppercasing:
 
 Unauthorized role access redirects to `/unauthorized`.
 
+## UI/UX Implementation
+
+All auth pages have been refactored to follow ITviec-style professional job portal design:
+
+### Design System
+
+- **Color scheme**: WorkHub red (#ed1b2f) as primary accent, clean white backgrounds, professional gray tones
+- **Layout**: Two-column desktop layout (branding left, form right) for Login/Register; single-column for password reset flow
+- **Typography**: Clear hierarchy with professional font sizes (28px headers, 15-16px body)
+- **Spacing**: Consistent 8px-based spacing system, proper padding (40px panels)
+- **Components**: Professional form inputs (44px height), prominent CTAs (48px height)
+
+### Login Page
+
+- Two-column layout with WorkHub branding and value proposition on the left
+- Features section highlighting platform benefits with icons
+- Clean form with email/password fields
+- Social login buttons with Google/Facebook icons
+- Links to register and forgot password
+
+### Register Page
+
+- Two-column layout with onboarding messaging
+- Form fields: email, password, username, date of birth, gender
+- Client-side validation before API call
+- Success redirect to login page
+
+### Forgot Password Flow
+
+- Three-step process with visual step indicators
+- Step 1: Email input to request OTP
+- Step 2: OTP verification with resend functionality
+- Step 3: New password creation with confirmation
+- Single-column centered layout for focused experience
+- Clear navigation between steps
+
+### Responsive Design
+
+- Desktop: Two-column layout for login/register, centered single-column for password reset
+- Mobile: Single-column layout, branding section hidden, optimized form spacing
+- Breakpoint: 768px
+
 ## TODOs
 
 - Add real dashboard pages for candidate, recruiter, and admin.
 - Add refresh-token endpoint support when backend exposes it.
 - Replace legacy profile token decoding with auth-store selectors in a later profile-module cleanup.
+- Consider adding password strength indicator for register/reset password forms.
+- Add countdown timer for OTP expiration (70 seconds).

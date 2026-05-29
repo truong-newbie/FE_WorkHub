@@ -1,8 +1,7 @@
 import {useState} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
-import Button from '../../components/ui/Button.jsx';
+import {FaKey, FaEnvelope} from 'react-icons/fa';
 import ErrorMessage from '../../components/ui/ErrorMessage.jsx';
-import Input from '../../components/ui/Input.jsx';
 import {useToast} from '../../components/ui/useToast.js';
 import {forgotPassword, verifyForgotPasswordOtp} from '../../services/authApi.js';
 import styles from './AuthPage.module.css';
@@ -26,12 +25,12 @@ export default function VerifyOtpPage() {
         setErrorMessage('');
 
         if (!email || !isValidEmail(email)) {
-            setErrorMessage('A valid email is required');
+            setErrorMessage('Email không hợp lệ');
             return;
         }
 
         if (!isValidOtp(otp)) {
-            setErrorMessage('OTP must be 6 digits');
+            setErrorMessage('Mã OTP phải có 6 chữ số');
             return;
         }
 
@@ -40,10 +39,10 @@ export default function VerifyOtpPage() {
         try {
             await verifyForgotPasswordOtp({email, otp});
             saveForgotPasswordEmail(email);
-            showToast({message: 'OTP verified successfully', type: 'success'});
+            showToast({message: 'Xác thực OTP thành công', type: 'success'});
             navigate('/reset-password', {state: {email, otp}});
         } catch (error) {
-            const message = error.message || 'OTP verification failed';
+            const message = error.message || 'Xác thực OTP thất bại';
             setErrorMessage(message);
             showToast({message, type: 'error'});
         } finally {
@@ -55,7 +54,7 @@ export default function VerifyOtpPage() {
         setErrorMessage('');
 
         if (!email || !isValidEmail(email)) {
-            setErrorMessage('A valid email is required before resending OTP');
+            setErrorMessage('Email không hợp lệ');
             return;
         }
 
@@ -65,11 +64,12 @@ export default function VerifyOtpPage() {
             const result = await forgotPassword({email});
             saveForgotPasswordEmail(email);
             showToast({
-                message: result?.message || 'OTP resent to your email',
+                message: result?.message || 'Mã OTP mới đã được gửi đến email của bạn',
                 type: 'success',
             });
+            setOtp('');
         } catch (error) {
-            const message = error.message || 'Failed to resend OTP';
+            const message = error.message || 'Gửi lại mã OTP thất bại';
             setErrorMessage(message);
             showToast({message, type: 'error'});
         } finally {
@@ -78,54 +78,85 @@ export default function VerifyOtpPage() {
     };
 
     return (
-        <main className={styles.authPage}>
-            <section className={styles.panel}>
+        <main className={styles.authPageSimple}>
+            <section className={styles.panelSimple}>
+                <div className={styles.stepIndicator}>
+                    <div className={`${styles.step} ${styles.stepCompleted}`}>1</div>
+                    <div className={styles.stepLine}></div>
+                    <div className={`${styles.step} ${styles.stepActive}`}>2</div>
+                    <div className={styles.stepLine}></div>
+                    <div className={styles.step}>3</div>
+                </div>
+
                 <div className={styles.header}>
-                    <h1>Verify OTP</h1>
-                    <p>Enter the 6-digit code sent to your email.</p>
+                    <h1>Xác thực OTP</h1>
+                    <p>Nhập mã OTP 6 chữ số đã được gửi đến email của bạn</p>
+                    {email && (
+                        <p style={{fontSize: '14px', color: '#6c757d', marginTop: '8px'}}>
+                            <FaEnvelope style={{marginRight: '6px'}}/>
+                            {email}
+                        </p>
+                    )}
                 </div>
 
                 <form className={styles.form} onSubmit={handleVerify}>
-                    <Input
-                        className={styles.field}
-                        label="Email"
-                        name="email"
-                        type="email"
-                        autoComplete="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        required
-                    />
-                    <Input
-                        className={styles.field}
-                        label="OTP"
-                        name="otp"
-                        inputMode="numeric"
-                        maxLength={6}
-                        value={otp}
-                        onChange={(event) => setOtp(event.target.value.replace(/\D/g, '').slice(0, 6))}
-                        required
-                    />
-                    <ErrorMessage message={errorMessage}/>
-                    <Button className={styles.fullWidth} type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? 'Verifying...' : 'Verify OTP'}
-                    </Button>
-                    <Button
-                        className={styles.fullWidth}
+                    <div className={styles.field}>
+                        <label htmlFor="email">Email</label>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            autoComplete="email"
+                            placeholder="your.email@example.com"
+                            value={email}
+                            onChange={(event) => setEmail(event.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className={styles.field}>
+                        <label htmlFor="otp">
+                            <FaKey style={{display: 'inline', marginRight: '6px'}}/>
+                            Mã OTP
+                        </label>
+                        <input
+                            id="otp"
+                            name="otp"
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={6}
+                            placeholder="Nhập 6 chữ số"
+                            value={otp}
+                            onChange={(event) => setOtp(event.target.value.replace(/\D/g, '').slice(0, 6))}
+                            required
+                            style={{fontSize: '20px', letterSpacing: '4px', textAlign: 'center'}}
+                        />
+                    </div>
+
+                    {errorMessage && <ErrorMessage message={errorMessage}/>}
+
+                    <button
+                        type="submit"
+                        className={styles.submitButton}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? 'Đang xác thực...' : 'Xác thực OTP'}
+                    </button>
+
+                    <button
                         type="button"
-                        variant="secondary"
+                        className={styles.secondaryButton}
                         disabled={isResending}
                         onClick={handleResend}
                     >
-                        {isResending ? 'Resending...' : 'Resend OTP'}
-                    </Button>
+                        {isResending ? 'Đang gửi lại...' : 'Gửi lại mã OTP'}
+                    </button>
                 </form>
 
                 <p className={styles.footer}>
-                    Back to <Link to="/forgot-password">forgot password</Link>
+                    Quay lại <Link to="/forgot-password">nhập email</Link>
                 </p>
             </section>
         </main>
     );
 }
-
