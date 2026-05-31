@@ -732,3 +732,61 @@ PENDING, REVIEWING, SCREENED, APPROVED, REJECTED
 - `src/main/java/org/example/workhub/domain/dto/request/JobUpdateRequest.java`
 - `src/main/java/org/example/workhub/domain/dto/request/JobFilterRequest.java`
 - `src/main/java/org/example/workhub/domain/dto/response/JobResponse.java`
+
+## 13. Frontend Implementation
+
+Routes:
+
+```text
+/jobs
+/jobs/:id
+/saved-jobs
+/applications
+/candidate/jobs/recommended
+/recruiter/jobs
+/recruiter/jobs/create
+/recruiter/jobs/:id/edit
+/recruiter/jobs/:jobId/applications
+/admin/jobs
+/admin/jobs/:jobId/applications
+```
+
+Service:
+
+```text
+src/features/job/services/jobService.js
+```
+
+Reusable UI:
+
+```text
+src/features/job/components/JobCard.jsx
+src/features/job/components/JobForm.jsx
+src/features/job/components/JobStatusBadge.jsx
+src/features/job/components/ApplicationStatusBadge.jsx
+```
+
+Implemented flows:
+
+- Public `/jobs` uses `/jobs/latest`; signed-in users use `/jobs/search` with autocomplete,
+  salary, location, level, employment type, skill, sorting, and pagination controls.
+- Job detail is protected because backend `GET /job/{id}` requires authentication.
+- Candidate flow supports save/remove favorite, saved-job list, apply with required cover
+  letter, withdraw pending application, application history, and recommended jobs.
+- Recruiter flow resolves the current company first, then uses company jobs because the
+  backend does not expose `/job/me`. It supports create, update, publish, unpublish,
+  soft-delete, application review, and ATS screening.
+- Admin flow supports full list filters, statistics, publish, unpublish, soft-delete,
+  application review, candidate resume access, and Elasticsearch reindex.
+
+UI states and guards:
+
+- Async screens handle loading, error, empty result, submit loading, pagination, and
+  refetch after mutations.
+- Candidate, recruiter, and admin pages are protected with existing role guards.
+- Public users see latest jobs and are sent to login before protected detail/search flows.
+- `workMode` is not exposed as an active filter because backend currently ignores it.
+- Recruiter list does not display an inaccurate application total from `applicationCount`.
+- Admin publication filtering intentionally switches between published and draft jobs.
+  Core `GET /job` does not expose an all-publication-state option because omitting
+  `published` defaults to `true`.

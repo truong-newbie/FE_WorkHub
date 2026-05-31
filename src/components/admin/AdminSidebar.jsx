@@ -1,6 +1,7 @@
 import {createElement} from 'react';
 import {NavLink} from 'react-router-dom';
 import {
+    FaBriefcase,
     FaBuilding,
     FaEnvelope,
     FaExternalLinkAlt,
@@ -26,6 +27,7 @@ const sections = [
         items: [
             {to: '/admin/users', label: 'Users', icon: FaUsers},
             {to: '/admin/companies', label: 'Companies', icon: FaBuilding},
+            {to: '/admin/jobs', label: 'Jobs', icon: FaBriefcase},
             {to: '/admin/skills', label: 'Skills', icon: FaTools},
             {to: '/admin/resumes', label: 'Resumes', icon: FaFileAlt},
             {to: '/admin/subscribers', label: 'Subscribers', icon: FaEnvelope},

@@ -2,6 +2,7 @@ import {createElement} from 'react';
 import {Link} from 'react-router-dom';
 import {
     FaArrowRight,
+    FaBriefcase,
     FaBuilding,
     FaEnvelope,
     FaFileAlt,
@@ -41,6 +42,7 @@ const priorityActions = [
 const modules = [
     {to: '/admin/users', label: 'Users', description: 'Accounts, roles and access status', icon: FaUsers},
     {to: '/admin/companies', label: 'Companies', description: 'Profiles, approval and visibility', icon: FaBuilding},
+    {to: '/admin/jobs', label: 'Jobs', description: 'Postings, publication and search index', icon: FaBriefcase},
     {to: '/admin/skills', label: 'Skills', description: 'Shared platform taxonomy', icon: FaTools},
     {to: '/admin/resumes', label: 'Resumes', description: 'Candidate CV records and ATS state', icon: FaFileAlt},
     {to: '/admin/subscribers', label: 'Subscribers', description: 'Job alerts and email operations', icon: FaEnvelope},

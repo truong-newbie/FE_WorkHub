@@ -33,6 +33,15 @@ import SubscriptionSettingsPage from './features/subscriber/pages/SubscriptionSe
 import AdminSubscriberManagementPage from './features/subscriber/pages/AdminSubscriberManagementPage.jsx';
 import UnsubscribePage from './features/subscriber/pages/UnsubscribePage.jsx';
 import AdminDashboardPage from './features/admin/pages/AdminDashboardPage.jsx';
+import JobListPage from './features/job/pages/JobListPage.jsx';
+import JobDetailPage from './features/job/pages/JobDetailPage.jsx';
+import SavedJobsPage from './features/job/pages/SavedJobsPage.jsx';
+import CandidateApplicationsPage from './features/job/pages/CandidateApplicationsPage.jsx';
+import RecommendedJobsPage from './features/job/pages/RecommendedJobsPage.jsx';
+import RecruiterJobsPage from './features/job/pages/RecruiterJobsPage.jsx';
+import JobFormPage from './features/job/pages/JobFormPage.jsx';
+import JobApplicationsPage from './features/job/pages/JobApplicationsPage.jsx';
+import AdminJobManagementPage from './features/job/pages/AdminJobManagementPage.jsx';
 import './App.module.css';
 
 function App() {
@@ -47,6 +56,7 @@ function App() {
                 <Route path="/auth/oauth/callback" element={<OAuthCallbackPage/>}/>
                 <Route path="/unauthorized" element={<UnauthorizedPage/>}/>
                 <Route element={<MainLayout/>}>
+                    <Route path="/jobs" element={<JobListPage/>}/>
                     <Route path="/companies" element={<CompanyListPage/>}/>
                     <Route path="/companies/:id" element={<CompanyDetailPage/>}/>
                     <Route path="/skills" element={<SkillDirectoryPage/>}/>
@@ -61,6 +71,7 @@ function App() {
                         <Route path="/profile/avatar" element={<UploadAvatarPage/>}/>
                         <Route path="/profile/change-password" element={<ChangePasswordPage/>}/>
                         <Route path="/settings/subscription" element={<SubscriptionSettingsPage/>}/>
+                        <Route path="/jobs/:id" element={<JobDetailPage/>}/>
                     </Route>
                 </Route>
 
@@ -74,6 +85,9 @@ function App() {
                         <Route path="/admin/resumes" element={<AdminResumeManagementPage/>}/>
                         <Route path="/admin/skills" element={<AdminSkillManagementPage/>}/>
                         <Route path="/admin/subscribers" element={<AdminSubscriberManagementPage/>}/>
+                        <Route path="/admin/jobs" element={<AdminJobManagementPage/>}/>
+                        <Route path="/admin/jobs/:jobId/applications" element={<JobApplicationsPage/>}/>
+                        <Route path="/admin/jobs/:jobId/candidates/:candidateId/resume" element={<RecruiterCandidateResumePage/>}/>
                     </Route>
                 </Route>
 
@@ -82,6 +96,10 @@ function App() {
                         <Route path="/recruiter/dashboard" element={<RoleDashboard title="Recruiter Dashboard"/>}/>
                         <Route path="/recruiter/company" element={<RecruiterCompanyOnboardingPage/>}/>
                         <Route path="/recruiter/company/requests" element={<ReviewerRecruiterRequestsPage reviewer="company"/>}/>
+                        <Route path="/recruiter/jobs" element={<RecruiterJobsPage/>}/>
+                        <Route path="/recruiter/jobs/create" element={<JobFormPage/>}/>
+                        <Route path="/recruiter/jobs/:id/edit" element={<JobFormPage/>}/>
+                        <Route path="/recruiter/jobs/:jobId/applications" element={<JobApplicationsPage/>}/>
                         <Route path="/recruiter/jobs/:jobId/candidates/:candidateId/resume" element={<RecruiterCandidateResumePage/>}/>
                     </Route>
                 </Route>
@@ -91,6 +109,9 @@ function App() {
                         <Route path="/candidate/dashboard" element={<RoleDashboard title="Candidate Dashboard"/>}/>
                         <Route path="/candidate/become-recruiter" element={<CandidateRecruiterRequestPage/>}/>
                         <Route path="/candidate/resumes" element={<CandidateResumesPage/>}/>
+                        <Route path="/saved-jobs" element={<SavedJobsPage/>}/>
+                        <Route path="/applications" element={<CandidateApplicationsPage/>}/>
+                        <Route path="/candidate/jobs/recommended" element={<RecommendedJobsPage/>}/>
                     </Route>
                 </Route>
             </Routes>

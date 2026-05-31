@@ -56,6 +56,7 @@ for example `2026-05-31T14:30:00`.
 | Resume | [resume-api.md](resume-api.md) |
 | Company | [company-api.md](company-api.md) |
 | Subscriber | [subscriber-api.md](subscriber-api.md) |
+| Job | [job-api.md](job-api.md) |
 
 ## Role Names
 
