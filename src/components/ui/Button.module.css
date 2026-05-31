@@ -14,8 +14,12 @@
 }
 
 .primary {
-    background: #0f6bff;
+    background: #ed1b2f;
     color: white;
+}
+
+.primary:hover:not(:disabled) {
+    background: #d91828;
 }
 
 .secondary {
@@ -27,4 +31,3 @@
     background: #d92d20;
     color: white;
 }
-

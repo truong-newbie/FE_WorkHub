@@ -24,9 +24,15 @@ apiClient.interceptors.response.use(
     (error) => {
         const status = error.response?.status;
         const data = error.response?.data;
+        const responseMessage = data?.message;
         const message = typeof data === 'string'
             ? data
-            : data?.message || data?.error || error.message || 'Request failed';
+            : typeof responseMessage === 'string'
+                ? responseMessage
+                : responseMessage?.message
+                    || (typeof data?.error === 'string' ? data.error : data?.error?.message)
+                    || error.message
+                    || 'Request failed';
 
         if (status === 401) {
             clearAuthTokens();

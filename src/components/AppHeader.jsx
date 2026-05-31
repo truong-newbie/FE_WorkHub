@@ -13,6 +13,7 @@ import {
     FaUsers,
     FaBars,
     FaTimes,
+    FaUserTie,
 } from 'react-icons/fa';
 import {useAuth} from '../stores/useAuth.js';
 import styles from './AppHeader.module.css';
@@ -87,6 +88,12 @@ export default function AppHeader() {
                 Việc đã ứng tuyển
             </NavLink>
             <NavLink
+                to="/candidate/become-recruiter"
+                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+            >
+                Become a Recruiter
+            </NavLink>
+            <NavLink
                 to="/saved-jobs"
                 className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
             >
@@ -116,6 +123,12 @@ export default function AppHeader() {
                 Ứng viên
             </NavLink>
             <NavLink
+                to="/recruiter/company/requests"
+                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+            >
+                Join requests
+            </NavLink>
+            <NavLink
                 to="/recruiter/company"
                 className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
             >
@@ -143,6 +156,18 @@ export default function AppHeader() {
                 className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
             >
                 Quản lý công ty
+            </NavLink>
+            <NavLink
+                to="/admin/recruiter-requests"
+                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+            >
+                Recruiter requests
+            </NavLink>
+            <NavLink
+                to="/admin/company-join-requests"
+                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+            >
+                Company join requests
             </NavLink>
             <NavLink
                 to="/admin/jobs"
@@ -201,6 +226,15 @@ export default function AppHeader() {
                             Việc đã ứng tuyển
                         </NavLink>
                         <NavLink
+                            to="/candidate/become-recruiter"
+                            className={({isActive}) =>
+                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
+                            }
+                            onClick={() => setShowMobileMenu(false)}
+                        >
+                            Become a Recruiter
+                        </NavLink>
+                        <NavLink
                             to="/saved-jobs"
                             className={({isActive}) =>
                                 `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
@@ -241,6 +275,15 @@ export default function AppHeader() {
                             Ứng viên
                         </NavLink>
                         <NavLink
+                            to="/recruiter/company/requests"
+                            className={({isActive}) =>
+                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
+                            }
+                            onClick={() => setShowMobileMenu(false)}
+                        >
+                            Join requests
+                        </NavLink>
+                        <NavLink
                             to="/recruiter/company"
                             className={({isActive}) =>
                                 `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
@@ -279,6 +322,24 @@ export default function AppHeader() {
                             onClick={() => setShowMobileMenu(false)}
                         >
                             Quản lý công ty
+                        </NavLink>
+                        <NavLink
+                            to="/admin/recruiter-requests"
+                            className={({isActive}) =>
+                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
+                            }
+                            onClick={() => setShowMobileMenu(false)}
+                        >
+                            Recruiter requests
+                        </NavLink>
+                        <NavLink
+                            to="/admin/company-join-requests"
+                            className={({isActive}) =>
+                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
+                            }
+                            onClick={() => setShowMobileMenu(false)}
+                        >
+                            Company join requests
                         </NavLink>
                         <NavLink
                             to="/admin/jobs"
@@ -397,6 +458,17 @@ export default function AppHeader() {
                                             <FaLock className={styles.dropdownItemIcon} />
                                             Đổi mật khẩu
                                         </Link>
+
+                                        {isCandidate && (
+                                            <Link
+                                                to="/candidate/become-recruiter"
+                                                className={styles.dropdownItem}
+                                                onClick={() => setShowDropdown(false)}
+                                            >
+                                                <FaUserTie className={styles.dropdownItemIcon} />
+                                                Become a Recruiter
+                                            </Link>
+                                        )}
 
                                         <div className={styles.dropdownDivider}></div>
 

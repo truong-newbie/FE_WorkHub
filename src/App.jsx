@@ -12,10 +12,15 @@ import VerifyOtpPage from './pages/auth/VerifyOtpPage.jsx';
 import ResetPasswordPage from './pages/auth/ResetPasswordPage.jsx';
 import RoleDashboard from './pages/dashboard/RoleDashboard.jsx';
 import AdminUserManagementPage from './features/user/pages/AdminUserManagementPage.jsx';
+import AdminCompanyManagementPage from './features/recruiterRequests/pages/AdminCompanyManagementPage.jsx';
+import AdminRecruiterUpgradeRequestsPage from './features/recruiterRequests/pages/AdminRecruiterUpgradeRequestsPage.jsx';
 import ProfileViewPage from './features/user/pages/ProfileViewPage.jsx';
 import EditProfilePage from './features/user/pages/EditProfilePage.jsx';
 import UploadAvatarPage from './features/user/pages/UploadAvatarPage.jsx';
 import ChangePasswordPage from './features/user/pages/ChangePasswordPage.jsx';
+import CandidateRecruiterRequestPage from './features/recruiterRequests/pages/CandidateRecruiterRequestPage.jsx';
+import RecruiterCompanyOnboardingPage from './features/recruiterRequests/pages/RecruiterCompanyOnboardingPage.jsx';
+import ReviewerRecruiterRequestsPage from './features/recruiterRequests/pages/ReviewerRecruiterRequestsPage.jsx';
 import './App.module.css';
 
 function App() {
@@ -44,18 +49,24 @@ function App() {
                     <Route element={<MainLayout/>}>
                         <Route path="/admin/dashboard" element={<RoleDashboard title="Admin Dashboard"/>}/>
                         <Route path="/admin/users" element={<AdminUserManagementPage/>}/>
+                        <Route path="/admin/companies" element={<AdminCompanyManagementPage/>}/>
+                        <Route path="/admin/recruiter-requests" element={<AdminRecruiterUpgradeRequestsPage/>}/>
+                        <Route path="/admin/company-join-requests" element={<ReviewerRecruiterRequestsPage reviewer="admin"/>}/>
                     </Route>
                 </Route>
 
                 <Route element={<RoleBasedRoute allowedRoles={['RECRUITER']}/>}>
                     <Route element={<MainLayout/>}>
                         <Route path="/recruiter/dashboard" element={<RoleDashboard title="Recruiter Dashboard"/>}/>
+                        <Route path="/recruiter/company" element={<RecruiterCompanyOnboardingPage/>}/>
+                        <Route path="/recruiter/company/requests" element={<ReviewerRecruiterRequestsPage reviewer="company"/>}/>
                     </Route>
                 </Route>
 
                 <Route element={<RoleBasedRoute allowedRoles={['CANDIDATE']}/>}>
                     <Route element={<MainLayout/>}>
                         <Route path="/candidate/dashboard" element={<RoleDashboard title="Candidate Dashboard"/>}/>
+                        <Route path="/candidate/become-recruiter" element={<CandidateRecruiterRequestPage/>}/>
                     </Route>
                 </Route>
             </Routes>

@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import {Link} from 'react-router-dom';
-import {FaUser, FaCamera, FaLock, FaEdit} from 'react-icons/fa';
+import {FaCamera, FaLock, FaEdit, FaUserTie} from 'react-icons/fa';
 import LoadingState from '../../../components/ui/LoadingState.jsx';
 import ErrorMessage from '../../../components/ui/ErrorMessage.jsx';
 import {useToast} from '../../../components/ui/useToast.js';
@@ -16,7 +16,7 @@ function formatDate(value) {
 }
 
 export default function ProfileViewPage() {
-    const {user: authUser, role, updateCurrentUser} = useAuth();
+    const {user: authUser, role, roles, updateCurrentUser} = useAuth();
     const {showToast} = useToast();
 
     const [profile, setProfile] = useState(null);
@@ -211,6 +211,24 @@ export default function ProfileViewPage() {
                                     Đổi mật khẩu
                                 </Link>
                             </div>
+                            {roles.includes('CANDIDATE') && (
+                                <div className={styles.actionCard}>
+                                    <div className={styles.actionInfo}>
+                                        <div className={styles.actionIcon}>
+                                            <FaUserTie/>
+                                        </div>
+                                        <div className={styles.actionText}>
+                                            <div className={styles.actionTitle}>Become a Recruiter</div>
+                                            <div className={styles.actionDescription}>
+                                                Learn how recruiter access is enabled for your account
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <Link to="/candidate/become-recruiter" className={styles.actionButton}>
+                                        View details
+                                    </Link>
+                                </div>
+                            )}
                         </div>
                     </section>
                 </div>

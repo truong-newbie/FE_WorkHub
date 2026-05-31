@@ -1,270 +1,260 @@
-Bạn là senior frontend engineer. Hãy tiếp tục refactor module User/Profile trong dự án WorkHub React + Vite theo chuẩn UI/UX của một website tìm kiếm việc làm hiện đại, chuyên nghiệp, tham khảo phong cách ITviec.
+Bạn là AI Frontend Engineer đang làm trong dự án WorkHub.
 
-Bối cảnh hiện tại:
+Nhiệm vụ: Hoàn thiện chức năng **User gửi yêu cầu trở thành Recruiter** dựa trên API document:
 
-* Dự án là FE React + Vite cho nền tảng tuyển dụng WorkHub.
-* Backend API đã có sẵn.
-* Các chức năng auth/user cơ bản đã làm.
-* Profile hiện tại nhìn tạm ổn nhưng chưa thật sự giống một trang tuyển dụng chuyên nghiệp.
-* Navbar/taskbar hiện tại còn chưa ổn, có chữ “instagram”, các menu như Home/Profile/User đang chưa đúng logic của job portal.
-* Phần User của Admin cũng cần thiết kế lại cho chuẩn, không nên gom tất cả vào một trang rối.
-* Trong dự án có thư mục `docs/ai-fe`, đây là tài liệu bắt buộc phải đọc trước khi sửa code.
+* `docs/ai-fe/modules/test_api_recruiter_requirement.md`
 
-Yêu cầu bắt buộc trước khi code:
+Trước khi code, bắt buộc đọc kỹ các file tài liệu trong `docs/ai-fe`, đặc biệt:
 
-1. Đọc kỹ toàn bộ thư mục:
+* `docs/ai-fe/ui-rules.md`
+* `docs/ai-fe/architecture.md`
+* `docs/ai-fe/conventions.md`
+* `docs/ai-fe/modules/test_api_recruiter_requirement.md`
+* Các module FE đã làm trước đó để hiểu style, structure, API service pattern, component pattern, route pattern và cách xử lý auth.
 
-   * `docs/ai-fe`
-   * `docs/ai-fe/ui-rules.md`
-   * các file architecture/convention/styling nếu có
-   * các file API document liên quan đến user/profile/admin user/change password/upload avatar
-2. Không được tự tạo architecture mới nếu project đã có convention.
-3. Không được sửa backend.
-4. Không được đổi endpoint API nếu không có lý do rõ ràng.
-5. Không được hardcode dữ liệu nếu đã có API.
-6. Không được code UI generic kiểu admin dashboard/template.
-7. Không được dùng style social network như Instagram/Facebook.
-8. UI phải theo chuẩn website tuyển dụng/job portal.
+Nếu tên file thực tế hơi khác, hãy tự tìm trong `docs/ai-fe` bằng keyword:
+`recruiter`, `requirement`, `request`, `user`, `auth`, `profile`.
 
-Mục tiêu chính:
-Refactor lại toàn bộ UI/UX và routing logic cho:
+## Mục tiêu chức năng
 
-* Candidate/Recruiter User Profile
-* Edit Profile
-* Upload Avatar
-* Change Password
-* Admin User Management
-* Navbar/Header/Taskbar/Menu
+Hoàn thiện flow để user/candidate có thể gửi yêu cầu nâng cấp tài khoản lên **Recruiter**.
 
-Phong cách thiết kế bắt buộc:
+Flow mong muốn:
 
-* Thiết kế theo chuẩn website tìm kiếm việc làm hiện đại.
-* Tham khảo ITviec:
+1. User đăng nhập vào hệ thống.
+2. User vào trang profile hoặc account setting.
+3. Có nút/entry rõ ràng: **Trở thành nhà tuyển dụng** / **Become a Recruiter**.
+4. Khi bấm vào, user được chuyển tới trang/form gửi yêu cầu.
+5. Form phải bám sát các field trong `test_api_recruiter_requirement.md`.
+6. Submit form gọi đúng API.
+7. Hiển thị trạng thái yêu cầu nếu user đã gửi request trước đó.
+8. Nếu request đang pending/approved/rejected thì UI phải xử lý hợp lý.
+9. Không cho spam gửi nhiều request nếu API/document có quy định.
+10. Admin hoặc role phù hợp nếu có API duyệt/từ chối thì implement đúng theo API doc.
 
-  * layout rõ ràng
-  * header chuyên nghiệp
-  * menu đúng ngữ cảnh tuyển dụng
-  * card thông tin gọn gàng
-  * màu sắc nghiêm túc
-  * spacing vừa phải
-  * CTA rõ ràng
-  * không gradient màu mè
-  * không animation thừa
-  * không style mạng xã hội
-* Giao diện phải tạo cảm giác đây là một job portal thật, không phải project demo.
+## Yêu cầu bắt buộc về UI/UX
 
-Yêu cầu refactor Navbar/Header:
+Thiết kế phải theo phong cách website tuyển dụng hiện đại giống ITviec, không làm UI generic.
 
-1. Xóa hoặc thay thế các item không phù hợp như “instagram”.
-2. Thiết kế navbar theo chuẩn job portal:
+Bắt buộc tuân thủ:
 
-   * Logo: WorkHub
-   * Menu public: Việc làm, Công ty, Cẩm nang nghề nghiệp nếu có route
-   * Nếu user chưa đăng nhập: Đăng nhập, Đăng ký, Đăng tuyển nếu phù hợp
-   * Nếu user đã đăng nhập:
+* Không dùng gradient màu mè.
+* Không dùng spacing quá lớn.
+* Layout compact, chuyên nghiệp, rõ hierarchy.
+* Màu chủ đạo nên đồng bộ với toàn bộ WorkHub.
+* Form phải sạch, dễ đọc, có label rõ ràng.
+* Có loading state khi submit/fetch data.
+* Có error state khi API lỗi.
+* Có empty state nếu chưa có request.
+* Có success feedback sau khi gửi yêu cầu.
+* Có validation rõ ràng trước khi submit.
+* Responsive tốt trên desktop/tablet/mobile.
+* Không để text linh tinh kiểu demo/test.
+* Không hard-code dữ liệu fake nếu API đã có thật.
 
-     * Candidate: Việc làm, Việc đã ứng tuyển, Việc đã lưu, Hồ sơ của tôi
-     * Recruiter: Dashboard, Tin tuyển dụng, Ứng viên, Công ty của tôi
-     * Admin: Dashboard, Quản lý người dùng, Quản lý công ty, Quản lý việc làm
-3. Dropdown user menu nên gồm:
+## Gợi ý UI
 
-   * Thông tin cá nhân
-   * Đổi ảnh đại diện
-   * Đổi mật khẩu
-   * Đăng xuất
-4. Header phải responsive tốt trên mobile.
-5. Không để các menu sai ngữ cảnh như Home/Profile/User chung chung.
+Tạo trang riêng cho flow này, ví dụ:
 
-Yêu cầu tách trang logic:
-Không gom tất cả profile/avatar/password vào một màn hình.
+* `/user/become-recruiter`
+* hoặc route phù hợp với convention hiện tại của project.
 
-Cần tách thành các route/page riêng, ví dụ:
+Trang nên có layout dạng:
 
-* `/profile` hoặc `/me/profile`: Xem thông tin cá nhân
-* `/profile/edit`: Cập nhật thông tin cá nhân
-* `/profile/avatar`: Upload/thay đổi ảnh đại diện
-* `/profile/change-password`: Đổi mật khẩu
-* `/admin/users`: Danh sách user cho Admin
-* `/admin/users/:id`: Chi tiết user
-* `/admin/users/:id/edit`: Cập nhật user nếu API hỗ trợ
+1. Header section:
 
-Lưu ý:
+   * Title: “Trở thành nhà tuyển dụng”
+   * Subtitle ngắn giải thích quyền lợi khi trở thành recruiter.
 
-* Route cụ thể phải bám theo routing convention hiện tại của project.
-* Nếu project đã có tên route khác, hãy giữ convention hiện tại và chỉ refactor cho logic hơn.
+2. Info card:
 
-Yêu cầu Profile Page:
+   * Giải thích recruiter có thể đăng tin tuyển dụng, quản lý ứng viên, xem CV, screening ATS nếu hệ thống hỗ trợ.
 
-1. Trang profile chỉ nên tập trung hiển thị thông tin cá nhân.
-2. Layout nên giống trang tài khoản trong job portal:
+3. Request form:
 
-   * Avatar
-   * Họ tên
-   * Email
-   * Role
-   * Số điện thoại
-   * Địa chỉ/location nếu có
-   * Trạng thái tài khoản nếu API có
-   * Ngày tạo/cập nhật nếu phù hợp
-3. Có các CTA rõ ràng:
+   * Render đúng field theo API doc.
+   * Field nào required thì validate required.
+   * Field email/phone/url nếu có thì validate đúng format.
+   * Nếu có companyId/companyName/companyWebsite/businessEmail/... thì đặt label chuyên nghiệp.
 
-   * Chỉnh sửa thông tin
-   * Đổi ảnh đại diện
-   * Đổi mật khẩu
-4. Không nhồi form upload avatar hoặc đổi mật khẩu trực tiếp vào profile chính.
-5. Có loading state, error state, empty state.
-6. Data hiển thị phải lấy từ API hiện tại.
+4. Status card:
 
-Yêu cầu Edit Profile Page:
+   * Nếu đã gửi request, hiển thị trạng thái:
 
-1. Tách thành trang riêng.
-2. Form chỉnh sửa thông tin cá nhân rõ ràng.
-3. Validate frontend theo API document.
-4. Hiển thị lỗi API đúng vị trí.
-5. Có nút Lưu thay đổi và Hủy.
-6. Sau khi lưu thành công, redirect hoặc show success theo UX hợp lý.
-7. Không thêm field không tồn tại trong API.
+     * PENDING: Đang chờ duyệt
+     * APPROVED: Đã được duyệt
+     * REJECTED: Bị từ chối
+   * Nếu rejected có reason/reviewNote thì hiển thị rõ.
+   * Nếu approved thì có CTA chuyển tới recruiter dashboard nếu route đã tồn tại.
 
-Yêu cầu Upload Avatar Page:
+## Yêu cầu về code structure
 
-1. Tách thành trang riêng.
-2. UI upload avatar chuyên nghiệp:
+Không tự tạo kiến trúc mới. Phải follow đúng cấu trúc FE hiện tại.
 
-   * Preview ảnh hiện tại
-   * Chọn ảnh mới
-   * Preview trước khi upload
-   * Validate định dạng file nếu API/document có yêu cầu
-   * Validate dung lượng nếu API/document có yêu cầu
-3. Có loading state khi upload.
-4. Có success/error message.
-5. Sau upload thành công, cập nhật lại avatar hiển thị ở header/profile nếu project có state quản lý user.
-6. Không để upload avatar lẫn trong trang profile chính.
+Trước khi code phải inspect project để xác định:
 
-Yêu cầu Change Password Page:
+* Cách tổ chức routes/pages hiện tại.
+* Cách gọi API service hiện tại.
+* Cách lưu token/auth hiện tại.
+* Cách handle response base format hiện tại.
+* Cách dùng component UI/form hiện tại.
+* Cách đặt tên file/folder hiện tại.
+* Cách phân quyền route hiện tại.
 
-1. Tách thành trang riêng.
-2. Form gồm các field theo đúng API document, ví dụ:
+Nếu project đang có cấu trúc kiểu:
 
-   * Mật khẩu hiện tại
-   * Mật khẩu mới
-   * Xác nhận mật khẩu mới
-3. Validate:
+* `src/pages`
+* `src/components`
+* `src/services`
+* `src/apis`
+* `src/hooks`
+* `src/types`
+* `src/routes`
 
-   * Không để trống
-   * Mật khẩu mới đủ điều kiện nếu API có rule
-   * Confirm password phải trùng
-4. Có show/hide password.
-5. Có loading, success, error state.
-6. Sau khi đổi mật khẩu thành công, có thể:
+thì đặt file theo đúng convention đó, không tự phát minh folder mới nếu không cần.
 
-   * thông báo thành công
-   * yêu cầu đăng nhập lại nếu flow API yêu cầu
-7. Không hardcode flow nếu API document nói khác.
+## API Integration
 
-Yêu cầu Admin User Management:
+Đọc kỹ `docs/ai-fe/modules/test_api_recruiter_requirement.md` và implement đúng:
 
-1. Refactor phần quản lý user của Admin theo chuẩn admin trong job portal.
-2. Không thiết kế như trang profile cá nhân.
-3. Tách logic thành nhiều màn hình nếu cần:
+* Endpoint.
+* HTTP method.
+* Request body.
+* Query/path params nếu có.
+* Response format.
+* Error response.
+* Auth header.
+* Role requirement.
+* Status enum.
+* Pagination/filter nếu có API danh sách.
+* API gửi request.
+* API lấy request hiện tại của user nếu có.
+* API admin duyệt/từ chối nếu có trong tài liệu.
 
-   * Danh sách user
-   * Chi tiết user
-   * Cập nhật user/trạng thái nếu API hỗ trợ
-4. Trang danh sách user cần có:
+Tất cả request phải tự động gắn:
 
-   * table rõ ràng
-   * search/filter nếu API hỗ trợ
-   * phân trang nếu API hỗ trợ
-   * role badge
-   * status badge nếu có
-   * action menu: xem chi tiết, chỉnh sửa, khóa/mở khóa nếu API hỗ trợ
-5. Trang chi tiết user cần hiển thị:
+```ts
+Authorization: Bearer <access_token>
+```
 
-   * thông tin cơ bản
-   * role
-   * trạng thái
-   * email/phone
-   * ngày tạo/cập nhật nếu API trả về
-   * các action hợp lệ theo API
-6. Không để Admin User trộn lẫn với Profile của user đang đăng nhập.
+theo cơ chế auth hiện tại của dự án.
 
-Yêu cầu component:
-Có thể tạo/refactor các component chung nếu phù hợp:
+Không hard-code base URL nếu project đã có config/env.
 
-* AppHeader
-* UserDropdown
-* RoleBasedNav
-* ProfileCard
-* ProfileInfoSection
-* AvatarUploader
-* ChangePasswordForm
-* AdminUserTable
-* AdminUserFilter
-* AdminUserDetailCard
-* EmptyState
-* LoadingState
-* ErrorState
+## Các phần cần implement
 
-Yêu cầu kỹ thuật:
+Tùy vào API doc, hoàn thiện đầy đủ các phần sau nếu có endpoint tương ứng:
 
-* Giữ đúng architecture hiện tại.
-* Nếu project có service/api layer, tất cả API call phải đi qua service.
-* Không gọi API trực tiếp lung tung trong JSX.
-* Không phá auth flow hiện tại.
-* Không phá role-based routing hiện tại.
-* Nếu có ProtectedRoute/PrivateRoute thì dùng lại đúng cách.
-* Nếu có state quản lý current user/auth, cập nhật lại sau khi edit profile hoặc upload avatar.
-* Không thêm thư viện mới nếu không cần thiết.
-* Nếu cần thêm thư viện, phải giải thích lý do trong summary.
+### User side
 
-Yêu cầu responsive:
+* Trang gửi yêu cầu trở thành recruiter.
+* API service gửi request.
+* API service lấy request hiện tại của user.
+* Form validation.
+* Loading/error/success state.
+* Status badge theo trạng thái request.
+* Disable submit nếu request đang pending hoặc approved.
+* Cho phép gửi lại nếu request rejected chỉ khi API cho phép.
 
-* Desktop: layout rộng, rõ hierarchy.
-* Tablet/mobile: navbar chuyển hợp lý, form không vỡ layout, table admin có thể scroll ngang hoặc chuyển layout phù hợp.
-* Không để UI bị tràn, lệch, hoặc spacing quá lớn.
+### Admin side nếu API doc có endpoint quản lý
 
-Yêu cầu cập nhật tài liệu:
-Sau khi sửa code, bắt buộc cập nhật `docs/ai-fe`:
+* Trang danh sách yêu cầu recruiter.
+* Table/list request compact, chuyên nghiệp.
+* Filter theo status nếu API hỗ trợ.
+* Search nếu API hỗ trợ.
+* Pagination nếu API hỗ trợ.
+* Detail drawer/modal/page nếu cần.
+* Button approve.
+* Button reject.
+* Reject form có reason nếu API yêu cầu.
+* Confirm dialog trước khi approve/reject.
+* Sau khi approve/reject phải refetch hoặc update state đúng.
 
-1. Nếu thay đổi UI rules, cập nhật `docs/ai-fe/ui-rules.md`.
-2. Nếu thay đổi route/page structure, cập nhật tài liệu architecture hoặc tạo/cập nhật file module user tương ứng.
-3. Nếu phát hiện API document thiếu hoặc lệch với code thực tế, bổ sung phần `Implementation Notes`.
-4. Ghi rõ quy ước mới:
+## Validation
 
-   * Profile page chỉ xem thông tin
-   * Upload avatar là page riêng
-   * Change password là page riêng
-   * Admin user management tách khỏi user profile
-   * Navbar phải role-based, không dùng menu generic
+Implement validation thực tế:
 
-Yêu cầu kiểm tra:
-Sau khi hoàn thành, chạy:
+* Required fields không được để trống.
+* Phone number nếu có phải hợp lệ.
+* Website URL nếu có phải hợp lệ.
+* Business email nếu có phải đúng email format.
+* Textarea reason/description nếu có nên giới hạn min/max length theo API doc nếu có.
+* Không cho submit khi form invalid.
+* Hiển thị lỗi gần field, không chỉ toast chung chung.
 
-* `npm run build`
-* `npm run lint` nếu project có
-* `npm test` nếu project có
+## Auth & Role Guard
 
-Test thủ công các flow:
+Kiểm tra cách project đang guard route.
 
-1. User xem profile.
-2. User vào edit profile và cập nhật thông tin.
-3. User vào upload avatar và upload ảnh.
-4. User vào change password và đổi mật khẩu.
-5. Header/navbar hiển thị đúng theo trạng thái login/logout.
-6. Header/navbar hiển thị đúng theo role Candidate/Recruiter/Admin.
-7. Admin vào danh sách user.
-8. Admin xem chi tiết user.
-9. Admin thao tác update user nếu API hỗ trợ.
-10. Logout vẫn hoạt động đúng.
+Yêu cầu:
 
-Kết quả cuối cùng cần báo cáo:
+* User chưa đăng nhập thì chuyển login hoặc hiện message phù hợp theo convention.
+* Candidate/user thường được gửi request nếu API cho phép.
+* Recruiter đã được duyệt không cần gửi request nữa.
+* Admin page chỉ admin truy cập.
+* Không để user thường thấy action approve/reject.
 
-1. Đã đọc những file nào trong `docs/ai-fe`.
-2. Đã sửa những file nào.
-3. Đã tạo/refactor route nào.
-4. Đã tạo/refactor component nào.
-5. Đã chỉnh navbar/header/taskbar như thế nào.
-6. Đã tách profile/avatar/change password/admin user ra sao.
-7. Đã cập nhật tài liệu nào trong `docs/ai-fe`.
-8. Đã chạy lệnh build/lint/test nào và kết quả.
-9. Còn vấn đề gì cần tôi kiểm tra thêm.
+## Style yêu cầu
+
+Style phải đồng bộ với các trang đã làm:
+
+* Button rõ ràng, không quá to.
+* Card border nhẹ, shadow nhẹ nếu project đang dùng.
+* Status badge màu rõ:
+
+  * Pending: vàng/cam nhẹ
+  * Approved: xanh
+  * Rejected: đỏ
+* Form width hợp lý, không kéo full màn hình quá rộng.
+* Page layout giống một website tuyển dụng thật, không giống dashboard template generic.
+
+## Error handling
+
+Phải xử lý các case:
+
+* 401/403: hết phiên hoặc không có quyền.
+* 400: validation backend trả về.
+* 404: không tìm thấy request nếu API có get current request.
+* 409: đã tồn tại request pending/approved.
+* 500: lỗi server.
+* Network error.
+
+Không được crash UI nếu response thiếu field.
+
+## Documentation update
+
+Sau khi code xong, cập nhật lại tài liệu trong `docs/ai-fe/modules/test_api_recruiter_requirement.md` hoặc tạo/cập nhật file module tương ứng nếu convention yêu cầu.
+
+Nội dung update gồm:
+
+* Các page/route đã implement.
+* Các component đã tạo/sửa.
+* Các service/API function đã tạo/sửa.
+* Các trạng thái UI đã xử lý.
+* Các role guard đã áp dụng.
+* Các lưu ý cho AI/dev sau tiếp tục maintain.
+
+Không viết lan man, chỉ ghi phần thay đổi thực tế.
+
+## Verification
+
+Sau khi implement xong, bắt buộc chạy kiểm tra:
+
+* `npm install` nếu thiếu dependency.
+* `npm run lint` nếu project có.
+* `npm run build` nếu project có.
+* `npm run dev` để kiểm tra UI nếu cần.
+
+Nếu command fail, phải đọc lỗi và sửa. Không được bỏ qua lỗi build/lint.
+
+## Nguyên tắc làm việc
+
+* Search trước, đọc file liên quan trước, không sửa mò.
+* Patch nhỏ, đúng phạm vi.
+* Không refactor lớn ngoài module này.
+* Không đổi design system toàn cục nếu không cần.
+* Không đổi cấu trúc auth/api hiện tại.
+* Không làm mock nếu API thật đã có document.
+* Không xóa code cũ nếu không chắc.
+* Không tạo duplicate service/component nếu đã có cái tương tự.
+* Sau khi làm xong phải tóm tắt rõ đã sửa những file nào và vì sao.
