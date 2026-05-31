@@ -311,3 +311,25 @@ asynchronous through RabbitMQ.
 | `409` | Email is already used by a non-deleted subscriber |
 | `409` | Current user already has a non-deleted subscriber |
 
+## 14. Frontend Implementation
+
+Routes:
+
+- `/settings/subscription`
+- `/admin/subscribers`
+- `/unsubscribe?token=...`
+
+Service:
+
+```text
+src/features/subscriber/services/subscriberService.js
+```
+
+Implemented UI:
+
+- Authenticated user create/update subscription, select skills, enable, disable, and
+  soft delete.
+- Admin search, enable, disable, delete, queue matching emails, and process ready queue
+  items.
+- Public unsubscribe token flow.
+- Operational mail buttons are intentionally exposed only on the admin page.

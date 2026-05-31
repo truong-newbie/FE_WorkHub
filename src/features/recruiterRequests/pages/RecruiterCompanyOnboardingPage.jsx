@@ -10,58 +10,16 @@ import RequestStatusBadge from '../components/RequestStatusBadge.jsx';
 import {formatRequestDate, getItems} from '../recruiterRequestUtils.js';
 import {
     createCompany,
-    createCompanyJoinRequest,
-    getCurrentRecruiterCompany,
-    getMyCompanyJoinRequests,
+    getCurrentCompany,
     searchCompanies,
+} from '../../company/services/companyService.js';
+import CompanyManagerPanel from '../../company/components/CompanyManagerPanel.jsx';
+import {buildCompanyPayload, emptyCompanyForm, validateCompany} from '../../company/companyUtils.js';
+import {
+    createCompanyJoinRequest,
+    getMyCompanyJoinRequests,
 } from '../services/recruiterRequestService.js';
 import styles from './RecruiterCompanyOnboardingPage.module.css';
-
-const emptyCompanyForm = {
-    name: '',
-    description: '',
-    website: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
-    country: '',
-    companySize: '',
-    industry: '',
-    taxCode: '',
-};
-
-function validateCompany(form) {
-    const errors = {};
-
-    if (!form.name.trim()) {
-        errors.name = 'Company name is required.';
-    } else if (form.name.trim().length > 255) {
-        errors.name = 'Company name must not exceed 255 characters.';
-    }
-
-    if (form.website && !/^https?:\/\/\S+$/i.test(form.website)) {
-        errors.website = 'Website must start with http:// or https://.';
-    }
-
-    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-        errors.email = 'Enter a valid company email.';
-    }
-
-    if (form.phone && !/^[\d\s+()-]{8,20}$/.test(form.phone)) {
-        errors.phone = 'Phone must contain 8 to 20 valid characters.';
-    }
-
-    return errors;
-}
-
-function buildCompanyPayload(form) {
-    return Object.fromEntries(
-        Object.entries({...form, active: true})
-            .map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value])
-            .filter(([, value]) => value !== ''),
-    );
-}
 
 export default function RecruiterCompanyOnboardingPage() {
     const {showToast} = useToast();
@@ -91,7 +49,7 @@ export default function RecruiterCompanyOnboardingPage() {
             let currentCompany = null;
 
             if (profile?.companyId) {
-                currentCompany = await getCurrentRecruiterCompany();
+                currentCompany = await getCurrentCompany();
             }
 
             setCompany(currentCompany);
@@ -167,7 +125,7 @@ export default function RecruiterCompanyOnboardingPage() {
         setIsSaving(true);
 
         try {
-            const createdCompany = await createCompany(buildCompanyPayload(companyForm));
+            const createdCompany = await createCompany({...buildCompanyPayload(companyForm), active: true});
             setCompany(createdCompany);
             setCompanyForm(emptyCompanyForm);
             showToast({message: 'Company created. It is waiting for administrator verification.', type: 'success'});
@@ -197,21 +155,24 @@ export default function RecruiterCompanyOnboardingPage() {
                 <ErrorMessage message={errorMessage}/>
 
                 {company ? (
-                    <section className={styles.companyCard}>
-                        <div className={styles.companyIcon}><FaBuilding/></div>
-                        <div>
-                            <h2>{company.name || 'Your company'}</h2>
-                            <p>Your recruiter account is linked to this company.</p>
-                            <div className={styles.companyMeta}>
-                                <span className={company.verified ? styles.goodBadge : styles.pendingBadge}>
-                                    {company.verified ? 'Verified' : 'Waiting for verification'}
-                                </span>
-                                <span className={company.active ? styles.goodBadge : styles.pendingBadge}>
-                                    {company.active ? 'Active' : 'Inactive'}
-                                </span>
+                    <>
+                        <section className={styles.companyCard}>
+                            <div className={styles.companyIcon}><FaBuilding/></div>
+                            <div>
+                                <h2>{company.name || 'Your company'}</h2>
+                                <p>Your recruiter account is linked to this company.</p>
+                                <div className={styles.companyMeta}>
+                                    <span className={company.verified ? styles.goodBadge : styles.pendingBadge}>
+                                        {company.verified ? 'Verified' : 'Waiting for verification'}
+                                    </span>
+                                    <span className={company.active ? styles.goodBadge : styles.pendingBadge}>
+                                        {company.active ? 'Active' : 'Inactive'}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
+                        <CompanyManagerPanel company={company} onCompanyChange={setCompany}/>
+                    </>
                 ) : (
                     <>
                         <section className={styles.summaryCard}>

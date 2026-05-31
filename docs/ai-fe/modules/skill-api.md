@@ -250,3 +250,22 @@ Enable and disable return the shared skill response. Delete returns:
 | `409` | Another non-deleted skill already has the same name |
 | `409` | Delete requested while skill is used by a job, resume, or subscriber |
 
+## 11. Frontend Implementation
+
+Routes:
+
+- `/skills`
+- `/admin/skills`
+
+Service:
+
+```text
+src/features/skill/services/skillService.js
+```
+
+Implemented UI:
+
+- Public search and popular skills.
+- Admin create, update, enable, disable, and soft delete.
+- Reusable `SkillSelector` based on `/skills/suggestions`, used by Resume and Subscriber
+  forms.

@@ -2,6 +2,25 @@ import axios from 'axios';
 import {env} from '../config/env';
 import {clearAuthTokens, getAccessToken} from './tokenStorage';
 
+function getErrorMessage(data, fallback) {
+    if (typeof data === 'string') {
+        return data;
+    }
+
+    const responseMessage = data?.message;
+
+    if (typeof responseMessage === 'string') {
+        return responseMessage;
+    }
+
+    if (responseMessage && typeof responseMessage === 'object') {
+        return responseMessage.message
+            || Object.entries(responseMessage).map(([field, message]) => `${field}: ${message}`).join(', ');
+    }
+
+    return (typeof data?.error === 'string' ? data.error : data?.error?.message) || fallback || 'Request failed';
+}
+
 export const apiClient = axios.create({
     baseURL: env.apiBaseUrl,
     headers: {
@@ -24,15 +43,7 @@ apiClient.interceptors.response.use(
     (error) => {
         const status = error.response?.status;
         const data = error.response?.data;
-        const responseMessage = data?.message;
-        const message = typeof data === 'string'
-            ? data
-            : typeof responseMessage === 'string'
-                ? responseMessage
-                : responseMessage?.message
-                    || (typeof data?.error === 'string' ? data.error : data?.error?.message)
-                    || error.message
-                    || 'Request failed';
+        const message = getErrorMessage(data, error.message);
 
         if (status === 401) {
             clearAuthTokens();

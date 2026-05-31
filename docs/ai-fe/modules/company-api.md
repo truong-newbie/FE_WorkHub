@@ -456,3 +456,28 @@ same recruiter's other pending join requests.
 Current backend limitation: company creation does not reject a recruiter who is already
 linked to a company. FE should hide the create-company action when the current profile
 already has `companyId`.
+
+## 14. Frontend Implementation
+
+Routes:
+
+- `/companies`
+- `/companies/:id`
+- `/recruiter/company`
+- `/admin/companies`
+- `/recruiter/company/requests`
+- `/admin/company-join-requests`
+
+Service:
+
+```text
+src/features/company/services/companyService.js
+```
+
+Implemented UI:
+
+- Public company search, detail, status badges, and company jobs.
+- Recruiter create/update current company, statistics, logo/cover uploads, and soft delete.
+- Admin search, approve, reject, enable, and disable.
+- Existing-company join requests remain in the recruiter-request feature because they are
+  part of recruiter onboarding.

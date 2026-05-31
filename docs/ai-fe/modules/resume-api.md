@@ -304,3 +304,25 @@ resume.
 | `404` | Resume, skill, user, or shareable candidate resume does not exist |
 | `409` | Current user already has a resume with the same title |
 
+## 12. Frontend Implementation
+
+Routes:
+
+- `/candidate/resumes`
+- `/admin/resumes`
+- `/recruiter/jobs/:jobId/candidates/:candidateId/resume`
+
+Service:
+
+```text
+src/features/resume/services/resumeService.js
+```
+
+Implemented UI:
+
+- Candidate upload, list, metadata update, file replacement, soft delete, default resume,
+  public flag, and download metadata flow.
+- Upload sends multipart `file` and repeated `skillIds` values.
+- Admin resume search and download.
+- Recruiter candidate resume view/download after job application.
+- ATS parsing is displayed as pending when scores are not available yet.

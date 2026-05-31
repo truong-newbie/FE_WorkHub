@@ -7,12 +7,14 @@ import Pagination from '../../../components/ui/Pagination.jsx';
 import Select from '../../../components/ui/Select.jsx';
 import Table from '../../../components/ui/Table.jsx';
 import {useToast} from '../../../components/ui/useToast.js';
-import {getItems, getPaginationMeta} from '../recruiterRequestUtils.js';
+import {getItems, getPaginationMeta} from '../../shared/moduleUtils.js';
 import {
     approveCompany,
+    disableCompany,
+    enableCompany,
     rejectCompany,
     searchCompanies,
-} from '../services/recruiterRequestService.js';
+} from '../services/companyService.js';
 import styles from './AdminCompanyManagementPage.module.css';
 
 export default function AdminCompanyManagementPage() {
@@ -60,7 +62,7 @@ export default function AdminCompanyManagementPage() {
     };
 
     const handleModerate = async (company, action) => {
-        if (!window.confirm(`${action === 'approve' ? 'Approve' : 'Reject'} company "${company.name}"?`)) {
+        if (!window.confirm(`${action[0].toUpperCase()}${action.slice(1)} company "${company.name}"?`)) {
             return;
         }
 
@@ -69,11 +71,15 @@ export default function AdminCompanyManagementPage() {
         try {
             if (action === 'approve') {
                 await approveCompany(company.id);
+            } else if (action === 'enable') {
+                await enableCompany(company.id);
+            } else if (action === 'disable') {
+                await disableCompany(company.id);
             } else {
                 await rejectCompany(company.id);
             }
 
-            showToast({message: `Company ${action === 'approve' ? 'approved' : 'rejected'}.`, type: 'success'});
+            showToast({message: `Company ${action} action completed.`, type: 'success'});
             await loadCompanies();
         } catch (error) {
             showToast({message: error.message || `Unable to ${action} company.`, type: 'error'});
@@ -133,6 +139,13 @@ export default function AdminCompanyManagementPage() {
                         disabled={actionCompanyId === company.id}
                     >
                         Reject
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        onClick={() => handleModerate(company, company.active ? 'disable' : 'enable')}
+                        disabled={actionCompanyId === company.id}
+                    >
+                        {company.active ? 'Disable' : 'Enable'}
                     </Button>
                 </div>
             ),

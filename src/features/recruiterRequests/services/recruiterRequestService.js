@@ -25,31 +25,6 @@ export async function rejectRecruiterUpgradeRequest(requestId, payload = {}) {
     return unwrapResult(response);
 }
 
-export async function searchCompanies(params = {}) {
-    const response = await apiClient.get('/companies', {params});
-    return unwrapResult(response);
-}
-
-export async function createCompany(payload) {
-    const response = await apiClient.post('/companies', payload);
-    return unwrapResult(response);
-}
-
-export async function getCurrentRecruiterCompany() {
-    const response = await apiClient.get('/companies/me');
-    return unwrapResult(response);
-}
-
-export async function approveCompany(companyId) {
-    const response = await apiClient.patch(`/companies/${companyId}/approve`);
-    return unwrapResult(response);
-}
-
-export async function rejectCompany(companyId) {
-    const response = await apiClient.patch(`/companies/${companyId}/reject`);
-    return unwrapResult(response);
-}
-
 export async function createCompanyJoinRequest(companyId, payload) {
     const response = await apiClient.post(`/companies/${companyId}/join-requests`, payload);
     return unwrapResult(response);
