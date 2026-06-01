@@ -115,6 +115,12 @@ export default function AppHeader({hideNavigation = false}) {
             >
                 Gợi ý việc làm
             </NavLink>
+            <NavLink
+                to="/candidate/assessments"
+                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+            >
+                My Assessments
+            </NavLink>
         </>
     );
 
@@ -131,6 +137,12 @@ export default function AppHeader({hideNavigation = false}) {
                 className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
             >
                 Tin tuyển dụng
+            </NavLink>
+            <NavLink
+                to="/recruiter/assessments"
+                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+            >
+                Assessments
             </NavLink>
             <NavLink
                 to="/recruiter/company/requests"
@@ -248,6 +260,15 @@ export default function AppHeader({hideNavigation = false}) {
                         >
                             Gợi ý việc làm
                         </NavLink>
+                        <NavLink
+                            to="/candidate/assessments"
+                            className={({isActive}) =>
+                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
+                            }
+                            onClick={() => setShowMobileMenu(false)}
+                        >
+                            My Assessments
+                        </NavLink>
                     </>
                 )}
                 {isRecruiter && (
@@ -269,6 +290,15 @@ export default function AppHeader({hideNavigation = false}) {
                             onClick={() => setShowMobileMenu(false)}
                         >
                             Tin tuyển dụng
+                        </NavLink>
+                        <NavLink
+                            to="/recruiter/assessments"
+                            className={({isActive}) =>
+                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
+                            }
+                            onClick={() => setShowMobileMenu(false)}
+                        >
+                            Assessments
                         </NavLink>
                         <NavLink
                             to="/recruiter/company/requests"

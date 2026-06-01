@@ -3,6 +3,7 @@ import {NavLink} from 'react-router-dom';
 import {
     FaBriefcase,
     FaBuilding,
+    FaClipboardList,
     FaEnvelope,
     FaExternalLinkAlt,
     FaFileAlt,
@@ -28,6 +29,7 @@ const sections = [
             {to: '/admin/users', label: 'Users', icon: FaUsers},
             {to: '/admin/companies', label: 'Companies', icon: FaBuilding},
             {to: '/admin/jobs', label: 'Jobs', icon: FaBriefcase},
+            {to: '/admin/assessments', label: 'Assessments', icon: FaClipboardList},
             {to: '/admin/skills', label: 'Skills', icon: FaTools},
             {to: '/admin/resumes', label: 'Resumes', icon: FaFileAlt},
             {to: '/admin/subscribers', label: 'Subscribers', icon: FaEnvelope},

@@ -143,7 +143,7 @@ export default function JobApplicationsPage() {
             <div className={styles.container}>
                 <header className={styles.pageHeader}>
                     <div><p className={styles.eyebrow}>Hiring pipeline</p><h1>Job applications</h1><p>Review candidates, queue ATS resume screening, and update recruitment status.</p></div>
-                    <div className={styles.actions}><Link className={styles.detailLink} to={`${basePath}/${jobId}/screenings`}>ATS ranking</Link><Link className={styles.detailLink} to={basePath}>Back to jobs</Link></div>
+                    <div className={styles.actions}><Link className={styles.detailLink} to={`${basePath}/${jobId}/screenings`}>ATS ranking</Link><Link className={styles.detailLink} to={`${basePath}/${jobId}/assessments/create`}>Create assessment</Link><Link className={styles.detailLink} to={basePath}>Back to jobs</Link></div>
                 </header>
                 <ErrorMessage message={errorMessage}/>
                 <section className={`${styles.panel} ${styles.applicationList}`}>

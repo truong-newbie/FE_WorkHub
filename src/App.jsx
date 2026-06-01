@@ -44,6 +44,15 @@ import JobApplicationsPage from './features/job/pages/JobApplicationsPage.jsx';
 import AdminJobManagementPage from './features/job/pages/AdminJobManagementPage.jsx';
 import AtsScreeningDetailPage from './features/ats/pages/AtsScreeningDetailPage.jsx';
 import JobScreeningRankingPage from './features/ats/pages/JobScreeningRankingPage.jsx';
+import RecruiterAssessmentsPage from './features/assessment/pages/RecruiterAssessmentsPage.jsx';
+import AssessmentFormPage from './features/assessment/pages/AssessmentFormPage.jsx';
+import RecruiterAssessmentWorkspacePage from './features/assessment/pages/RecruiterAssessmentWorkspacePage.jsx';
+import AssessmentAssignPage from './features/assessment/pages/AssessmentAssignPage.jsx';
+import AssessmentResultsPage from './features/assessment/pages/AssessmentResultsPage.jsx';
+import AssessmentResultDetailPage from './features/assessment/pages/AssessmentResultDetailPage.jsx';
+import CandidateAssessmentsPage from './features/assessment/pages/CandidateAssessmentsPage.jsx';
+import CandidateAssessmentTakePage from './features/assessment/pages/CandidateAssessmentTakePage.jsx';
+import CandidateAssessmentResultPage from './features/assessment/pages/CandidateAssessmentResultPage.jsx';
 import './App.module.css';
 
 function App() {
@@ -92,6 +101,13 @@ function App() {
                         <Route path="/admin/jobs/:jobId/candidates/:candidateId/resume" element={<RecruiterCandidateResumePage/>}/>
                         <Route path="/admin/jobs/:jobId/screenings" element={<JobScreeningRankingPage/>}/>
                         <Route path="/admin/jobs/applications/:applicationId/screening-result" element={<AtsScreeningDetailPage/>}/>
+                        <Route path="/admin/assessments" element={<RecruiterAssessmentsPage/>}/>
+                        <Route path="/admin/jobs/:jobId/assessments/create" element={<AssessmentFormPage/>}/>
+                        <Route path="/admin/assessments/:testId" element={<RecruiterAssessmentWorkspacePage/>}/>
+                        <Route path="/admin/assessments/:testId/edit" element={<AssessmentFormPage/>}/>
+                        <Route path="/admin/assessments/:testId/assign" element={<AssessmentAssignPage/>}/>
+                        <Route path="/admin/assessments/:testId/results" element={<AssessmentResultsPage/>}/>
+                        <Route path="/admin/assessments/assignments/:assignmentId/answers" element={<AssessmentResultDetailPage/>}/>
                     </Route>
                 </Route>
 
@@ -107,6 +123,13 @@ function App() {
                         <Route path="/recruiter/jobs/:jobId/candidates/:candidateId/resume" element={<RecruiterCandidateResumePage/>}/>
                         <Route path="/recruiter/jobs/:jobId/screenings" element={<JobScreeningRankingPage/>}/>
                         <Route path="/recruiter/jobs/applications/:applicationId/screening-result" element={<AtsScreeningDetailPage/>}/>
+                        <Route path="/recruiter/assessments" element={<RecruiterAssessmentsPage/>}/>
+                        <Route path="/recruiter/jobs/:jobId/assessments/create" element={<AssessmentFormPage/>}/>
+                        <Route path="/recruiter/assessments/:testId" element={<RecruiterAssessmentWorkspacePage/>}/>
+                        <Route path="/recruiter/assessments/:testId/edit" element={<AssessmentFormPage/>}/>
+                        <Route path="/recruiter/assessments/:testId/assign" element={<AssessmentAssignPage/>}/>
+                        <Route path="/recruiter/assessments/:testId/results" element={<AssessmentResultsPage/>}/>
+                        <Route path="/recruiter/assessments/assignments/:assignmentId/answers" element={<AssessmentResultDetailPage/>}/>
                     </Route>
                 </Route>
 
@@ -118,6 +141,9 @@ function App() {
                         <Route path="/saved-jobs" element={<SavedJobsPage/>}/>
                         <Route path="/applications" element={<CandidateApplicationsPage/>}/>
                         <Route path="/candidate/jobs/recommended" element={<RecommendedJobsPage/>}/>
+                        <Route path="/candidate/assessments" element={<CandidateAssessmentsPage/>}/>
+                        <Route path="/candidate/assessments/:assignmentId/take" element={<CandidateAssessmentTakePage/>}/>
+                        <Route path="/candidate/assessments/:assignmentId/result" element={<CandidateAssessmentResultPage/>}/>
                     </Route>
                 </Route>
             </Routes>
