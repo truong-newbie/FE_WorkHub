@@ -34,8 +34,8 @@ export async function getResumeById(id) {
     return unwrapResult(response);
 }
 
-export async function getMyResumes(params = {}) {
-    const response = await apiClient.get('/resume/me', {params});
+export async function getMyResumes(params = {}, config = {}) {
+    const response = await apiClient.get('/resume/me', {...config, params});
     return unwrapResult(response);
 }
 

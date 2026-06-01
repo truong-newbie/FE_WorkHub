@@ -1,7 +1,7 @@
 import {apiClient, unwrapResult} from '../../../lib/apiClient.js';
 
 export async function getLatestJobs(params = {}) {
-    const response = await apiClient.get('/jobs/latest', {params});
+    const response = await apiClient.get('/jobs/latest', {params, skipAuth: true, skipAuthCleanup: true});
     return unwrapResult(response);
 }
 
@@ -20,8 +20,8 @@ export async function getJobs(params = {}) {
     return unwrapResult(response);
 }
 
-export async function getJobById(id) {
-    const response = await apiClient.get(`/job/${id}`);
+export async function getJobById(id, config = {}) {
+    const response = await apiClient.get(`/job/${id}`, config);
     return unwrapResult(response);
 }
 
@@ -70,8 +70,8 @@ export async function unsaveJob(jobId) {
     return unwrapResult(response);
 }
 
-export async function getSavedJobs(params = {}) {
-    const response = await apiClient.get('/jobs/favorites', {params});
+export async function getSavedJobs(params = {}, config = {}) {
+    const response = await apiClient.get('/jobs/favorites', {...config, params});
     return unwrapResult(response);
 }
 
@@ -85,8 +85,8 @@ export async function withdrawJobApplication(jobId) {
     return unwrapResult(response);
 }
 
-export async function getMyApplications(params = {}) {
-    const response = await apiClient.get('/applications/me', {params});
+export async function getMyApplications(params = {}, config = {}) {
+    const response = await apiClient.get('/applications/me', {...config, params});
     return unwrapResult(response);
 }
 
@@ -100,12 +100,12 @@ export async function updateApplicationStatus(applicationId, payload) {
     return unwrapResult(response);
 }
 
-export async function screenApplication(applicationId) {
-    const response = await apiClient.post(`/recruiter/applications/${applicationId}/screen`);
+export async function getRecommendedJobs(params = {}) {
+    const response = await apiClient.get('/candidate/jobs/recommended', {params});
     return unwrapResult(response);
 }
 
-export async function getRecommendedJobs(params = {}) {
-    const response = await apiClient.get('/candidate/jobs/recommended', {params});
+export async function trackJobView(jobId, payload = {source: 'JOB_DETAIL'}) {
+    const response = await apiClient.post(`/candidate/jobs/${jobId}/view`, payload, {skipAuthCleanup: true});
     return unwrapResult(response);
 }

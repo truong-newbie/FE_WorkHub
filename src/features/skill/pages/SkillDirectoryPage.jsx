@@ -22,7 +22,7 @@ export default function SkillDirectoryPage() {
         setIsLoading(true);
         try {
             const [skillsData, popularData] = await Promise.all([
-                searchSkills(cleanParams({keyword: appliedKeyword, pageNum: page, pageSize: 12, sortBy: 'name', isAscending: true})),
+                searchSkills(cleanParams({keyword: appliedKeyword, pageNum: page, pageSize: 12, sortBy: 'name', isAscending: true}), {skipAuth: true, skipAuthCleanup: true}),
                 getPopularSkills({limit: 10}),
             ]);
             const items = getItems(skillsData);

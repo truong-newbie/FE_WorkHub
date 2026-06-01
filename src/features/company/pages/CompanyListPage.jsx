@@ -23,7 +23,7 @@ export default function CompanyListPage() {
         setErrorMessage('');
 
         try {
-            const data = await searchCompanies(cleanParams({keyword: appliedKeyword, pageNum: page, pageSize: 10}));
+            const data = await searchCompanies(cleanParams({keyword: appliedKeyword, pageNum: page, pageSize: 10}), {skipAuth: true, skipAuthCleanup: true});
             const items = getItems(data);
             setCompanies(items);
             setMeta(getPaginationMeta(data, items.length));

@@ -309,7 +309,7 @@ export default function AppHeader({hideNavigation = false}) {
         <>
             <header className={styles.header}>
                 <div className={styles.container}>
-                    <Link to="/" className={styles.logo}>
+                    <Link to={isAuthenticated ? '/' : '/jobs'} className={styles.logo}>
                         <FaBriefcase />
                         WorkHub
                     </Link>

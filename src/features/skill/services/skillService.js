@@ -1,22 +1,22 @@
 import {apiClient, unwrapResult} from '../../../lib/apiClient.js';
 
-export async function searchSkills(params = {}) {
-    const response = await apiClient.get('/skills', {params});
+export async function searchSkills(params = {}, config = {}) {
+    const response = await apiClient.get('/skills', {...config, params});
     return unwrapResult(response);
 }
 
 export async function getSkillById(id) {
-    const response = await apiClient.get(`/skills/${id}`);
+    const response = await apiClient.get(`/skills/${id}`, {skipAuth: true, skipAuthCleanup: true});
     return unwrapResult(response);
 }
 
 export async function getSkillSuggestions(params = {}) {
-    const response = await apiClient.get('/skills/suggestions', {params});
+    const response = await apiClient.get('/skills/suggestions', {params, skipAuth: true, skipAuthCleanup: true});
     return unwrapResult(response);
 }
 
 export async function getPopularSkills(params = {}) {
-    const response = await apiClient.get('/skills/popular', {params});
+    const response = await apiClient.get('/skills/popular', {params, skipAuth: true, skipAuthCleanup: true});
     return unwrapResult(response);
 }
 

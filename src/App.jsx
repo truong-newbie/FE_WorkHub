@@ -42,6 +42,8 @@ import RecruiterJobsPage from './features/job/pages/RecruiterJobsPage.jsx';
 import JobFormPage from './features/job/pages/JobFormPage.jsx';
 import JobApplicationsPage from './features/job/pages/JobApplicationsPage.jsx';
 import AdminJobManagementPage from './features/job/pages/AdminJobManagementPage.jsx';
+import AtsScreeningDetailPage from './features/ats/pages/AtsScreeningDetailPage.jsx';
+import JobScreeningRankingPage from './features/ats/pages/JobScreeningRankingPage.jsx';
 import './App.module.css';
 
 function App() {
@@ -57,6 +59,7 @@ function App() {
                 <Route path="/unauthorized" element={<UnauthorizedPage/>}/>
                 <Route element={<MainLayout/>}>
                     <Route path="/jobs" element={<JobListPage/>}/>
+                    <Route path="/jobs/:id" element={<JobDetailPage/>}/>
                     <Route path="/companies" element={<CompanyListPage/>}/>
                     <Route path="/companies/:id" element={<CompanyDetailPage/>}/>
                     <Route path="/skills" element={<SkillDirectoryPage/>}/>
@@ -71,7 +74,6 @@ function App() {
                         <Route path="/profile/avatar" element={<UploadAvatarPage/>}/>
                         <Route path="/profile/change-password" element={<ChangePasswordPage/>}/>
                         <Route path="/settings/subscription" element={<SubscriptionSettingsPage/>}/>
-                        <Route path="/jobs/:id" element={<JobDetailPage/>}/>
                     </Route>
                 </Route>
 
@@ -88,6 +90,8 @@ function App() {
                         <Route path="/admin/jobs" element={<AdminJobManagementPage/>}/>
                         <Route path="/admin/jobs/:jobId/applications" element={<JobApplicationsPage/>}/>
                         <Route path="/admin/jobs/:jobId/candidates/:candidateId/resume" element={<RecruiterCandidateResumePage/>}/>
+                        <Route path="/admin/jobs/:jobId/screenings" element={<JobScreeningRankingPage/>}/>
+                        <Route path="/admin/jobs/applications/:applicationId/screening-result" element={<AtsScreeningDetailPage/>}/>
                     </Route>
                 </Route>
 
@@ -101,6 +105,8 @@ function App() {
                         <Route path="/recruiter/jobs/:id/edit" element={<JobFormPage/>}/>
                         <Route path="/recruiter/jobs/:jobId/applications" element={<JobApplicationsPage/>}/>
                         <Route path="/recruiter/jobs/:jobId/candidates/:candidateId/resume" element={<RecruiterCandidateResumePage/>}/>
+                        <Route path="/recruiter/jobs/:jobId/screenings" element={<JobScreeningRankingPage/>}/>
+                        <Route path="/recruiter/jobs/applications/:applicationId/screening-result" element={<AtsScreeningDetailPage/>}/>
                     </Route>
                 </Route>
 

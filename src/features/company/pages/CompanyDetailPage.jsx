@@ -22,8 +22,8 @@ export default function CompanyDetailPage() {
 
         try {
             const [companyData, jobsData] = await Promise.all([
-                getCompanyById(id),
-                getCompanyJobs(id, {pageNum: page, pageSize: 10, sortBy: 'createdDate', isAscending: false}),
+                getCompanyById(id, {skipAuth: true, skipAuthCleanup: true}),
+                getCompanyJobs(id, {pageNum: page, pageSize: 10, sortBy: 'createdDate', isAscending: false}, {skipAuth: true, skipAuthCleanup: true}),
             ]);
             const jobItems = getItems(jobsData);
             setCompany(companyData);

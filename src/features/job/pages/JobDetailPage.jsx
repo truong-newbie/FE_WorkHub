@@ -1,25 +1,30 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {FaBriefcase, FaBuilding, FaCalendarAlt, FaMapMarkerAlt, FaUsers} from 'react-icons/fa';
 import {Link, useParams} from 'react-router-dom';
 import Button from '../../../components/ui/Button.jsx';
 import ErrorMessage from '../../../components/ui/ErrorMessage.jsx';
 import LoadingState from '../../../components/ui/LoadingState.jsx';
+import Select from '../../../components/ui/Select.jsx';
 import {useToast} from '../../../components/ui/useToast.js';
 import {useAuth} from '../../../stores/useAuth.js';
+import {getMyResumes} from '../../resume/services/resumeService.js';
 import {formatDate, getItems} from '../../shared/moduleUtils.js';
 import {formatJobSalary, getCompanyLogo, getCompanyName, getJobId, getJobSkills} from '../jobUtils.js';
-import {applyJob, getJobById, getMyApplications, getSavedJobs, saveJob, unsaveJob, withdrawJobApplication} from '../services/jobService.js';
+import {applyJob, getJobById, getMyApplications, getSavedJobs, saveJob, trackJobView, unsaveJob, withdrawJobApplication} from '../services/jobService.js';
 import JobStatusBadge from '../components/JobStatusBadge.jsx';
 import styles from '../components/Job.module.css';
 
 export default function JobDetailPage() {
     const {id} = useParams();
     const {showToast} = useToast();
-    const {roles} = useAuth();
+    const {accessToken, isAuthenticated, roles} = useAuth();
     const isCandidate = roles.includes('CANDIDATE');
+    const trackedViewRef = useRef('');
     const [job, setJob] = useState(null);
     const [application, setApplication] = useState(null);
     const [isSaved, setIsSaved] = useState(false);
+    const [resumes, setResumes] = useState([]);
+    const [resumeId, setResumeId] = useState('');
     const [coverLetter, setCoverLetter] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
@@ -29,27 +34,37 @@ export default function JobDetailPage() {
         setIsLoading(true);
         setErrorMessage('');
         try {
-            const jobData = await getJobById(id);
+            const jobData = await getJobById(id, {skipAuth: true, skipAuthCleanup: true});
             if (isCandidate && (!jobData.published || jobData.deleted)) {
                 setJob(null);
                 setErrorMessage('This job is not available for candidate access.');
                 return;
             }
             setJob(jobData);
+            if (accessToken && trackedViewRef.current !== String(id)) {
+                trackedViewRef.current = String(id);
+                trackJobView(id).catch(() => {});
+            }
             if (isCandidate) {
-                const [favoritesData, applicationsData] = await Promise.all([
-                    getSavedJobs({page: 0, size: 100}).catch(() => ({items: []})),
-                    getMyApplications({page: 0, size: 100}).catch(() => ({items: []})),
+                const [favoritesData, applicationsData, resumesData] = await Promise.all([
+                    getSavedJobs({page: 0, size: 100}, {skipAuthCleanup: true}).catch(() => ({items: []})),
+                    getMyApplications({page: 0, size: 100}, {skipAuthCleanup: true}).catch(() => ({items: []})),
+                    getMyResumes({page: 0, size: 100}, {skipAuthCleanup: true}).catch(() => ({items: []})),
                 ]);
+                const resumeItems = getItems(resumesData);
                 setIsSaved(getItems(favoritesData).some((favorite) => String(getJobId(favorite.job)) === String(id)));
                 setApplication(getItems(applicationsData).find((item) => String(getJobId(item.job)) === String(id)) || null);
+                setResumes(resumeItems);
+                setResumeId((current) => resumeItems.some((resume) => String(resume.id) === current)
+                    ? current
+                    : String(resumeItems.find((resume) => resume.isDefault)?.id || resumeItems[0]?.id || ''));
             }
         } catch (error) {
             setErrorMessage(error.message || 'Unable to load job detail.');
         } finally {
             setIsLoading(false);
         }
-    }, [id, isCandidate]);
+    }, [accessToken, id, isCandidate]);
 
     useEffect(() => { loadJob(); }, [loadJob]);
 
@@ -68,13 +83,16 @@ export default function JobDetailPage() {
 
     const submitApplication = async (event) => {
         event.preventDefault();
-        if (!coverLetter.trim()) {
-            setErrorMessage('Cover letter is required before applying.');
+        if (!resumeId) {
+            setErrorMessage('Choose a resume before applying.');
             return;
         }
         setIsSaving(true);
         try {
-            await applyJob(id, {coverLetter: coverLetter.trim()});
+            await applyJob(id, {
+                resumeId: Number(resumeId),
+                ...(coverLetter.trim() ? {coverLetter: coverLetter.trim()} : {}),
+            });
             setCoverLetter('');
             showToast({message: 'Application submitted.', type: 'success'});
             await loadJob();
@@ -134,9 +152,9 @@ export default function JobDetailPage() {
                             {isCandidate ? (
                                 <>
                                     <div className={styles.actions}><Button variant="secondary" onClick={toggleFavorite} disabled={isSaving}>{isSaved ? 'Remove saved job' : 'Save job'}</Button></div>
-                                    {application ? <div className={styles.notice}>Application status: <strong>{application.status}</strong>{application.status === 'PENDING' && <div className={styles.actions}><Button variant="secondary" onClick={withdraw} disabled={isSaving}>Withdraw application</Button></div>}</div> : <form className={styles.applyForm} onSubmit={submitApplication}><label className={styles.textareaField}><span>Cover letter *</span><textarea rows="5" value={coverLetter} onChange={(event) => setCoverLetter(event.target.value)} placeholder="Briefly explain why you are suitable for this position."/></label><Button type="submit" disabled={isSaving || !job.published || job.expired}>{isSaving ? 'Submitting...' : 'Apply now'}</Button></form>}
+                                    {application ? <div className={styles.notice}>Application status: <strong>{application.status}</strong>{application.status === 'PENDING' && <div className={styles.actions}><Button variant="secondary" onClick={withdraw} disabled={isSaving}>Withdraw application</Button></div>}</div> : resumes.length === 0 ? <div className={styles.notice}>Upload a resume before applying. <Link className={styles.companyLink} to="/candidate/resumes">Manage resumes</Link></div> : <form className={styles.applyForm} onSubmit={submitApplication}><Select label="Resume *" name="application-resume" value={resumeId} onChange={(event) => {setResumeId(event.target.value); setErrorMessage('');}} required><option value="">Choose a resume</option>{resumes.map((resume) => <option key={resume.id} value={resume.id}>{resume.title}{resume.isDefault ? ' (Default)' : ''}</option>)}</Select><label className={styles.textareaField}><span>Cover letter (optional)</span><textarea rows="5" value={coverLetter} onChange={(event) => setCoverLetter(event.target.value)} placeholder="Briefly explain why you are suitable for this position."/></label><Button type="submit" disabled={isSaving || !job.published || job.expired}>{isSaving ? 'Submitting...' : 'Apply now'}</Button></form>}
                                 </>
-                            ) : <div className={styles.notice}>Only candidate accounts can save and apply for jobs.</div>}
+                            ) : isAuthenticated ? <div className={styles.notice}>Only candidate accounts can save and apply for jobs.</div> : <div className={styles.notice}><Link className={styles.companyLink} to="/login" state={{from: {pathname: `/jobs/${id}`}}}>Sign in</Link> with a candidate account to save or apply for this job.</div>}
                         </section>
                         <section className={styles.panel}><h2>About the company</h2><dl className={styles.infoList}><div><dt>Company</dt><dd>{getCompanyName(job)}</dd></div><div><dt>Address</dt><dd>{company.address || job.location || 'Not specified'}</dd></div>{company.website && <div><dt>Website</dt><dd>{company.website}</dd></div>}</dl>{company.id && <div className={styles.actions}><Link className={styles.companyLink} to={`/companies/${company.id}`}>View company profile</Link></div>}</section>
                     </aside>

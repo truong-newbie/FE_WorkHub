@@ -49,7 +49,8 @@ The app base URL is `VITE_API_BASE_URL`, with local fallback `/api/v1`.
 3. `AuthProvider` calls `loginApi`.
 4. API response data must contain `accessToken`, optional `refreshToken`, `id`, and `authorities`.
 5. Store persists tokens and decodes role.
-6. User is redirected by role:
+6. User returns to the protected route that sent them to login when present. Otherwise,
+   the user is redirected by role:
    - `ADMIN` -> `/admin/dashboard`
    - `RECRUITER` -> `/recruiter/dashboard`
    - `CANDIDATE` -> `/candidate/dashboard`
@@ -156,9 +157,14 @@ Actions:
 - `accessToken` is stored as `localStorage.accessToken` and mirrored to legacy `localStorage.token`.
 - `refreshToken` is stored as `localStorage.refreshToken`.
 - OAuth `userId` is stored as `localStorage.userId`.
-- `apiClient` automatically attaches `Authorization: Bearer <accessToken>`.
+- `apiClient` automatically attaches `Authorization: Bearer <accessToken>` to protected
+  calls. Public/auth calls opt out with `skipAuth: true`.
 - `apiClient` normalizes errors.
-- `401` clears local tokens and dispatches an auth cleanup event.
+- A protected-call `401` clears local tokens and dispatches an auth cleanup event only
+  when the failed request used the current token. This avoids clearing a valid session
+  because of public calls or stale responses from an older token. After cleanup, FE
+  redirects to `/login`.
+- `400`, `403`, `404`, and `409` errors do not clear the session or redirect to login.
 - Refresh token is persisted but not used for auto-refresh because no refresh endpoint is documented.
 
 ## OAuth Flow

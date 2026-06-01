@@ -51,6 +51,6 @@ export async function processSubscriberMailQueue() {
 }
 
 export async function unsubscribeSubscriber(token) {
-    const response = await apiClient.get('/subscribers/unsubscribe', {params: {token}});
+    const response = await apiClient.get('/subscribers/unsubscribe', {params: {token}, skipAuth: true, skipAuthCleanup: true});
     return unwrapResult(response);
 }

@@ -1,12 +1,12 @@
 import {apiClient, unwrapResult} from '../../../lib/apiClient.js';
 
-export async function searchCompanies(params = {}) {
-    const response = await apiClient.get('/companies', {params});
+export async function searchCompanies(params = {}, config = {}) {
+    const response = await apiClient.get('/companies', {...config, params});
     return unwrapResult(response);
 }
 
-export async function getCompanyById(id) {
-    const response = await apiClient.get(`/companies/${id}`);
+export async function getCompanyById(id, config = {}) {
+    const response = await apiClient.get(`/companies/${id}`, config);
     return unwrapResult(response);
 }
 
@@ -67,8 +67,8 @@ export async function rejectCompany(id) {
     return unwrapResult(response);
 }
 
-export async function getCompanyJobs(id, params = {}) {
-    const response = await apiClient.get(`/companies/${id}/jobs`, {params});
+export async function getCompanyJobs(id, params = {}, config = {}) {
+    const response = await apiClient.get(`/companies/${id}/jobs`, {...config, params});
     return unwrapResult(response);
 }
 

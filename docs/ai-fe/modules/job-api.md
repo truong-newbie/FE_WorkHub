@@ -232,10 +232,10 @@ Response: HTTP `200`, `data` la Job model day du.
 
 ```http
 GET /api/v1/job/{id}
-Authorization: Bearer <access_token>
+Authorization: Bearer <access_token> (optional)
 ```
 
-Quyen: user da dang nhap.
+Quyen: public. Guest va user da dang nhap deu xem duoc job detail.
 
 Response: HTTP `200`, `data` la Job model day du.
 
@@ -569,6 +569,28 @@ Response la paginated response. Item co cac field cua latest job va them diem:
 
 Khi `explain=false`, mot so field giai thich co the khong xuat hien.
 
+### Track job detail view
+
+```http
+POST /api/v1/candidate/jobs/{jobId}/view
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+Quyen: user da dang nhap. FE chi goi khi co access token.
+
+Request body co the bo qua hoac gui:
+
+```json
+{
+  "source": "JOB_DETAIL",
+  "sessionId": "optional-session-id"
+}
+```
+
+Day la request phu. Loi tracking khong duoc chan trang detail, xoa session, hoac
+redirect user sang login.
+
 ## 8. Company jobs
 
 ```http
@@ -623,12 +645,13 @@ Content-Type: application/json
 
 ```json
 {
+  "resumeId": 12,
   "coverLetter": "I am interested in this position."
 }
 ```
 
-`coverLetter` la bat buoc. Candidate chi apply duoc job da publish, chua xoa,
-chua het han va chua apply truoc do.
+`resumeId` la bat buoc. `coverLetter` la tuy chon. Candidate chi apply duoc job da
+publish, chua xoa, chua het han va chua apply truoc do.
 
 #### Withdraw application
 
@@ -705,9 +728,8 @@ PENDING, REVIEWING, SCREENED, APPROVED, REJECTED
    `/api/v1/jobs/latest`.
 2. Backend chua expose endpoint `/api/v1/job/me` du hang so da ton tai. Hien
    recruiter chua co API rieng de lay "my jobs".
-3. `GET /api/v1/job/{id}` chi kiem tra job chua bi xoa; user da login co the xem
-   draft neu biet ID. Khong nen dua endpoint nay ra public truoc khi backend bo
-   sung rule phan quyen.
+3. `GET /api/v1/job/{id}` la public. Header authorization la tuy chon. FE khong
+   redirect guest sang login khi mo job detail.
 4. `GET /api/v1/job` cho phep user da login gui `published=false` de xem draft.
    FE candidate khong nen gui tham so nay; backend nen harden neu can bao mat
    draft.
@@ -770,9 +792,12 @@ Implemented flows:
 
 - Public `/jobs` uses `/jobs/latest`; signed-in users use `/jobs/search` with autocomplete,
   salary, location, level, employment type, skill, sorting, and pagination controls.
-- Job detail is protected because backend `GET /job/{id}` requires authentication.
-- Candidate flow supports save/remove favorite, saved-job list, apply with required cover
-  letter, withdraw pending application, application history, and recommended jobs.
+- Job detail is public. Signed-in users send best-effort
+  `POST /candidate/jobs/{jobId}/view` tracking with `{ "source": "JOB_DETAIL" }`.
+  Tracking failures do not block detail rendering or clear the current session.
+- Candidate flow supports save/remove favorite, saved-job list, apply with a required
+  resume and optional cover letter, withdraw pending application, application history,
+  and recommended jobs.
 - Recruiter flow resolves the current company first, then uses company jobs because the
   backend does not expose `/job/me`. It supports create, update, publish, unpublish,
   soft-delete, application review, and ATS screening.

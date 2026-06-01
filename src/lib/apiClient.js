@@ -31,7 +31,7 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use((config) => {
     const token = getAccessToken();
 
-    if (token) {
+    if (token && !config.skipAuth) {
         config.headers.Authorization = `Bearer ${token}`;
     }
 
@@ -44,10 +44,17 @@ apiClient.interceptors.response.use(
         const status = error.response?.status;
         const data = error.response?.data;
         const message = getErrorMessage(data, error.message);
+        const requestAuthorization = error.config?.headers?.Authorization
+            || error.config?.headers?.get?.('Authorization');
+        const currentToken = getAccessToken();
+        const requestUsedCurrentToken = currentToken && requestAuthorization === `Bearer ${currentToken}`;
 
-        if (status === 401) {
+        if (status === 401 && !error.config?.skipAuthCleanup && requestUsedCurrentToken) {
             clearAuthTokens();
             window.dispatchEvent(new Event('auth:unauthorized'));
+            if (window.location.pathname !== '/login') {
+                window.location.assign('/login');
+            }
         }
 
         return Promise.reject({
