@@ -16,15 +16,16 @@ export function getRoleRedirectPath(role) {
 }
 
 export async function getPostLoginRedirectPath(role, requestedPath = '') {
-    if (requestedPath) return requestedPath;
     const normalizedRole = role?.replace(/^ROLE_/, '').toUpperCase();
     if (normalizedRole === 'CANDIDATE') {
         try {
-            const status = await getCandidateOnboardingStatus();
+            const status = await getCandidateOnboardingStatus({skipAuthCleanup: true});
             if (status.requiredPreference || !status.hasJobPreference) return '/candidate/job-preference';
         } catch {
             // Login must remain usable if the optional onboarding check is unavailable.
         }
+        return '/jobs';
     }
+    if (requestedPath) return requestedPath;
     return getRoleRedirectPath(role);
 }

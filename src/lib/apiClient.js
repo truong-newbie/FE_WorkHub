@@ -21,6 +21,18 @@ function getErrorMessage(data, fallback) {
     return (typeof data?.error === 'string' ? data.error : data?.error?.message) || fallback || 'Request failed';
 }
 
+function getStatusFallback(status, fallback) {
+    if (status === 403) {
+        return 'You do not have permission to perform this action.';
+    }
+
+    if (status >= 500) {
+        return 'A system error occurred. Please try again later.';
+    }
+
+    return fallback;
+}
+
 export const apiClient = axios.create({
     baseURL: env.apiBaseUrl,
     headers: {
@@ -43,7 +55,7 @@ apiClient.interceptors.response.use(
     (error) => {
         const status = error.response?.status;
         const data = error.response?.data;
-        const message = getErrorMessage(data, error.message);
+        const message = getErrorMessage(data, getStatusFallback(status, error.message));
         const requestAuthorization = error.config?.headers?.Authorization
             || error.config?.headers?.get?.('Authorization');
         const currentToken = getAccessToken();

@@ -1,7 +1,7 @@
 import {apiClient, unwrapResult} from '../../../lib/apiClient.js';
 
-export async function getCandidateOnboardingStatus() {
-    const response = await apiClient.get('/candidate/onboarding-status');
+export async function getCandidateOnboardingStatus(config = {}) {
+    const response = await apiClient.get('/candidate/onboarding-status', config);
     return unwrapResult(response);
 }
 

@@ -1,12 +1,12 @@
 import {apiClient, unwrapResult} from '../../../lib/apiClient.js';
 
 export async function getNotifications(params = {}) {
-    const response = await apiClient.get('/notifications', {params});
+    const response = await apiClient.get('/notifications', {params, skipAuthCleanup: true});
     return unwrapResult(response);
 }
 
 export async function getUnreadNotificationCount() {
-    const response = await apiClient.get('/notifications/unread-count');
+    const response = await apiClient.get('/notifications/unread-count', {skipAuthCleanup: true});
     return unwrapResult(response);
 }
 
