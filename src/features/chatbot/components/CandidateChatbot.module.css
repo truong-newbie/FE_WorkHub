@@ -1,0 +1,470 @@
+.widget {
+    bottom: 24px;
+    position: fixed;
+    right: 24px;
+    z-index: 1100;
+}
+
+.launcher {
+    align-items: center;
+    background: #ed1b2f;
+    border: 0;
+    border-radius: 50%;
+    box-shadow: 0 10px 28px rgba(109, 17, 29, 0.28);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    font-size: 22px;
+    height: 58px;
+    justify-content: center;
+    margin-left: auto;
+    transition: background 0.2s ease, transform 0.2s ease;
+    width: 58px;
+}
+
+.launcher:hover {
+    background: #c91527;
+    transform: translateY(-2px);
+}
+
+.panel {
+    background: #fff;
+    border: 1px solid #e4e7ec;
+    border-radius: 18px;
+    box-shadow: 0 22px 50px rgba(16, 24, 40, 0.2);
+    display: flex;
+    flex-direction: column;
+    height: min(640px, calc(100vh - 112px));
+    margin-bottom: 14px;
+    overflow: hidden;
+    width: min(430px, calc(100vw - 32px));
+}
+
+.panelHeader {
+    align-items: center;
+    background: linear-gradient(135deg, #b81324, #ed1b2f);
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 16px;
+}
+
+.assistantIdentity,
+.assistantIdentity span:last-child,
+.conversationItem span:first-child {
+    display: flex;
+    flex-direction: column;
+}
+
+.assistantIdentity {
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.assistantIdentity small {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.assistantIcon {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    display: flex;
+    height: 36px;
+    justify-content: center;
+    width: 36px;
+}
+
+.iconButton,
+.toolbarButton {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    display: inline-flex;
+    gap: 6px;
+}
+
+.panelHeader .iconButton {
+    color: #fff;
+    font-size: 18px;
+}
+
+.viewToolbar {
+    align-items: center;
+    border-bottom: 1px solid #eef0f3;
+    display: flex;
+    justify-content: space-between;
+    min-height: 48px;
+    padding: 8px 12px;
+}
+
+.toolbarActions {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+}
+
+.viewToolbar .iconButton,
+.toolbarButton {
+    color: #475467;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 7px;
+}
+
+.viewToolbar .iconButton:hover,
+.toolbarButton:hover {
+    color: #d2192d;
+}
+
+.messages,
+.conversationList {
+    background: #f8f9fb;
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px;
+}
+
+.messageRow {
+    display: flex;
+    margin-bottom: 12px;
+}
+
+.userRow {
+    justify-content: flex-end;
+}
+
+.assistantRow {
+    justify-content: flex-start;
+}
+
+.bubble {
+    border-radius: 14px;
+    max-width: 88%;
+    padding: 10px 12px;
+}
+
+.userBubble {
+    background: #ed1b2f;
+    border-bottom-right-radius: 4px;
+    color: #fff;
+}
+
+.assistantBubble {
+    background: #fff;
+    border: 1px solid #e6e9ee;
+    border-bottom-left-radius: 4px;
+    color: #344054;
+}
+
+.messageHeading {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 12px;
+    gap: 7px;
+    margin-bottom: 5px;
+}
+
+.responseMode {
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    text-transform: uppercase;
+}
+
+.responseModeAI {
+    background: #ecfdf3;
+    color: #027a48;
+}
+
+.responseModeFALLBACK {
+    background: #fffaeb;
+    color: #b54708;
+}
+
+.responseModeREFUSAL {
+    background: #fef3f2;
+    color: #b42318;
+}
+
+.messageContent {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.messageTime,
+.conversationItem time {
+    display: block;
+    font-size: 10px;
+    margin-top: 7px;
+    opacity: 0.72;
+}
+
+.sources {
+    border-top: 1px solid #eef0f3;
+    display: grid;
+    gap: 7px;
+    margin-top: 10px;
+    padding-top: 9px;
+}
+
+.sectionLabel {
+    color: #667085;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.sourceCard {
+    align-items: center;
+    background: #f9fafb;
+    border: 1px solid #e4e7ec;
+    border-radius: 9px;
+    color: #344054;
+    cursor: pointer;
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    text-align: left;
+    width: 100%;
+}
+
+.sourceCard span {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.sourceCard strong,
+.sourceCard small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sourceCard small {
+    color: #667085;
+    margin-top: 2px;
+}
+
+.sourceCard:hover {
+    border-color: #ed1b2f;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 9px;
+}
+
+.actionButton {
+    background: #fff1f3;
+    border: 1px solid #fecdd3;
+    border-radius: 999px;
+    color: #b81324;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 9px;
+}
+
+.actionButton:hover {
+    background: #ffe4e8;
+}
+
+.welcome {
+    align-items: center;
+    color: #475467;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 58px 20px 20px;
+    text-align: center;
+}
+
+.welcome svg {
+    color: #ed1b2f;
+    font-size: 30px;
+}
+
+.welcome p,
+.mutedText,
+.typing,
+.errorMessage,
+.historyError {
+    font-size: 13px;
+    line-height: 1.45;
+    margin: 0;
+}
+
+.mutedText,
+.typing {
+    color: #667085;
+}
+
+.typing {
+    padding: 3px 0 10px;
+}
+
+.composer {
+    border-top: 1px solid #e4e7ec;
+    padding: 10px 12px 8px;
+}
+
+.composerRow {
+    align-items: flex-end;
+    display: flex;
+    gap: 8px;
+}
+
+.composer textarea {
+    border: 1px solid #d0d5dd;
+    border-radius: 10px;
+    flex: 1;
+    font: inherit;
+    font-size: 14px;
+    line-height: 1.4;
+    max-height: 110px;
+    min-height: 42px;
+    padding: 9px;
+    resize: vertical;
+}
+
+.composer textarea:focus {
+    border-color: #ed1b2f;
+    outline: 2px solid rgba(237, 27, 47, 0.12);
+}
+
+.sendButton {
+    align-items: center;
+    background: #ed1b2f;
+    border: 0;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    height: 42px;
+    justify-content: center;
+    width: 42px;
+}
+
+.sendButton:disabled {
+    background: #f3a0aa;
+    cursor: not-allowed;
+}
+
+.characterCount {
+    color: #98a2b3;
+    display: block;
+    font-size: 11px;
+    margin-top: 5px;
+    text-align: right;
+}
+
+.errorMessage,
+.historyError {
+    color: #b42318;
+    margin-bottom: 7px;
+}
+
+.historyError {
+    border-top: 1px solid #fecdca;
+    padding: 8px 12px;
+}
+
+.historyView {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.conversationList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.conversationItem {
+    align-items: center;
+    background: #fff;
+    border: 1px solid #e4e7ec;
+    border-radius: 10px;
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.conversationSelectButton {
+    background: transparent;
+    border: 0;
+    color: #344054;
+    cursor: pointer;
+    flex: 1;
+    min-width: 0;
+    padding: 10px;
+    text-align: left;
+}
+
+.conversationSelectButton span {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.conversationSelectButton strong,
+.conversationSelectButton small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.conversationSelectButton small {
+    color: #667085;
+    margin-top: 4px;
+}
+
+.conversationItem:hover,
+.activeConversation {
+    border-color: #ed1b2f;
+}
+
+.deleteButton {
+    background: transparent;
+    border: 0;
+    color: #98a2b3;
+    cursor: pointer;
+    flex: 0 0 auto;
+    padding: 10px;
+}
+
+.deleteButton:hover {
+    color: #b42318;
+}
+
+.deleteButton:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+@media (max-width: 600px) {
+    .widget {
+        bottom: 12px;
+        right: 12px;
+    }
+
+    .panel {
+        height: min(680px, calc(100vh - 90px));
+        width: calc(100vw - 24px);
+    }
+}

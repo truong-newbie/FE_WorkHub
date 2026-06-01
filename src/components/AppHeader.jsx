@@ -9,15 +9,16 @@ import {
     FaBuilding,
     FaHeart,
     FaFileAlt,
-    FaTachometerAlt,
-    FaUsers,
     FaBars,
     FaTimes,
+    FaUserTie,
 } from 'react-icons/fa';
 import {useAuth} from '../stores/useAuth.js';
+import NotificationBell from '../features/notification/components/NotificationBell.jsx';
+import CandidateChatbotWidget from '../features/chatbot/components/CandidateChatbotWidget.jsx';
 import styles from './AppHeader.module.css';
 
-export default function AppHeader() {
+export default function AppHeader({hideNavigation = false}) {
     const {user, role, roles, isAuthenticated, logout} = useAuth();
     const navigate = useNavigate();
     const [showDropdown, setShowDropdown] = useState(false);
@@ -64,6 +65,12 @@ export default function AppHeader() {
                 Việc làm
             </NavLink>
             <NavLink
+                to="/skills"
+                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+            >
+                Skills
+            </NavLink>
+            <NavLink
                 to="/companies"
                 className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
             >
@@ -81,16 +88,46 @@ export default function AppHeader() {
                 Việc làm
             </NavLink>
             <NavLink
+                to="/candidate/resumes"
+                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+            >
+                CV
+            </NavLink>
+            <NavLink
                 to="/applications"
                 className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
             >
                 Việc đã ứng tuyển
             </NavLink>
             <NavLink
+                to="/candidate/become-recruiter"
+                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+            >
+                Become a Recruiter
+            </NavLink>
+            <NavLink
                 to="/saved-jobs"
                 className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
             >
                 Việc đã lưu
+            </NavLink>
+            <NavLink
+                to="/candidate/jobs/recommended"
+                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+            >
+                Gợi ý việc làm
+            </NavLink>
+            <NavLink
+                to="/candidate/job-preference"
+                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+            >
+                Job Preferences
+            </NavLink>
+            <NavLink
+                to="/candidate/assessments"
+                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+            >
+                My Assessments
             </NavLink>
         </>
     );
@@ -110,10 +147,16 @@ export default function AppHeader() {
                 Tin tuyển dụng
             </NavLink>
             <NavLink
-                to="/recruiter/applicants"
+                to="/recruiter/assessments"
                 className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
             >
-                Ứng viên
+                Assessments
+            </NavLink>
+            <NavLink
+                to="/recruiter/company/requests"
+                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+            >
+                Join requests
             </NavLink>
             <NavLink
                 to="/recruiter/company"
@@ -125,32 +168,12 @@ export default function AppHeader() {
     );
 
     const renderAdminNav = () => (
-        <>
-            <NavLink
-                to="/admin/dashboard"
-                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
-            >
-                Dashboard
-            </NavLink>
-            <NavLink
-                to="/admin/users"
-                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
-            >
-                Quản lý người dùng
-            </NavLink>
-            <NavLink
-                to="/admin/companies"
-                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
-            >
-                Quản lý công ty
-            </NavLink>
-            <NavLink
-                to="/admin/jobs"
-                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
-            >
-                Quản lý việc làm
-            </NavLink>
-        </>
+        <NavLink
+            to="/admin/dashboard"
+            className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+        >
+            Admin Control Center
+        </NavLink>
     );
 
     const renderMobileNav = () => {
@@ -168,6 +191,15 @@ export default function AppHeader() {
                             onClick={() => setShowMobileMenu(false)}
                         >
                             Việc làm
+                        </NavLink>
+                        <NavLink
+                            to="/skills"
+                            className={({isActive}) =>
+                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
+                            }
+                            onClick={() => setShowMobileMenu(false)}
+                        >
+                            Skills
                         </NavLink>
                         <NavLink
                             to="/companies"
@@ -192,6 +224,15 @@ export default function AppHeader() {
                             Việc làm
                         </NavLink>
                         <NavLink
+                            to="/candidate/resumes"
+                            className={({isActive}) =>
+                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
+                            }
+                            onClick={() => setShowMobileMenu(false)}
+                        >
+                            CV
+                        </NavLink>
+                        <NavLink
                             to="/applications"
                             className={({isActive}) =>
                                 `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
@@ -201,6 +242,15 @@ export default function AppHeader() {
                             Việc đã ứng tuyển
                         </NavLink>
                         <NavLink
+                            to="/candidate/become-recruiter"
+                            className={({isActive}) =>
+                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
+                            }
+                            onClick={() => setShowMobileMenu(false)}
+                        >
+                            Become a Recruiter
+                        </NavLink>
+                        <NavLink
                             to="/saved-jobs"
                             className={({isActive}) =>
                                 `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
@@ -208,6 +258,33 @@ export default function AppHeader() {
                             onClick={() => setShowMobileMenu(false)}
                         >
                             Việc đã lưu
+                        </NavLink>
+                        <NavLink
+                            to="/candidate/jobs/recommended"
+                            className={({isActive}) =>
+                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
+                            }
+                            onClick={() => setShowMobileMenu(false)}
+                        >
+                            Gợi ý việc làm
+                        </NavLink>
+                        <NavLink
+                            to="/candidate/job-preference"
+                            className={({isActive}) =>
+                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
+                            }
+                            onClick={() => setShowMobileMenu(false)}
+                        >
+                            Job Preferences
+                        </NavLink>
+                        <NavLink
+                            to="/candidate/assessments"
+                            className={({isActive}) =>
+                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
+                            }
+                            onClick={() => setShowMobileMenu(false)}
+                        >
+                            My Assessments
                         </NavLink>
                     </>
                 )}
@@ -232,13 +309,22 @@ export default function AppHeader() {
                             Tin tuyển dụng
                         </NavLink>
                         <NavLink
-                            to="/recruiter/applicants"
+                            to="/recruiter/assessments"
                             className={({isActive}) =>
                                 `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
                             }
                             onClick={() => setShowMobileMenu(false)}
                         >
-                            Ứng viên
+                            Assessments
+                        </NavLink>
+                        <NavLink
+                            to="/recruiter/company/requests"
+                            className={({isActive}) =>
+                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
+                            }
+                            onClick={() => setShowMobileMenu(false)}
+                        >
+                            Join requests
                         </NavLink>
                         <NavLink
                             to="/recruiter/company"
@@ -252,44 +338,15 @@ export default function AppHeader() {
                     </>
                 )}
                 {isAdmin && (
-                    <>
-                        <NavLink
-                            to="/admin/dashboard"
-                            className={({isActive}) =>
-                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
-                            }
-                            onClick={() => setShowMobileMenu(false)}
-                        >
-                            Dashboard
-                        </NavLink>
-                        <NavLink
-                            to="/admin/users"
-                            className={({isActive}) =>
-                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
-                            }
-                            onClick={() => setShowMobileMenu(false)}
-                        >
-                            Quản lý người dùng
-                        </NavLink>
-                        <NavLink
-                            to="/admin/companies"
-                            className={({isActive}) =>
-                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
-                            }
-                            onClick={() => setShowMobileMenu(false)}
-                        >
-                            Quản lý công ty
-                        </NavLink>
-                        <NavLink
-                            to="/admin/jobs"
-                            className={({isActive}) =>
-                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
-                            }
-                            onClick={() => setShowMobileMenu(false)}
-                        >
-                            Quản lý việc làm
-                        </NavLink>
-                    </>
+                    <NavLink
+                        to="/admin/dashboard"
+                        className={({isActive}) =>
+                            `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
+                        }
+                        onClick={() => setShowMobileMenu(false)}
+                    >
+                        Admin Control Center
+                    </NavLink>
                 )}
             </div>
         );
@@ -299,17 +356,19 @@ export default function AppHeader() {
         <>
             <header className={styles.header}>
                 <div className={styles.container}>
-                    <Link to="/" className={styles.logo}>
+                    <Link to={isAuthenticated ? '/' : '/jobs'} className={styles.logo}>
                         <FaBriefcase />
                         WorkHub
                     </Link>
 
-                    <nav className={styles.nav}>
-                        {!isAuthenticated && renderPublicNav()}
-                        {isCandidate && renderCandidateNav()}
-                        {isRecruiter && renderRecruiterNav()}
-                        {isAdmin && renderAdminNav()}
-                    </nav>
+                    {!hideNavigation && (
+                        <nav className={styles.nav}>
+                            {!isAuthenticated && renderPublicNav()}
+                            {isCandidate && renderCandidateNav()}
+                            {isRecruiter && renderRecruiterNav()}
+                            {isAdmin && renderAdminNav()}
+                        </nav>
+                    )}
 
                     <div className={styles.rightSection}>
                         {!isAuthenticated ? (
@@ -328,6 +387,8 @@ export default function AppHeader() {
                                 </button>
                             </div>
                         ) : (
+                            <>
+                            <NotificationBell/>
                             <div className={styles.userMenu} ref={dropdownRef}>
                                 <button
                                     className={styles.userButton}
@@ -398,6 +459,26 @@ export default function AppHeader() {
                                             Đổi mật khẩu
                                         </Link>
 
+                                        <Link
+                                            to="/settings/subscription"
+                                            className={styles.dropdownItem}
+                                            onClick={() => setShowDropdown(false)}
+                                        >
+                                            <FaFileAlt className={styles.dropdownItemIcon} />
+                                            Job email subscription
+                                        </Link>
+
+                                        {isCandidate && (
+                                            <Link
+                                                to="/candidate/become-recruiter"
+                                                className={styles.dropdownItem}
+                                                onClick={() => setShowDropdown(false)}
+                                            >
+                                                <FaUserTie className={styles.dropdownItemIcon} />
+                                                Become a Recruiter
+                                            </Link>
+                                        )}
+
                                         <div className={styles.dropdownDivider}></div>
 
                                         <button
@@ -410,18 +491,22 @@ export default function AppHeader() {
                                     </div>
                                 )}
                             </div>
+                            </>
                         )}
 
-                        <button
-                            className={styles.mobileMenuButton}
-                            onClick={() => setShowMobileMenu(!showMobileMenu)}
-                        >
-                            {showMobileMenu ? <FaTimes /> : <FaBars />}
-                        </button>
+                        {!hideNavigation && (
+                            <button
+                                className={styles.mobileMenuButton}
+                                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                            >
+                                {showMobileMenu ? <FaTimes /> : <FaBars />}
+                            </button>
+                        )}
                     </div>
                 </div>
             </header>
-            {renderMobileNav()}
+            {!hideNavigation && renderMobileNav()}
+            {isCandidate && <CandidateChatbotWidget/>}
         </>
     );
 }

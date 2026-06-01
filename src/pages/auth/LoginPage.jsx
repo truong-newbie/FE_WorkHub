@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {Link, useNavigate, useSearchParams} from 'react-router-dom';
+import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom';
 import {FaCheckCircle, FaBriefcase, FaUsers, FaRocket} from 'react-icons/fa';
 import {FcGoogle} from 'react-icons/fc';
 import {FaFacebook} from 'react-icons/fa';
@@ -7,7 +7,7 @@ import ErrorMessage from '../../components/ui/ErrorMessage.jsx';
 import {getOAuthAuthorizeUrl} from '../../services/authApi.js';
 import {useAuth} from '../../stores/useAuth.js';
 import {useToast} from '../../components/ui/useToast.js';
-import {getRoleRedirectPath} from './authRedirects.js';
+import {getPostLoginRedirectPath} from './authRedirects.js';
 import styles from './AuthPage.module.css';
 
 export default function LoginPage() {
@@ -17,6 +17,7 @@ export default function LoginPage() {
     const [oauthProvider, setOauthProvider] = useState('');
 
     const navigate = useNavigate();
+    const location = useLocation();
     const [searchParams] = useSearchParams();
     const {login, isLoading} = useAuth();
     const {showToast} = useToast();
@@ -33,7 +34,7 @@ export default function LoginPage() {
         try {
             const result = await login({email, password});
             showToast({message: 'Logged in successfully', type: 'success'});
-            navigate(getRoleRedirectPath(result.role), {replace: true});
+            navigate(await getPostLoginRedirectPath(result.role, location.state?.from?.pathname), {replace: true});
         } catch (error) {
             const message = error.message || 'Login failed';
             setErrorMessage(message);

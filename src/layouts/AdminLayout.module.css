@@ -1,0 +1,43 @@
+.shell {
+    min-height: 100vh;
+    background: #f3f5f8;
+}
+
+.workspace {
+    display: flex;
+    min-height: calc(100vh - 64px);
+}
+
+.contentColumn {
+    min-width: 0;
+    flex: 1;
+}
+
+.mainContent {
+    min-width: 0;
+}
+
+.menuButton {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .workspace {
+        min-height: calc(100vh - 56px);
+    }
+
+    .menuButton {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 14px 18px 0;
+        border: 1px solid #d9dee6;
+        border-radius: 8px;
+        background: #ffffff;
+        color: #303846;
+        cursor: pointer;
+        padding: 9px 12px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+}

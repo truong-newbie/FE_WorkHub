@@ -1,0 +1,284 @@
+.page {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 28px;
+}
+
+.hero {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 30px;
+    overflow: hidden;
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at 75% -20%, rgba(237, 27, 47, 0.52), transparent 32%),
+        linear-gradient(125deg, #101620, #1d2736);
+    box-shadow: 0 16px 28px rgba(24, 31, 42, 0.14);
+    color: #ffffff;
+    padding: 30px;
+}
+
+.eyebrow,
+.sectionEyebrow {
+    color: #f34b5b;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.hero h1 {
+    margin-top: 8px;
+    color: #ffffff;
+    font-size: clamp(30px, 4vw, 46px);
+    letter-spacing: -0.06em;
+}
+
+.heroDescription {
+    max-width: 660px;
+    margin-top: 10px;
+    color: #c3ccd8;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.heroMeta {
+    display: grid;
+    align-content: end;
+    min-width: 220px;
+    border-left: 1px solid rgba(255, 255, 255, 0.13);
+    padding-left: 22px;
+}
+
+.heroMeta strong {
+    margin-top: 18px;
+    color: #ffffff;
+    font-size: 17px;
+}
+
+.heroMeta small {
+    margin-top: 4px;
+    color: #9eabba;
+    font-size: 12px;
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    width: fit-content;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.09);
+    color: #d9e1ea;
+    padding: 6px 9px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.status i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #3fd68c;
+    box-shadow: 0 0 0 4px rgba(63, 214, 140, 0.14);
+}
+
+.introRow,
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.introRow {
+    margin: 30px 0 14px;
+}
+
+.introRow h2,
+.sectionHeader h2 {
+    margin-top: 4px;
+    color: #202631;
+    font-size: 22px;
+}
+
+.introRow p:not(.sectionEyebrow) {
+    margin-top: 4px;
+    color: #687282;
+    font-size: 14px;
+}
+
+.shield {
+    color: #d9dee5;
+    font-size: 38px;
+}
+
+.priorityGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.priorityCard {
+    border: 1px solid #e1e5eb;
+    border-radius: 13px;
+    background: #ffffff;
+    color: #252c37;
+    padding: 17px;
+    text-decoration: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.priorityCard:hover {
+    border-color: #cdd3dc;
+    box-shadow: 0 12px 24px rgba(27, 36, 49, 0.08);
+    transform: translateY(-3px);
+}
+
+.priorityIcon {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.red .priorityIcon {
+    background: #fff0f1;
+    color: #d91d30;
+}
+
+.blue .priorityIcon {
+    background: #eef5ff;
+    color: #2869c8;
+}
+
+.amber .priorityIcon {
+    background: #fff7e6;
+    color: #b86b00;
+}
+
+.priorityCard h3 {
+    margin-top: 15px;
+    font-size: 16px;
+}
+
+.priorityCard p {
+    min-height: 60px;
+    margin-top: 7px;
+    color: #6b7482;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.priorityCard span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    color: #333b48;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.modulesSection {
+    margin-top: 30px;
+}
+
+.sectionHeader span {
+    border-radius: 999px;
+    background: #e8edf3;
+    color: #566170;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.moduleGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.moduleCard {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    border: 1px solid #e1e5eb;
+    border-radius: 11px;
+    background: #ffffff;
+    color: #596574;
+    padding: 15px;
+    text-decoration: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.moduleCard:hover {
+    border-color: #f19ba4;
+    box-shadow: 0 8px 17px rgba(33, 42, 56, 0.07);
+}
+
+.moduleCard > svg:first-child {
+    flex: 0 0 auto;
+    color: #d51e30;
+    font-size: 18px;
+}
+
+.moduleCard div {
+    min-width: 0;
+    flex: 1;
+}
+
+.moduleCard strong {
+    color: #28303b;
+    font-size: 14px;
+}
+
+.moduleCard p {
+    margin-top: 4px;
+    color: #7a8492;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.arrow {
+    flex: 0 0 auto;
+    color: #aeb6c1;
+    font-size: 12px;
+}
+
+@media (max-width: 1080px) {
+    .moduleGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 720px) {
+    .page {
+        padding: 18px;
+    }
+
+    .hero {
+        display: grid;
+        padding: 23px;
+    }
+
+    .heroMeta {
+        border-top: 1px solid rgba(255, 255, 255, 0.13);
+        border-left: 0;
+        padding-top: 17px;
+        padding-left: 0;
+    }
+
+    .priorityGrid,
+    .moduleGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .priorityCard p {
+        min-height: 0;
+    }
+}

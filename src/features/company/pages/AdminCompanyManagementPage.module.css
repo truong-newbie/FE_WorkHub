@@ -1,0 +1,145 @@
+.page {
+    min-height: calc(100vh - 64px);
+    background: #f5f5f5;
+    padding: 28px 24px;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.header,
+.panelHeader,
+.filters,
+.actions {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.header {
+    margin-bottom: 18px;
+}
+
+.eyebrow {
+    color: #ed1b2f;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.header h1 {
+    color: #212529;
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.header p,
+.panelHeader p {
+    color: #6c757d;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.panel {
+    margin-bottom: 18px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background: #ffffff;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.filters {
+    align-items: end;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.filters > label:first-child {
+    min-width: min(100%, 340px);
+}
+
+.panelHeader {
+    margin-bottom: 14px;
+}
+
+.panelHeader h2 {
+    color: #212529;
+    font-size: 18px;
+    margin-bottom: 3px;
+}
+
+.companyCell {
+    display: grid;
+    gap: 3px;
+    min-width: 170px;
+}
+
+.companyCell strong {
+    color: #212529;
+}
+
+.companyCell span {
+    color: #6c757d;
+    font-size: 13px;
+}
+
+.approvedBadge,
+.pendingBadge,
+.rejectedBadge {
+    display: inline-flex;
+    border-radius: 999px;
+    padding: 5px 9px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.approvedBadge {
+    background: #ecfdf3;
+    color: #067647;
+}
+
+.pendingBadge {
+    background: #fff4e5;
+    color: #b54708;
+}
+
+.rejectedBadge {
+    background: #fef3f2;
+    color: #b42318;
+}
+
+.actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.actions button {
+    min-height: 32px;
+    padding: 6px 9px;
+    font-size: 13px;
+}
+
+.panel nav {
+    justify-content: flex-end;
+    margin-top: 14px;
+}
+
+@media (max-width: 600px) {
+    .page {
+        min-height: calc(100vh - 56px);
+        padding: 20px 16px;
+    }
+
+    .header,
+    .filters {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,41 @@
+.selector {
+    display: grid;
+    gap: 8px;
+}
+
+.options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.option,
+.selected {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid #dee2e6;
+    border-radius: 999px;
+    cursor: pointer;
+    padding: 5px 9px;
+    color: #495057;
+    font-size: 13px;
+}
+
+.selected {
+    border-color: #ed1b2f;
+    background: #fff5f5;
+    color: #b42318;
+}
+
+.option input,
+.selected input {
+    display: none;
+}
+
+.error {
+    color: #d92d20;
+    font-size: 13px;
+}

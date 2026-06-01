@@ -1,6 +1,7 @@
 import Home from './pages/home/home.jsx';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import MainLayout from './layouts/MainLayout.jsx';
+import AdminLayout from './layouts/AdminLayout.jsx';
 import ProtectedRoute from './routes/ProtectedRoute.jsx';
 import RoleBasedRoute from './routes/RoleBasedRoute.jsx';
 import UnauthorizedPage from './pages/unauthorized/UnauthorizedPage.jsx';
@@ -12,10 +13,48 @@ import VerifyOtpPage from './pages/auth/VerifyOtpPage.jsx';
 import ResetPasswordPage from './pages/auth/ResetPasswordPage.jsx';
 import RoleDashboard from './pages/dashboard/RoleDashboard.jsx';
 import AdminUserManagementPage from './features/user/pages/AdminUserManagementPage.jsx';
+import AdminCompanyManagementPage from './features/company/pages/AdminCompanyManagementPage.jsx';
+import AdminRecruiterUpgradeRequestsPage from './features/recruiterRequests/pages/AdminRecruiterUpgradeRequestsPage.jsx';
 import ProfileViewPage from './features/user/pages/ProfileViewPage.jsx';
 import EditProfilePage from './features/user/pages/EditProfilePage.jsx';
 import UploadAvatarPage from './features/user/pages/UploadAvatarPage.jsx';
 import ChangePasswordPage from './features/user/pages/ChangePasswordPage.jsx';
+import CandidateRecruiterRequestPage from './features/recruiterRequests/pages/CandidateRecruiterRequestPage.jsx';
+import RecruiterCompanyOnboardingPage from './features/recruiterRequests/pages/RecruiterCompanyOnboardingPage.jsx';
+import ReviewerRecruiterRequestsPage from './features/recruiterRequests/pages/ReviewerRecruiterRequestsPage.jsx';
+import CompanyListPage from './features/company/pages/CompanyListPage.jsx';
+import CompanyDetailPage from './features/company/pages/CompanyDetailPage.jsx';
+import CandidateResumesPage from './features/resume/pages/CandidateResumesPage.jsx';
+import RecruiterCandidateResumePage from './features/resume/pages/RecruiterCandidateResumePage.jsx';
+import AdminResumeManagementPage from './features/resume/pages/AdminResumeManagementPage.jsx';
+import SkillDirectoryPage from './features/skill/pages/SkillDirectoryPage.jsx';
+import AdminSkillManagementPage from './features/skill/pages/AdminSkillManagementPage.jsx';
+import SubscriptionSettingsPage from './features/subscriber/pages/SubscriptionSettingsPage.jsx';
+import AdminSubscriberManagementPage from './features/subscriber/pages/AdminSubscriberManagementPage.jsx';
+import UnsubscribePage from './features/subscriber/pages/UnsubscribePage.jsx';
+import AdminDashboardPage from './features/admin/pages/AdminDashboardPage.jsx';
+import JobListPage from './features/job/pages/JobListPage.jsx';
+import JobDetailPage from './features/job/pages/JobDetailPage.jsx';
+import SavedJobsPage from './features/job/pages/SavedJobsPage.jsx';
+import CandidateApplicationsPage from './features/job/pages/CandidateApplicationsPage.jsx';
+import RecommendedJobsPage from './features/job/pages/RecommendedJobsPage.jsx';
+import RecruiterJobsPage from './features/job/pages/RecruiterJobsPage.jsx';
+import JobFormPage from './features/job/pages/JobFormPage.jsx';
+import JobApplicationsPage from './features/job/pages/JobApplicationsPage.jsx';
+import AdminJobManagementPage from './features/job/pages/AdminJobManagementPage.jsx';
+import AtsScreeningDetailPage from './features/ats/pages/AtsScreeningDetailPage.jsx';
+import JobScreeningRankingPage from './features/ats/pages/JobScreeningRankingPage.jsx';
+import RecruiterAssessmentsPage from './features/assessment/pages/RecruiterAssessmentsPage.jsx';
+import AssessmentFormPage from './features/assessment/pages/AssessmentFormPage.jsx';
+import RecruiterAssessmentWorkspacePage from './features/assessment/pages/RecruiterAssessmentWorkspacePage.jsx';
+import AssessmentAssignPage from './features/assessment/pages/AssessmentAssignPage.jsx';
+import AssessmentResultsPage from './features/assessment/pages/AssessmentResultsPage.jsx';
+import AssessmentResultDetailPage from './features/assessment/pages/AssessmentResultDetailPage.jsx';
+import CandidateAssessmentsPage from './features/assessment/pages/CandidateAssessmentsPage.jsx';
+import CandidateAssessmentTakePage from './features/assessment/pages/CandidateAssessmentTakePage.jsx';
+import CandidateAssessmentResultPage from './features/assessment/pages/CandidateAssessmentResultPage.jsx';
+import JobPreferencePage from './features/recommendation/pages/JobPreferencePage.jsx';
+import NotificationsPage from './features/notification/pages/NotificationsPage.jsx';
 import './App.module.css';
 
 function App() {
@@ -29,6 +68,14 @@ function App() {
                 <Route path="/reset-password" element={<ResetPasswordPage/>}/>
                 <Route path="/auth/oauth/callback" element={<OAuthCallbackPage/>}/>
                 <Route path="/unauthorized" element={<UnauthorizedPage/>}/>
+                <Route element={<MainLayout/>}>
+                    <Route path="/jobs" element={<JobListPage/>}/>
+                    <Route path="/jobs/:id" element={<JobDetailPage/>}/>
+                    <Route path="/companies" element={<CompanyListPage/>}/>
+                    <Route path="/companies/:id" element={<CompanyDetailPage/>}/>
+                    <Route path="/skills" element={<SkillDirectoryPage/>}/>
+                    <Route path="/unsubscribe" element={<UnsubscribePage/>}/>
+                </Route>
 
                 <Route element={<ProtectedRoute/>}>
                     <Route element={<MainLayout/>}>
@@ -37,25 +84,70 @@ function App() {
                         <Route path="/profile/edit" element={<EditProfilePage/>}/>
                         <Route path="/profile/avatar" element={<UploadAvatarPage/>}/>
                         <Route path="/profile/change-password" element={<ChangePasswordPage/>}/>
+                        <Route path="/settings/subscription" element={<SubscriptionSettingsPage/>}/>
+                        <Route path="/notifications" element={<NotificationsPage/>}/>
                     </Route>
                 </Route>
 
                 <Route element={<RoleBasedRoute allowedRoles={['ADMIN']}/>}>
-                    <Route element={<MainLayout/>}>
-                        <Route path="/admin/dashboard" element={<RoleDashboard title="Admin Dashboard"/>}/>
+                    <Route element={<AdminLayout/>}>
+                        <Route path="/admin/dashboard" element={<AdminDashboardPage/>}/>
                         <Route path="/admin/users" element={<AdminUserManagementPage/>}/>
+                        <Route path="/admin/companies" element={<AdminCompanyManagementPage/>}/>
+                        <Route path="/admin/recruiter-requests" element={<AdminRecruiterUpgradeRequestsPage/>}/>
+                        <Route path="/admin/company-join-requests" element={<ReviewerRecruiterRequestsPage reviewer="admin"/>}/>
+                        <Route path="/admin/resumes" element={<AdminResumeManagementPage/>}/>
+                        <Route path="/admin/skills" element={<AdminSkillManagementPage/>}/>
+                        <Route path="/admin/subscribers" element={<AdminSubscriberManagementPage/>}/>
+                        <Route path="/admin/jobs" element={<AdminJobManagementPage/>}/>
+                        <Route path="/admin/jobs/:jobId/applications" element={<JobApplicationsPage/>}/>
+                        <Route path="/admin/jobs/:jobId/candidates/:candidateId/resume" element={<RecruiterCandidateResumePage/>}/>
+                        <Route path="/admin/jobs/:jobId/screenings" element={<JobScreeningRankingPage/>}/>
+                        <Route path="/admin/jobs/applications/:applicationId/screening-result" element={<AtsScreeningDetailPage/>}/>
+                        <Route path="/admin/assessments" element={<RecruiterAssessmentsPage/>}/>
+                        <Route path="/admin/jobs/:jobId/assessments/create" element={<AssessmentFormPage/>}/>
+                        <Route path="/admin/assessments/:testId" element={<RecruiterAssessmentWorkspacePage/>}/>
+                        <Route path="/admin/assessments/:testId/edit" element={<AssessmentFormPage/>}/>
+                        <Route path="/admin/assessments/:testId/assign" element={<AssessmentAssignPage/>}/>
+                        <Route path="/admin/assessments/:testId/results" element={<AssessmentResultsPage/>}/>
+                        <Route path="/admin/assessments/assignments/:assignmentId/answers" element={<AssessmentResultDetailPage/>}/>
                     </Route>
                 </Route>
 
                 <Route element={<RoleBasedRoute allowedRoles={['RECRUITER']}/>}>
                     <Route element={<MainLayout/>}>
                         <Route path="/recruiter/dashboard" element={<RoleDashboard title="Recruiter Dashboard"/>}/>
+                        <Route path="/recruiter/company" element={<RecruiterCompanyOnboardingPage/>}/>
+                        <Route path="/recruiter/company/requests" element={<ReviewerRecruiterRequestsPage reviewer="company"/>}/>
+                        <Route path="/recruiter/jobs" element={<RecruiterJobsPage/>}/>
+                        <Route path="/recruiter/jobs/create" element={<JobFormPage/>}/>
+                        <Route path="/recruiter/jobs/:id/edit" element={<JobFormPage/>}/>
+                        <Route path="/recruiter/jobs/:jobId/applications" element={<JobApplicationsPage/>}/>
+                        <Route path="/recruiter/jobs/:jobId/candidates/:candidateId/resume" element={<RecruiterCandidateResumePage/>}/>
+                        <Route path="/recruiter/jobs/:jobId/screenings" element={<JobScreeningRankingPage/>}/>
+                        <Route path="/recruiter/jobs/applications/:applicationId/screening-result" element={<AtsScreeningDetailPage/>}/>
+                        <Route path="/recruiter/assessments" element={<RecruiterAssessmentsPage/>}/>
+                        <Route path="/recruiter/jobs/:jobId/assessments/create" element={<AssessmentFormPage/>}/>
+                        <Route path="/recruiter/assessments/:testId" element={<RecruiterAssessmentWorkspacePage/>}/>
+                        <Route path="/recruiter/assessments/:testId/edit" element={<AssessmentFormPage/>}/>
+                        <Route path="/recruiter/assessments/:testId/assign" element={<AssessmentAssignPage/>}/>
+                        <Route path="/recruiter/assessments/:testId/results" element={<AssessmentResultsPage/>}/>
+                        <Route path="/recruiter/assessments/assignments/:assignmentId/answers" element={<AssessmentResultDetailPage/>}/>
                     </Route>
                 </Route>
 
                 <Route element={<RoleBasedRoute allowedRoles={['CANDIDATE']}/>}>
                     <Route element={<MainLayout/>}>
                         <Route path="/candidate/dashboard" element={<RoleDashboard title="Candidate Dashboard"/>}/>
+                        <Route path="/candidate/become-recruiter" element={<CandidateRecruiterRequestPage/>}/>
+                        <Route path="/candidate/resumes" element={<CandidateResumesPage/>}/>
+                        <Route path="/saved-jobs" element={<SavedJobsPage/>}/>
+                        <Route path="/applications" element={<CandidateApplicationsPage/>}/>
+                        <Route path="/candidate/jobs/recommended" element={<RecommendedJobsPage/>}/>
+                        <Route path="/candidate/job-preference" element={<JobPreferencePage/>}/>
+                        <Route path="/candidate/assessments" element={<CandidateAssessmentsPage/>}/>
+                        <Route path="/candidate/assessments/:assignmentId/take" element={<CandidateAssessmentTakePage/>}/>
+                        <Route path="/candidate/assessments/:assignmentId/result" element={<CandidateAssessmentResultPage/>}/>
                     </Route>
                 </Route>
             </Routes>
