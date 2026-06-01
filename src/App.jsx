@@ -54,6 +54,7 @@ import CandidateAssessmentsPage from './features/assessment/pages/CandidateAsses
 import CandidateAssessmentTakePage from './features/assessment/pages/CandidateAssessmentTakePage.jsx';
 import CandidateAssessmentResultPage from './features/assessment/pages/CandidateAssessmentResultPage.jsx';
 import JobPreferencePage from './features/recommendation/pages/JobPreferencePage.jsx';
+import NotificationsPage from './features/notification/pages/NotificationsPage.jsx';
 import './App.module.css';
 
 function App() {
@@ -84,6 +85,7 @@ function App() {
                         <Route path="/profile/avatar" element={<UploadAvatarPage/>}/>
                         <Route path="/profile/change-password" element={<ChangePasswordPage/>}/>
                         <Route path="/settings/subscription" element={<SubscriptionSettingsPage/>}/>
+                        <Route path="/notifications" element={<NotificationsPage/>}/>
                     </Route>
                 </Route>
 

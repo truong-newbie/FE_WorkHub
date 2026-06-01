@@ -9,9 +9,9 @@ export function ToastProvider({children}) {
         setToasts((current) => current.filter((toast) => toast.id !== id));
     }, []);
 
-    const showToast = useCallback(({message, type = 'info', duration = 4000}) => {
+    const showToast = useCallback(({message, type = 'info', duration = 4000, onClick}) => {
         const id = crypto.randomUUID();
-        setToasts((current) => [...current, {id, message, type}]);
+        setToasts((current) => [...current, {id, message, type, onClick}]);
 
         if (duration > 0) {
             window.setTimeout(() => removeToast(id), duration);
@@ -31,7 +31,10 @@ export function ToastProvider({children}) {
                         key={toast.id}
                         type="button"
                         className={`${styles.toast} ${styles[toast.type]}`}
-                        onClick={() => removeToast(toast.id)}
+                        onClick={() => {
+                            toast.onClick?.();
+                            removeToast(toast.id);
+                        }}
                     >
                         {toast.message}
                     </button>

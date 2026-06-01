@@ -1,10 +1,8 @@
 Bạn là AI Frontend Engineer đang làm trong dự án WorkHub.
 
-BE đã gửi tài liệu API/flow cho tính năng **Job Recommendation** tại:
+Nhiệm vụ: Xây dựng/hoàn thiện FE cho tính năng **Realtime Notification** dựa trên tài liệu:
 
-* `docs/ai-fe/modules/job-recommendation.md`
-
-Nhiệm vụ: Đọc kỹ tài liệu này và xây dựng/hoàn thiện FE cho tính năng **gợi ý việc làm cá nhân hóa**.
+* `docs/ai-fe/modules/realtime-notification.md`
 
 ## 1. File bắt buộc phải đọc trước khi code
 
@@ -14,61 +12,66 @@ Trước khi sửa code, bắt buộc đọc kỹ:
 docs/ai-fe/ui-rules.md
 docs/ai-fe/architecture.md
 docs/ai-fe/conventions.md
-docs/ai-fe/modules/job-recommendation.md
-docs/ai-fe/modules/job-api.md
-docs/ai-fe/modules/user-api.md
+docs/ai-fe/modules/realtime-notification.md
 ```
 
-Nên đọc thêm các module liên quan nếu có:
+Nên đọc thêm các module liên quan nếu notification có điều hướng tới các nghiệp vụ khác:
 
 ```text
+docs/ai-fe/modules/job-api.md
 docs/ai-fe/modules/resume-api.md
 docs/ai-fe/modules/ats-resume-screening-api.md
 docs/ai-fe/modules/recruiter-assessment.md
+docs/ai-fe/modules/job-recommendation.md
+docs/ai-fe/modules/user-api.md
 ```
 
 Nếu tên file khác thực tế, hãy tự search trong `docs/ai-fe` bằng keyword:
 
 ```text
-recommendation
-job recommendation
-recommended jobs
-personalized jobs
-preference
-candidate preference
-job
-candidate
+notification
+realtime
+websocket
+stomp
+socket
+unread
+read
+read all
+recipient
 ```
 
 ## 2. Mục tiêu chức năng
 
-Implement end-to-end FE cho tính năng **Job Recommendation**.
+Implement end-to-end FE cho **Realtime Notification**.
 
 Flow tổng quát:
 
-1. Candidate đăng nhập vào hệ thống.
-2. Candidate có thể xem danh sách job được gợi ý cá nhân hóa.
-3. Nếu hệ thống cần profile/preference để gợi ý, FE phải hiển thị onboarding/preference form theo đúng API doc.
-4. Candidate có thể cập nhật preference nếu API hỗ trợ.
-5. Candidate có thể xem lý do vì sao job được recommend nếu API trả về reason/matched skills/score.
-6. Candidate có thể click vào job detail.
-7. Candidate có thể save/favorite job nếu job module đã hỗ trợ.
-8. Candidate có thể apply job nếu flow apply đã có.
-9. Nếu API có feedback recommendation như interested/not interested/hide, implement đúng theo tài liệu.
-10. Không tự bịa API hoặc mock data nếu API thật đã có trong docs.
+1. User đăng nhập vào hệ thống.
+2. FE kết nối realtime tới server theo đúng tài liệu.
+3. User nhận notification realtime khi có sự kiện mới.
+4. Header/navbar hiển thị icon chuông + unread count.
+5. User mở notification dropdown để xem danh sách notification gần đây.
+6. User có thể đánh dấu một notification là đã đọc.
+7. User có thể đánh dấu tất cả là đã đọc nếu API hỗ trợ.
+8. User có thể xóa/ẩn notification nếu API hỗ trợ.
+9. User có thể vào trang danh sách notification đầy đủ.
+10. Khi notification có targetUrl/type/entityId, click sẽ điều hướng đúng trang liên quan.
+11. Khi logout hoặc token hết hạn, FE phải disconnect websocket.
+
+Không tự bịa API hoặc mock data nếu API thật đã có trong docs.
 
 ## 3. Nguyên tắc bắt buộc
 
 * Search trước, đọc docs trước, rồi mới code.
 * Không sửa mò.
 * Không tạo architecture mới.
-* Không refactor lớn ngoài phạm vi job recommendation.
+* Không refactor lớn ngoài phạm vi notification.
 * Không đổi design system toàn cục.
-* Không duplicate service/component nếu đã có.
-* Không hard-code fake data.
-* Không làm vỡ job/user/resume module hiện có.
-* Tất cả UI/API/route phải bám sát `job-recommendation.md`.
-* Nếu response thực tế khác dự đoán, ưu tiên tài liệu API.
+* Không duplicate API client/socket client nếu đã có.
+* Không hard-code fake notification.
+* Không làm vỡ auth/layout hiện có.
+* Tất cả endpoint, socket URL, topic, destination phải lấy từ `realtime-notification.md`.
+* Nếu docs có STOMP/WebSocket config cụ thể thì phải dùng đúng.
 
 ## 4. Kiểm tra cấu trúc project trước khi làm
 
@@ -77,337 +80,338 @@ Trước khi code, inspect project để xác định:
 * Framework: React/Vite/Next hoặc setup thực tế.
 * Folder pages/routes hiện tại.
 * API client hiện tại: axios/fetch/custom wrapper.
-* Cách attach JWT token.
-* Base response format.
-* Error response format.
-* Pagination pattern.
-* Filter/search pattern.
-* Toast/loading/skeleton/modal pattern.
 * Auth state/current user pattern.
-* Role guard hiện tại.
-* Style convention hiện tại.
-* Component có sẵn: JobCard, JobList, EmptyState, Loading, Pagination, Badge, Button, Form Input.
+* Token storage pattern.
+* Route guard pattern.
+* Layout/header/navbar hiện tại.
+* Toast/notification UI pattern.
+* State management hiện tại: Context, Redux, Zustand, React Query, SWR hoặc local state.
+* Package manager: npm/yarn/pnpm.
+* Đã có dependency websocket/stomp chưa.
 
-Không tạo pattern mới nếu project đã có pattern tương ứng.
+Không tự thêm dependency nếu project đã có package phù hợp. Nếu cần thêm package, phải chọn hợp lý và giải thích trong báo cáo cuối.
 
-## 5. Role & Permission
+## 5. API Integration
 
-Tính năng này chủ yếu dành cho:
+Đọc kỹ `docs/ai-fe/modules/realtime-notification.md` và implement đúng:
 
-```text
-CANDIDATE
-```
-
-Yêu cầu:
-
-* User chưa đăng nhập thì redirect login hoặc hiển thị login prompt theo convention.
-* Recruiter/Admin không cần thấy trang recommendation dành cho candidate, trừ khi docs có quy định.
-* Candidate chưa hoàn thiện preference/profile thì hiển thị màn hình setup preference.
-* Nếu API trả 401/403 thì UI xử lý rõ ràng, không crash.
-* Không hiển thị action không đúng role.
-
-## 6. API Integration
-
-Đọc kỹ `docs/ai-fe/modules/job-recommendation.md` và implement đúng:
-
-* Endpoint.
-* HTTP method.
-* Path params.
-* Query params.
-* Request body.
+* Endpoint lấy danh sách notification.
+* Endpoint lấy unread count.
+* Endpoint mark read.
+* Endpoint mark all as read.
+* Endpoint delete/soft delete nếu có.
+* Query params/pagination/filter.
 * Response body.
-* Pagination response.
-* Recommendation score.
-* Recommendation reason.
-* Matched skills.
-* Missing skills nếu có.
-* Preference API nếu có.
-* Feedback API nếu có.
-* Auth requirement.
-* Role requirement.
 * Error response.
+* Auth requirement.
+* WebSocket endpoint.
+* STOMP endpoint nếu có.
+* Subscribe topic/queue.
+* Message payload realtime.
+* Reconnect policy nếu docs có.
+* Heartbeat nếu docs có.
 
-Tất cả API cần login phải dùng cơ chế auth hiện tại để gắn:
+Tất cả REST API cần login phải gắn:
 
 ```text
 Authorization: Bearer <access_token>
 ```
 
-Không tự viết token logic mới nếu project đã có axios interceptor/auth client.
+theo cơ chế auth hiện tại, không tự viết token logic mới nếu đã có interceptor.
+
+## 6. WebSocket/STOMP Integration
+
+Nếu backend dùng WebSocket/STOMP, implement socket client đúng theo docs.
+
+Yêu cầu:
+
+* Chỉ connect khi user đã authenticated.
+* Gắn token khi connect nếu docs yêu cầu.
+* Subscribe đúng destination, ví dụ dạng:
+
+  * `/user/queue/notifications`
+  * `/topic/notifications`
+  * hoặc destination đúng trong docs.
+* Khi nhận message:
+
+  * Parse payload an toàn.
+  * Add notification vào state.
+  * Tăng unread count.
+  * Hiển thị toast nếu phù hợp.
+  * Không duplicate notification nếu message trùng id.
+* Khi logout:
+
+  * Disconnect socket.
+  * Clear notification state nếu cần.
+* Khi token hết hạn/401:
+
+  * Disconnect hoặc reconnect sau khi refresh token nếu project đã có flow refresh token.
+* Có cleanup trong component/hook để tránh memory leak.
+* Không tạo nhiều connection song song khi user navigate nhiều trang.
+* Nếu dùng React Strict Mode, phải tránh connect duplicate.
+
+Gợi ý tạo hook/service nếu project chưa có:
+
+```text
+notificationSocket.ts
+useNotificationSocket.ts
+NotificationProvider.tsx
+```
+
+Nhưng phải follow convention hiện tại.
 
 ## 7. Service/API functions
 
 Tạo/cập nhật service theo convention hiện tại, ví dụ:
 
 ```text
-jobRecommendationService.ts
-jobRecommendationApi.ts
-recommendation.service.ts
+notificationService.ts
+notificationApi.ts
+realtimeNotification.service.ts
 ```
 
-Chỉ tạo function nếu API document có endpoint tương ứng.
+Chỉ tạo function nếu API docs có endpoint tương ứng.
 
-Gợi ý function, tùy tài liệu có gì thì implement cái đó:
+Gợi ý functions:
 
 ```ts
-getRecommendedJobs(params)
-getRecommendedJobDetail(jobId)
-getCandidatePreferences()
-createCandidatePreferences(payload)
-updateCandidatePreferences(payload)
-submitRecommendationFeedback(payload)
-hideRecommendedJob(jobId)
-refreshRecommendations(params)
+getNotifications(params)
+getUnreadNotificationCount()
+markNotificationAsRead(notificationId)
+markAllNotificationsAsRead()
+deleteNotification(notificationId)
+```
+
+Socket functions/hook:
+
+```ts
+connectNotificationSocket(token)
+disconnectNotificationSocket()
+subscribeNotificationChannel(callback)
+useNotificationSocket()
 ```
 
 Tên function phải follow convention hiện tại của project.
 
 ## 8. TypeScript types / DTO
 
-Nếu project dùng TypeScript, tạo/cập nhật type rõ ràng.
-
-Gợi ý types:
+Nếu project dùng TypeScript, tạo/cập nhật type rõ ràng:
 
 ```ts
-RecommendedJob
-RecommendedJobListItem
-RecommendedJobDetail
-JobRecommendationReason
-JobRecommendationScore
-CandidateJobPreference
-CandidateJobPreferenceRequest
-CandidatePreferenceStatus
-RecommendationFeedbackRequest
-RecommendationFeedbackType
-JobRecommendationSearchParams
+Notification
+NotificationListItem
+NotificationType
+NotificationStatus
+NotificationPayload
+NotificationSearchParams
+UnreadNotificationCountResponse
+MarkNotificationReadResponse
+RealtimeNotificationMessage
 ```
 
-Không dùng `any` tràn lan. Field nào optional phải theo đúng docs.
+Field thường có, chỉ dùng đúng theo docs:
 
-## 9. UI Pages cần implement
+```ts
+id
+recipientId
+title
+content
+message
+type
+read
+deleted
+targetUrl
+entityType
+entityId
+createdAt
+updatedAt
+```
 
-Tùy theo route convention hiện tại, tạo/cập nhật các page sau nếu API hỗ trợ.
+Không dùng `any` tràn lan. Field nào có thể null thì khai báo optional/null đúng.
 
-### 9.1 Candidate Recommended Jobs Page
+## 9. UI cần implement
+
+### 9.1 Notification Bell ở Header/Navbar
+
+Thêm hoặc cập nhật icon chuông trong layout hiện tại.
+
+Yêu cầu:
+
+* Hiển thị unread count badge.
+* Nếu unread count = 0 thì không hiển thị badge hoặc hiển thị nhẹ theo style hiện tại.
+* Click mở dropdown/popover.
+* Chỉ hiển thị khi user đã login.
+* Không hiển thị cho guest nếu docs không yêu cầu.
+
+Dropdown hiển thị:
+
+* 5–10 notification gần nhất.
+* Title/content ngắn gọn.
+* Created time.
+* Read/unread state.
+* Action mark read nếu có.
+* Link “Xem tất cả”.
+* Empty state: “Bạn chưa có thông báo nào”.
+* Loading state khi fetch.
+* Error state nếu fetch lỗi.
+
+### 9.2 Notification Dropdown Behavior
+
+Yêu cầu:
+
+* Notification unread nổi bật hơn read.
+* Click notification:
+
+  * Mark read nếu chưa đọc.
+  * Điều hướng theo `targetUrl` nếu có.
+  * Nếu không có targetUrl thì chỉ mở detail hoặc mark read.
+* Không crash nếu notification thiếu targetUrl.
+* Khi mark read thành công:
+
+  * Update item state.
+  * Giảm unread count.
+* Khi nhận realtime notification:
+
+  * Đưa item mới lên đầu list.
+  * Tăng badge.
+  * Có thể hiển thị toast ngắn.
+
+### 9.3 Full Notification Page
 
 Route gợi ý:
 
 ```text
-/candidate/recommended-jobs
+/notifications
 ```
-
-hoặc route phù hợp với convention hiện tại.
 
 UI cần có:
 
-* Header: “Việc làm phù hợp với bạn”
-* Subtitle ngắn: dựa trên kỹ năng, vị trí, kinh nghiệm, mong muốn làm việc.
-* Danh sách recommended jobs.
-* Filter/sort nếu API hỗ trợ.
+* Header: “Thông báo”
+* Tabs/filter nếu API hỗ trợ:
+
+  * Tất cả
+  * Chưa đọc
+  * Đã đọc
 * Pagination nếu API hỗ trợ.
+* Button “Đánh dấu tất cả đã đọc” nếu API có.
+* List notification đầy đủ.
+* Delete/soft delete nếu API hỗ trợ.
 * Loading skeleton.
 * Empty state.
 * Error state.
-* CTA cập nhật preference nếu chưa có dữ liệu gợi ý.
-* CTA refresh recommendation nếu API hỗ trợ.
+* Responsive tốt.
 
-Mỗi job card nên hiển thị:
+### 9.4 Toast Realtime Notification
 
-* Job title.
-* Company name/logo.
-* Location.
-* Salary.
-* Skills/tags.
-* Work mode.
-* Employment type.
-* Level.
-* Recommendation score nếu API có.
-* Reason/matched skills nếu API có.
-* Button xem chi tiết.
-* Button lưu job nếu job module có.
-* Button apply nếu flow apply có.
+Khi nhận message realtime:
 
-### 9.2 Recommendation Reason UI
+* Hiển thị toast nhỏ gọn nếu user đang online.
+* Toast gồm title + content ngắn.
+* Click toast nếu có targetUrl thì điều hướng.
+* Không spam toast nếu nhận nhiều message nhanh; nếu project có throttle/debounce pattern thì áp dụng.
+* Không hiển thị toast cho notification đang ở chính trang liên quan nếu project có pattern, không bắt buộc.
 
-Nếu API trả về lý do gợi ý, hiển thị rõ:
+## 10. Notification Navigation Mapping
 
-* “Phù hợp vì bạn có kỹ năng: Java, Spring Boot, MySQL”
-* “Phù hợp với địa điểm mong muốn: Hà Nội”
-* “Phù hợp với hình thức làm việc: Remote/Hybrid/Onsite”
-* “Mức độ phù hợp: 86%”
+Nếu notification payload có `targetUrl`, ưu tiên dùng `targetUrl`.
 
-Không hiển thị JSON raw.
+Nếu chỉ có `type/entityType/entityId`, map điều hướng theo docs nếu có.
 
-Score UI:
-
-* > = 80: Rất phù hợp
-* 60–79: Phù hợp
-* 40–59: Có thể cân nhắc
-* < 40: Ít phù hợp
-
-Chỉ dùng mapping này nếu API không trả label sẵn. Nếu API trả label/recommendationLevel thì ưu tiên dùng API.
-
-### 9.3 Candidate Preference Setup Page/Form
-
-Nếu API yêu cầu preference:
-
-Route gợi ý:
+Ví dụ, chỉ áp dụng nếu phù hợp với docs/project:
 
 ```text
-/candidate/job-preferences
+JOB_APPLICATION -> /recruiter/applications/:id
+ATS_SCREENING -> /recruiter/ats-screenings/:id
+ASSESSMENT_ASSIGNED -> /candidate/assessments/:id
+ASSESSMENT_SUBMITTED -> /recruiter/assessment-submissions/:id
+JOB_RECOMMENDATION -> /candidate/recommended-jobs
+COMPANY_JOIN_REQUEST -> /admin/company-join-requests
 ```
 
-Form cần map đúng request body trong docs.
+Không tự bịa mapping nếu docs đã có mapping khác. Nếu không đủ dữ liệu để điều hướng, vẫn hiển thị notification bình thường.
 
-Các field thường có, chỉ dùng nếu docs có:
+## 11. State Management
 
-* desiredJobTitles
-* preferredLocations
-* preferredSkills
-* workMode
-* employmentType
-* candidateLevel
-* minSalary
-* maxSalary
-* salaryCurrency
-* experienceYears
-* industry
-* companySize
-* remotePreference
-* openToRelocation
+Chọn cách quản lý state theo project hiện tại.
 
-Validation:
+Yêu cầu:
 
-* Required fields theo docs.
-* Salary min <= salary max.
-* Experience >= 0.
-* Ít nhất một skill/job title/location nếu nghiệp vụ yêu cầu.
-* Không cho submit form invalid.
-* Hiển thị lỗi gần field.
+* Notification list state.
+* Unread count state.
+* Socket connected state nếu cần.
+* Loading/error state.
+* Reconnect state nếu cần.
+* Clear state khi logout.
+* Refetch unread count khi user login.
+* Refetch list khi mở dropdown/page nếu cần.
+* Tránh duplicate message realtime.
 
-UX:
+Nếu project dùng React Query/SWR:
 
-* Form compact, chia section:
+* Dùng query/mutation đúng pattern.
+* Invalidate/refetch sau mark read/delete.
+* Update cache hợp lý khi nhận realtime message.
 
-  * Vai trò mong muốn.
-  * Kỹ năng.
-  * Địa điểm & hình thức làm việc.
-  * Mức lương.
-  * Kinh nghiệm.
-* Có save/update button.
-* Có loading khi submit.
-* Success feedback sau khi lưu.
-* Sau khi lưu có thể redirect về recommended jobs nếu hợp lý.
+Nếu project dùng Context/Zustand/Redux:
 
-### 9.4 First Login / Onboarding Preference
+* Follow store pattern hiện có.
+* Không tạo store mới nếu notification state có thể nằm trong layout/provider hiện tại.
 
-Nếu docs có flow first login/preference:
+## 12. Error Handling
 
-* Khi candidate chưa có preference, hiển thị onboarding card.
-* Không ép flow nếu API không yêu cầu.
-* Nếu hệ thống có flag `hasCompletedPreference` hoặc tương tự, dùng đúng field đó.
-* Có CTA “Thiết lập gợi ý việc làm”.
-* Sau khi hoàn tất, đưa candidate tới trang recommended jobs.
+Bắt buộc xử lý:
 
-### 9.5 Feedback cho recommendation
+* 401 unauthorized.
+* 403 forbidden.
+* 404 notification not found.
+* 409 conflict nếu đã read/deleted.
+* 500 server error.
+* Network error.
+* WebSocket disconnected.
+* WebSocket connect failed.
+* Invalid realtime payload.
+* Token missing/expired.
+* Pagination empty.
 
-Nếu API hỗ trợ feedback:
+Không để UI crash khi socket lỗi.
 
-Implement action:
-
-* Interested.
-* Not interested.
-* Hide this job.
-* Not relevant.
-* Save preference signal.
-
-UI:
-
-* Không làm rối job card.
-* Dùng menu nhỏ hoặc button gọn.
-* Sau feedback, update UI/refetch.
-* Xử lý lỗi 409/404/403.
-* Không xóa job khỏi UI nếu API không xác nhận thành công.
-
-## 10. Integration với Job module
-
-Tính năng recommendation phải reuse Job module nếu đã có:
-
-* Reuse JobCard nếu phù hợp.
-* Reuse JobDetail route.
-* Reuse save/favorite API nếu có.
-* Reuse apply job flow nếu đã có.
-* Reuse skill badge/status badge/pagination nếu đã có.
-* Không tạo job detail page mới riêng nếu `/jobs/:id` đã tồn tại.
-* Click recommended job phải đi tới job detail chuẩn.
-
-## 11. Routing/Menu
-
-Thêm menu/entry hợp lý nếu project có navbar/sidebar/profile menu.
-
-Candidate:
-
-```text
-Việc làm gợi ý
-Gợi ý cho bạn
-Recommended Jobs
-```
-
-Preference:
-
-```text
-Cài đặt gợi ý việc làm
-Job Preferences
-```
-
-Không thêm menu cho recruiter/admin nếu docs không yêu cầu.
-
-## 12. UI Style bắt buộc
+## 13. UI Style bắt buộc
 
 Bám theo `docs/ai-fe/ui-rules.md` và style WorkHub hiện tại.
 
 Yêu cầu:
 
-* Phong cách website tìm việc chuyên nghiệp giống ITviec.
-* Clean, compact, thực tế.
+* Clean, compact, chuyên nghiệp.
 * Không gradient màu mè.
 * Không spacing quá lớn.
 * Không dashboard generic.
+* Notification dropdown phải gọn, dễ scan.
+* Badge unread rõ nhưng không quá chói.
+* Full page list phải dễ đọc.
+* Empty state có hướng xử lý.
 * Không text demo/fake.
-* Card job dễ scan.
-* Score/reason hiển thị rõ nhưng không lấn át job info.
-* CTA rõ: “Xem chi tiết”, “Ứng tuyển”, “Lưu việc”.
-* Empty state phải có hướng xử lý: cập nhật preference/tìm job khác.
-* Responsive tốt desktop/tablet/mobile.
+* Responsive tốt.
 
-## 13. State Handling
+## 14. Dependency
 
-Bắt buộc xử lý:
+Nếu cần WebSocket/STOMP package, kiểm tra `package.json` trước.
 
-* Initial loading.
-* Submit loading.
-* Empty recommendation.
-* Empty preference.
-* API error.
-* Validation error.
-* 401 unauthorized.
-* 403 forbidden.
-* 404 not found.
-* 409 conflict.
-* Network error.
-* Pagination state.
-* Filter state.
-* Refetch sau update preference/feedback.
-* Null/undefined field từ API.
+Có thể dùng nếu project chưa có và backend là Spring STOMP:
 
-Không để UI crash nếu response thiếu field.
+```bash
+npm install @stomp/stompjs sockjs-client
+```
 
-## 14. Documentation Update
+Nhưng chỉ thêm nếu tài liệu `realtime-notification.md` xác nhận backend dùng SockJS/STOMP hoặc project chưa có dependency tương ứng.
+
+Không tự thêm thư viện nặng khi không cần.
+
+## 15. Documentation Update
 
 Sau khi code xong, cập nhật:
 
 ```text
-docs/ai-fe/modules/job-recommendation.md
+docs/ai-fe/modules/realtime-notification.md
 ```
 
 Nội dung update gồm:
@@ -415,18 +419,20 @@ Nội dung update gồm:
 * Route/page đã implement.
 * Component đã tạo/sửa.
 * Service/API function đã tạo/sửa.
+* Socket client/hook/provider đã tạo/sửa.
 * Types/interfaces đã tạo/sửa.
-* Flow candidate xem job recommendation.
-* Flow setup/update preference.
-* Flow feedback nếu có.
-* Integration với job detail/save/apply.
+* Flow realtime connect/subscribe/disconnect.
+* Flow notification dropdown.
+* Flow full notification page.
+* Flow mark read/mark all/delete.
 * State/loading/error đã xử lý.
-* Role guard đã áp dụng.
+* Role/auth guard đã áp dụng.
+* Dependency đã thêm nếu có.
 * Edge cases còn lưu ý.
 
-Không viết lan man. Chỉ ghi thay đổi thực tế để dev/AI agent sau maintain được.
+Không viết lan man. Chỉ ghi thay đổi thực tế.
 
-## 15. Verification
+## 16. Verification
 
 Sau khi implement xong, chạy đúng package manager hiện tại.
 
@@ -448,14 +454,28 @@ Nếu lỗi:
 * Chạy lại.
 * Không bỏ qua lỗi TypeScript/build/lint.
 
-## 16. Báo cáo cuối cùng
+Nếu test realtime được:
+
+* Login bằng user có token.
+* Mở app.
+* Kiểm tra websocket connected.
+* Kiểm tra subscribe đúng channel.
+* Tạo event ở BE/Postman để phát notification.
+* Xác nhận chuông tăng unread count.
+* Xác nhận dropdown có notification mới.
+* Xác nhận mark read hoạt động.
+* Xác nhận logout thì socket disconnect.
+
+## 17. Báo cáo cuối cùng
 
 Sau khi hoàn thành, báo cáo rõ:
 
 * Đã đọc những file docs nào.
 * Đã tạo/sửa những file nào.
 * Đã implement route nào.
-* Đã tích hợp API nào.
-* Đã xử lý role guard nào.
+* Đã tích hợp REST API nào.
+* Đã tích hợp WebSocket/STOMP như thế nào.
+* Đã xử lý auth/role guard nào.
+* Đã thêm dependency nào nếu có.
 * Đã chạy command nào.
 * Lỗi còn tồn tại nếu có.

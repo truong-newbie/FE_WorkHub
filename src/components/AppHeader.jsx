@@ -14,6 +14,7 @@ import {
     FaUserTie,
 } from 'react-icons/fa';
 import {useAuth} from '../stores/useAuth.js';
+import NotificationBell from '../features/notification/components/NotificationBell.jsx';
 import styles from './AppHeader.module.css';
 
 export default function AppHeader({hideNavigation = false}) {
@@ -385,6 +386,8 @@ export default function AppHeader({hideNavigation = false}) {
                                 </button>
                             </div>
                         ) : (
+                            <>
+                            <NotificationBell/>
                             <div className={styles.userMenu} ref={dropdownRef}>
                                 <button
                                     className={styles.userButton}
@@ -487,6 +490,7 @@ export default function AppHeader({hideNavigation = false}) {
                                     </div>
                                 )}
                             </div>
+                            </>
                         )}
 
                         {!hideNavigation && (
