@@ -53,6 +53,7 @@ import AssessmentResultDetailPage from './features/assessment/pages/AssessmentRe
 import CandidateAssessmentsPage from './features/assessment/pages/CandidateAssessmentsPage.jsx';
 import CandidateAssessmentTakePage from './features/assessment/pages/CandidateAssessmentTakePage.jsx';
 import CandidateAssessmentResultPage from './features/assessment/pages/CandidateAssessmentResultPage.jsx';
+import JobPreferencePage from './features/recommendation/pages/JobPreferencePage.jsx';
 import './App.module.css';
 
 function App() {
@@ -141,6 +142,7 @@ function App() {
                         <Route path="/saved-jobs" element={<SavedJobsPage/>}/>
                         <Route path="/applications" element={<CandidateApplicationsPage/>}/>
                         <Route path="/candidate/jobs/recommended" element={<RecommendedJobsPage/>}/>
+                        <Route path="/candidate/job-preference" element={<JobPreferencePage/>}/>
                         <Route path="/candidate/assessments" element={<CandidateAssessmentsPage/>}/>
                         <Route path="/candidate/assessments/:assignmentId/take" element={<CandidateAssessmentTakePage/>}/>
                         <Route path="/candidate/assessments/:assignmentId/result" element={<CandidateAssessmentResultPage/>}/>

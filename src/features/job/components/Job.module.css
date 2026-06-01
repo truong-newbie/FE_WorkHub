@@ -524,6 +524,11 @@
     white-space: pre-wrap;
 }
 
+.fieldError {
+    color: #d92d20;
+    font-size: 12px;
+}
+
 @media (max-width: 900px) {
     .listingLayout,
     .detailLayout {

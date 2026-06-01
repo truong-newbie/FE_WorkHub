@@ -7,7 +7,7 @@ import ErrorMessage from '../../components/ui/ErrorMessage.jsx';
 import {getOAuthAuthorizeUrl} from '../../services/authApi.js';
 import {useAuth} from '../../stores/useAuth.js';
 import {useToast} from '../../components/ui/useToast.js';
-import {getRoleRedirectPath} from './authRedirects.js';
+import {getPostLoginRedirectPath} from './authRedirects.js';
 import styles from './AuthPage.module.css';
 
 export default function LoginPage() {
@@ -34,7 +34,7 @@ export default function LoginPage() {
         try {
             const result = await login({email, password});
             showToast({message: 'Logged in successfully', type: 'success'});
-            navigate(location.state?.from?.pathname || getRoleRedirectPath(result.role), {replace: true});
+            navigate(await getPostLoginRedirectPath(result.role, location.state?.from?.pathname), {replace: true});
         } catch (error) {
             const message = error.message || 'Login failed';
             setErrorMessage(message);

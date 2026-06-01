@@ -9,6 +9,7 @@ import Select from '../../../components/ui/Select.jsx';
 import {useToast} from '../../../components/ui/useToast.js';
 import {useAuth} from '../../../stores/useAuth.js';
 import SkillSelector from '../../skill/components/SkillSelector.jsx';
+import {trackJobSearch} from '../../recommendation/services/recommendationService.js';
 import {cleanParams, getItems, getPaginationMeta} from '../../shared/moduleUtils.js';
 import JobCard from '../components/JobCard.jsx';
 import {EMPLOYMENT_TYPES, getJobId, JOB_LEVELS} from '../jobUtils.js';
@@ -100,6 +101,17 @@ export default function JobListPage() {
         }
         setPage(1);
         setAppliedFilters(filters);
+        if (isCandidate && filters.keyword.trim()) {
+            trackJobSearch({
+                keyword: filters.keyword.trim(),
+                filtersJson: JSON.stringify({
+                    ...(filters.location ? {location: filters.location} : {}),
+                    ...(filters.level ? {level: filters.level} : {}),
+                    ...(filters.employmentType ? {employmentType: filters.employmentType} : {}),
+                    ...(filters.skillIds.length ? {skillIds: filters.skillIds} : {}),
+                }),
+            }).catch(() => {});
+        }
     };
 
     const resetFilters = () => {

@@ -10,7 +10,8 @@ import {useAuth} from '../../../stores/useAuth.js';
 import {getMyResumes} from '../../resume/services/resumeService.js';
 import {formatDate, getItems} from '../../shared/moduleUtils.js';
 import {formatJobSalary, getCompanyLogo, getCompanyName, getJobId, getJobSkills} from '../jobUtils.js';
-import {applyJob, getJobById, getMyApplications, getSavedJobs, saveJob, trackJobView, unsaveJob, withdrawJobApplication} from '../services/jobService.js';
+import {trackJobView} from '../../recommendation/services/recommendationService.js';
+import {applyJob, getJobById, getMyApplications, getSavedJobs, saveJob, unsaveJob, withdrawJobApplication} from '../services/jobService.js';
 import JobStatusBadge from '../components/JobStatusBadge.jsx';
 import styles from '../components/Job.module.css';
 

@@ -116,6 +116,12 @@ export default function AppHeader({hideNavigation = false}) {
                 Gợi ý việc làm
             </NavLink>
             <NavLink
+                to="/candidate/job-preference"
+                className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+            >
+                Job Preferences
+            </NavLink>
+            <NavLink
                 to="/candidate/assessments"
                 className={({isActive}) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
             >
@@ -259,6 +265,15 @@ export default function AppHeader({hideNavigation = false}) {
                             onClick={() => setShowMobileMenu(false)}
                         >
                             Gợi ý việc làm
+                        </NavLink>
+                        <NavLink
+                            to="/candidate/job-preference"
+                            className={({isActive}) =>
+                                `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`
+                            }
+                            onClick={() => setShowMobileMenu(false)}
+                        >
+                            Job Preferences
                         </NavLink>
                         <NavLink
                             to="/candidate/assessments"

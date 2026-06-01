@@ -4,7 +4,7 @@ import ErrorMessage from '../../components/ui/ErrorMessage.jsx';
 import LoadingState from '../../components/ui/LoadingState.jsx';
 import {useAuth} from '../../stores/useAuth.js';
 import {useToast} from '../../components/ui/useToast.js';
-import {getRoleRedirectPath} from './authRedirects.js';
+import {getPostLoginRedirectPath} from './authRedirects.js';
 import styles from './AuthPage.module.css';
 
 export default function OAuthCallbackPage() {
@@ -31,15 +31,18 @@ export default function OAuthCallbackPage() {
             return;
         }
 
-        try {
-            const result = loginSuccess({accessToken, refreshToken, userId, role});
-            showToast({message: 'Logged in successfully', type: 'success'});
-            navigate(getRoleRedirectPath(result.role || role), {replace: true});
-        } catch (callbackError) {
-            const message = callbackError.message || 'OAuth login failed';
-            setErrorMessage(message);
-            showToast({message, type: 'error'});
-        }
+        const completeLogin = async () => {
+            try {
+                const result = loginSuccess({accessToken, refreshToken, userId, role});
+                showToast({message: 'Logged in successfully', type: 'success'});
+                navigate(await getPostLoginRedirectPath(result.role || role), {replace: true});
+            } catch (callbackError) {
+                const message = callbackError.message || 'OAuth login failed';
+                setErrorMessage(message);
+                showToast({message, type: 'error'});
+            }
+        };
+        completeLogin();
     }, [loginSuccess, navigate, searchParams, showToast]);
 
     return (

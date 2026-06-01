@@ -99,13 +99,3 @@ export async function updateApplicationStatus(applicationId, payload) {
     const response = await apiClient.put(`/applications/${applicationId}/status`, payload);
     return unwrapResult(response);
 }
-
-export async function getRecommendedJobs(params = {}) {
-    const response = await apiClient.get('/candidate/jobs/recommended', {params});
-    return unwrapResult(response);
-}
-
-export async function trackJobView(jobId, payload = {source: 'JOB_DETAIL'}) {
-    const response = await apiClient.post(`/candidate/jobs/${jobId}/view`, payload, {skipAuthCleanup: true});
-    return unwrapResult(response);
-}

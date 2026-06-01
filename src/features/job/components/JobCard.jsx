@@ -6,7 +6,7 @@ import {formatJobSalary, getCompanyLogo, getCompanyName, getJobId, getJobSkills}
 import JobStatusBadge from './JobStatusBadge.jsx';
 import styles from './Job.module.css';
 
-export default function JobCard({job, showStatus = false, saved = false, onToggleFavorite, favoriteBusy = false}) {
+export default function JobCard({job, showStatus = false, saved = false, onToggleFavorite, onJobClick, favoriteBusy = false}) {
     const id = getJobId(job);
     const skills = getJobSkills(job).slice(0, 5);
 
@@ -18,7 +18,7 @@ export default function JobCard({job, showStatus = false, saved = false, onToggl
             <div className={styles.jobCardBody}>
                 <div className={styles.jobCardTitleRow}>
                     <div>
-                        <h2><Link to={`/jobs/${id}`}>{job.title}</Link></h2>
+                        <h2><Link to={`/jobs/${id}`} onClick={() => onJobClick?.(job)}>{job.title}</Link></h2>
                         <p className={styles.companyName}>{getCompanyName(job)}</p>
                     </div>
                     {showStatus && <JobStatusBadge job={job}/>}
@@ -38,7 +38,7 @@ export default function JobCard({job, showStatus = false, saved = false, onToggl
                         {saved ? 'Saved' : 'Save'}
                     </Button>
                 )}
-                <Link className={styles.detailLink} to={`/jobs/${id}`}>View job</Link>
+                <Link className={styles.detailLink} to={`/jobs/${id}`} onClick={() => onJobClick?.(job)}>View job</Link>
             </div>
         </article>
     );

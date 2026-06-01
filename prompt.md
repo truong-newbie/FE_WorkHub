@@ -1,124 +1,114 @@
 Bạn là AI Frontend Engineer đang làm trong dự án WorkHub.
 
-Nhiệm vụ: Xây dựng/hoàn thiện FE cho tính năng **Recruiter Assessment** dựa trên toàn bộ thông tin trong file:
+BE đã gửi tài liệu API/flow cho tính năng **Job Recommendation** tại:
 
-* `docs/ai-fe/modules/recruiter-assessment.md`
+* `docs/ai-fe/modules/job-recommendation.md`
 
-Trước khi code, bắt buộc đọc kỹ các file trong `docs/ai-fe`, đặc biệt:
+Nhiệm vụ: Đọc kỹ tài liệu này và xây dựng/hoàn thiện FE cho tính năng **gợi ý việc làm cá nhân hóa**.
 
-* `docs/ai-fe/ui-rules.md`
-* `docs/ai-fe/architecture.md`
-* `docs/ai-fe/conventions.md`
-* `docs/ai-fe/modules/recruiter-assessment.md`
-* `docs/ai-fe/modules/job-api.md`
-* `docs/ai-fe/modules/resume-api.md`
-* `docs/ai-fe/modules/ats-resume-screening-api.md` nếu assessment có liên quan tới candidate/application flow.
+## 1. File bắt buộc phải đọc trước khi code
 
-Nếu tên file hơi khác, hãy tự search trong `docs/ai-fe` bằng keyword:
+Trước khi sửa code, bắt buộc đọc kỹ:
 
 ```text
-assessment
-recruiter assessment
-test
-quiz
-question
-answer
-submission
-candidate
-application
-job
+docs/ai-fe/ui-rules.md
+docs/ai-fe/architecture.md
+docs/ai-fe/conventions.md
+docs/ai-fe/modules/job-recommendation.md
+docs/ai-fe/modules/job-api.md
+docs/ai-fe/modules/user-api.md
 ```
 
-## Mục tiêu
+Nên đọc thêm các module liên quan nếu có:
 
-Implement end-to-end FE cho tính năng **Recruiter Assessment**.
+```text
+docs/ai-fe/modules/resume-api.md
+docs/ai-fe/modules/ats-resume-screening-api.md
+docs/ai-fe/modules/recruiter-assessment.md
+```
 
-Flow tổng quát cần hỗ trợ theo đúng API doc:
+Nếu tên file khác thực tế, hãy tự search trong `docs/ai-fe` bằng keyword:
 
-1. Recruiter tạo bài assessment/test cho job hoặc candidate/application nếu API hỗ trợ.
-2. Recruiter quản lý danh sách assessment.
-3. Recruiter thêm/sửa/xóa câu hỏi nếu API có.
-4. Recruiter gửi/gán assessment cho candidate/application nếu API có.
-5. Candidate nhận và làm assessment nếu API cho phép.
-6. Candidate submit bài làm.
-7. Recruiter xem kết quả/chấm điểm nếu API có.
-8. Admin chỉ được can thiệp nếu API doc có endpoint admin.
+```text
+recommendation
+job recommendation
+recommended jobs
+personalized jobs
+preference
+candidate preference
+job
+candidate
+```
 
-Không tự bịa chức năng ngoài tài liệu. Nếu API doc không có endpoint nào thì không implement phần đó.
+## 2. Mục tiêu chức năng
 
-## Nguyên tắc bắt buộc
+Implement end-to-end FE cho tính năng **Job Recommendation**.
 
-* Search trước, đọc tài liệu trước, rồi mới code.
+Flow tổng quát:
+
+1. Candidate đăng nhập vào hệ thống.
+2. Candidate có thể xem danh sách job được gợi ý cá nhân hóa.
+3. Nếu hệ thống cần profile/preference để gợi ý, FE phải hiển thị onboarding/preference form theo đúng API doc.
+4. Candidate có thể cập nhật preference nếu API hỗ trợ.
+5. Candidate có thể xem lý do vì sao job được recommend nếu API trả về reason/matched skills/score.
+6. Candidate có thể click vào job detail.
+7. Candidate có thể save/favorite job nếu job module đã hỗ trợ.
+8. Candidate có thể apply job nếu flow apply đã có.
+9. Nếu API có feedback recommendation như interested/not interested/hide, implement đúng theo tài liệu.
+10. Không tự bịa API hoặc mock data nếu API thật đã có trong docs.
+
+## 3. Nguyên tắc bắt buộc
+
+* Search trước, đọc docs trước, rồi mới code.
 * Không sửa mò.
 * Không tạo architecture mới.
-* Không refactor lớn ngoài phạm vi assessment module.
+* Không refactor lớn ngoài phạm vi job recommendation.
 * Không đổi design system toàn cục.
-* Không hard-code fake data nếu API thật đã có.
-* Không duplicate service/component nếu đã có pattern tương tự.
-* Tất cả UI/flow/API phải bám sát `recruiter-assessment.md`.
-* Nếu response field khác với dự đoán, ưu tiên API document.
+* Không duplicate service/component nếu đã có.
+* Không hard-code fake data.
+* Không làm vỡ job/user/resume module hiện có.
+* Tất cả UI/API/route phải bám sát `job-recommendation.md`.
+* Nếu response thực tế khác dự đoán, ưu tiên tài liệu API.
 
-## Yêu cầu đọc cấu trúc project trước khi code
+## 4. Kiểm tra cấu trúc project trước khi làm
 
-Trước khi sửa file, inspect project để xác định:
+Trước khi code, inspect project để xác định:
 
-* Framework đang dùng: React/Vite/Next hoặc setup thực tế.
+* Framework: React/Vite/Next hoặc setup thực tế.
 * Folder pages/routes hiện tại.
 * API client hiện tại: axios/fetch/custom wrapper.
-* Cách gắn JWT token.
+* Cách attach JWT token.
 * Base response format.
 * Error response format.
-* Pagination/filter pattern.
-* Toast/modal/loading/skeleton pattern.
-* Form validation pattern.
+* Pagination pattern.
+* Filter/search pattern.
+* Toast/loading/skeleton/modal pattern.
+* Auth state/current user pattern.
 * Role guard hiện tại.
-* Component style hiện tại.
-* Naming convention cho service/type/component/page.
+* Style convention hiện tại.
+* Component có sẵn: JobCard, JobList, EmptyState, Loading, Pagination, Badge, Button, Form Input.
 
-Không tự tạo folder hoặc pattern mới nếu project đã có convention.
+Không tạo pattern mới nếu project đã có pattern tương ứng.
 
-## Role & Permission
+## 5. Role & Permission
 
-Phải xử lý role đúng:
+Tính năng này chủ yếu dành cho:
 
-### Recruiter
-
-Recruiter có thể làm các phần nếu API hỗ trợ:
-
-* Tạo assessment.
-* Cập nhật assessment.
-* Xóa assessment.
-* Publish/close assessment nếu có.
-* Thêm/sửa/xóa câu hỏi.
-* Gán assessment cho candidate/application/job.
-* Xem submissions/kết quả.
-* Chấm điểm essay/manual nếu có.
-
-### Candidate
-
-Candidate có thể làm các phần nếu API hỗ trợ:
-
-* Xem assessment được giao.
-* Bắt đầu làm bài.
-* Trả lời câu hỏi.
-* Submit bài.
-* Xem kết quả nếu API cho phép.
-
-### Admin
-
-Admin chỉ có quyền nếu `recruiter-assessment.md` ghi rõ.
+```text
+CANDIDATE
+```
 
 Yêu cầu:
 
-* User chưa đăng nhập thì redirect login hoặc xử lý theo convention hiện tại.
-* Candidate không được thấy trang quản lý assessment của recruiter.
-* Recruiter không được làm bài thay candidate.
-* Không hiển thị action mà role hiện tại không có quyền.
-* Nếu API trả 403 thì UI hiển thị lỗi không có quyền, không crash.
+* User chưa đăng nhập thì redirect login hoặc hiển thị login prompt theo convention.
+* Recruiter/Admin không cần thấy trang recommendation dành cho candidate, trừ khi docs có quy định.
+* Candidate chưa hoàn thiện preference/profile thì hiển thị màn hình setup preference.
+* Nếu API trả 401/403 thì UI xử lý rõ ràng, không crash.
+* Không hiển thị action không đúng role.
 
-## API Integration
+## 6. API Integration
 
-Đọc kỹ `docs/ai-fe/modules/recruiter-assessment.md` và implement đúng:
+Đọc kỹ `docs/ai-fe/modules/job-recommendation.md` và implement đúng:
 
 * Endpoint.
 * HTTP method.
@@ -126,468 +116,298 @@ Yêu cầu:
 * Query params.
 * Request body.
 * Response body.
+* Pagination response.
+* Recommendation score.
+* Recommendation reason.
+* Matched skills.
+* Missing skills nếu có.
+* Preference API nếu có.
+* Feedback API nếu có.
 * Auth requirement.
 * Role requirement.
-* Status enum.
-* Question type enum.
 * Error response.
-* Pagination response nếu có.
-* Flow tạo assessment.
-* Flow thêm câu hỏi.
-* Flow assign/gửi assessment.
-* Flow candidate submit.
-* Flow recruiter xem kết quả/chấm điểm.
 
-Tất cả request cần login phải gắn:
+Tất cả API cần login phải dùng cơ chế auth hiện tại để gắn:
 
 ```text
 Authorization: Bearer <access_token>
 ```
 
-theo cơ chế auth hiện tại của project. Không tự viết token logic mới nếu đã có interceptor.
+Không tự viết token logic mới nếu project đã có axios interceptor/auth client.
 
-## Service/API functions
+## 7. Service/API functions
 
 Tạo/cập nhật service theo convention hiện tại, ví dụ:
 
 ```text
-recruiterAssessmentService.ts
-assessmentApi.ts
-assessment.service.ts
+jobRecommendationService.ts
+jobRecommendationApi.ts
+recommendation.service.ts
 ```
 
-Chỉ tạo function nếu API doc có endpoint tương ứng.
+Chỉ tạo function nếu API document có endpoint tương ứng.
 
 Gợi ý function, tùy tài liệu có gì thì implement cái đó:
 
 ```ts
-getRecruiterAssessments(params)
-getAssessmentById(id)
-createAssessment(payload)
-updateAssessment(id, payload)
-deleteAssessment(id)
-publishAssessment(id)
-closeAssessment(id)
-
-getAssessmentQuestions(assessmentId)
-createQuestion(assessmentId, payload)
-updateQuestion(questionId, payload)
-deleteQuestion(questionId)
-
-assignAssessment(payload)
-getCandidateAssessments(params)
-getCandidateAssessmentDetail(assessmentId)
-startAssessment(assessmentId)
-submitAssessment(assessmentId, payload)
-
-getAssessmentSubmissions(assessmentId, params)
-getSubmissionDetail(submissionId)
-gradeSubmission(submissionId, payload)
+getRecommendedJobs(params)
+getRecommendedJobDetail(jobId)
+getCandidatePreferences()
+createCandidatePreferences(payload)
+updateCandidatePreferences(payload)
+submitRecommendationFeedback(payload)
+hideRecommendedJob(jobId)
+refreshRecommendations(params)
 ```
 
-Tên function phải follow naming convention hiện tại.
+Tên function phải follow convention hiện tại của project.
 
-## TypeScript types / DTO
+## 8. TypeScript types / DTO
 
 Nếu project dùng TypeScript, tạo/cập nhật type rõ ràng.
 
 Gợi ý types:
 
 ```ts
-Assessment
-AssessmentListItem
-AssessmentDetail
-AssessmentCreateRequest
-AssessmentUpdateRequest
-AssessmentStatus
-AssessmentQuestion
-AssessmentQuestionType
-AssessmentQuestionCreateRequest
-AssessmentQuestionUpdateRequest
-AssessmentOption
-AssessmentAssignRequest
-CandidateAssessment
-CandidateAssessmentDetail
-AssessmentSubmission
-AssessmentSubmissionDetail
-AssessmentSubmitRequest
-AssessmentAnswerRequest
-AssessmentGradeRequest
-AssessmentResult
-AssessmentSearchParams
+RecommendedJob
+RecommendedJobListItem
+RecommendedJobDetail
+JobRecommendationReason
+JobRecommendationScore
+CandidateJobPreference
+CandidateJobPreferenceRequest
+CandidatePreferenceStatus
+RecommendationFeedbackRequest
+RecommendationFeedbackType
+JobRecommendationSearchParams
 ```
 
-Không dùng `any` tràn lan. Dữ liệu nào optional thì đánh dấu optional đúng theo response trong docs.
+Không dùng `any` tràn lan. Field nào optional phải theo đúng docs.
 
-## UI Pages cần implement
+## 9. UI Pages cần implement
 
-Tùy route convention hiện tại, tạo/cập nhật các page sau nếu API hỗ trợ.
+Tùy theo route convention hiện tại, tạo/cập nhật các page sau nếu API hỗ trợ.
 
-### 1. Recruiter Assessment List
+### 9.1 Candidate Recommended Jobs Page
 
 Route gợi ý:
 
 ```text
-/recruiter/assessments
+/candidate/recommended-jobs
 ```
+
+hoặc route phù hợp với convention hiện tại.
 
 UI cần có:
 
-* Header: “Quản lý bài đánh giá”
-* Button tạo assessment.
-* Search/filter nếu API hỗ trợ.
-* Filter theo status nếu API hỗ trợ.
-* Filter theo job nếu API hỗ trợ.
+* Header: “Việc làm phù hợp với bạn”
+* Subtitle ngắn: dựa trên kỹ năng, vị trí, kinh nghiệm, mong muốn làm việc.
+* Danh sách recommended jobs.
+* Filter/sort nếu API hỗ trợ.
 * Pagination nếu API hỗ trợ.
 * Loading skeleton.
 * Empty state.
 * Error state.
-* Table hoặc card list compact.
+* CTA cập nhật preference nếu chưa có dữ liệu gợi ý.
+* CTA refresh recommendation nếu API hỗ trợ.
 
-Mỗi item hiển thị:
+Mỗi job card nên hiển thị:
 
-* Assessment title.
-* Job liên quan nếu có.
-* Question count nếu có.
-* Time limit nếu có.
-* Status badge.
-* Created at/updated at.
-* Số candidate đã làm nếu có.
-* Action:
+* Job title.
+* Company name/logo.
+* Location.
+* Salary.
+* Skills/tags.
+* Work mode.
+* Employment type.
+* Level.
+* Recommendation score nếu API có.
+* Reason/matched skills nếu API có.
+* Button xem chi tiết.
+* Button lưu job nếu job module có.
+* Button apply nếu flow apply có.
 
-  * View detail.
-  * Edit.
-  * Manage questions.
-  * Assign to candidate/application.
-  * View submissions.
-  * Publish/close.
-  * Delete.
+### 9.2 Recommendation Reason UI
 
-Chỉ hiển thị action nếu API và trạng thái cho phép.
+Nếu API trả về lý do gợi ý, hiển thị rõ:
 
-### 2. Create / Update Assessment Form
+* “Phù hợp vì bạn có kỹ năng: Java, Spring Boot, MySQL”
+* “Phù hợp với địa điểm mong muốn: Hà Nội”
+* “Phù hợp với hình thức làm việc: Remote/Hybrid/Onsite”
+* “Mức độ phù hợp: 86%”
+
+Không hiển thị JSON raw.
+
+Score UI:
+
+* > = 80: Rất phù hợp
+* 60–79: Phù hợp
+* 40–59: Có thể cân nhắc
+* < 40: Ít phù hợp
+
+Chỉ dùng mapping này nếu API không trả label sẵn. Nếu API trả label/recommendationLevel thì ưu tiên dùng API.
+
+### 9.3 Candidate Preference Setup Page/Form
+
+Nếu API yêu cầu preference:
 
 Route gợi ý:
 
 ```text
-/recruiter/assessments/create
-/recruiter/assessments/:id/edit
+/candidate/job-preferences
 ```
 
-Form phải map đúng request body trong docs.
+Form cần map đúng request body trong docs.
 
-Các field thường có, chỉ dùng nếu API doc có:
+Các field thường có, chỉ dùng nếu docs có:
 
-* title
-* description
-* jobId
-* durationMinutes/timeLimit
-* passingScore
-* maxAttempts
-* startAt
-* endAt/deadline
-* status
-* instruction
-* questionIds nếu API yêu cầu
+* desiredJobTitles
+* preferredLocations
+* preferredSkills
+* workMode
+* employmentType
+* candidateLevel
+* minSalary
+* maxSalary
+* salaryCurrency
+* experienceYears
+* industry
+* companySize
+* remotePreference
+* openToRelocation
 
 Validation:
 
-* Title required.
-* Job required nếu API yêu cầu.
-* Time limit > 0 nếu có.
-* Passing score trong khoảng hợp lệ nếu có.
-* Deadline không được trước start time nếu có.
-* Description/instruction không vượt quá max length nếu docs có.
+* Required fields theo docs.
+* Salary min <= salary max.
+* Experience >= 0.
+* Ít nhất một skill/job title/location nếu nghiệp vụ yêu cầu.
+* Không cho submit form invalid.
+* Hiển thị lỗi gần field.
 
-UI form nên chia section:
+UX:
 
-* Thông tin bài đánh giá.
-* Cấu hình thời gian.
-* Liên kết job/candidate.
-* Hướng dẫn làm bài.
-* Cài đặt trạng thái.
+* Form compact, chia section:
 
-### 3. Manage Questions
+  * Vai trò mong muốn.
+  * Kỹ năng.
+  * Địa điểm & hình thức làm việc.
+  * Mức lương.
+  * Kinh nghiệm.
+* Có save/update button.
+* Có loading khi submit.
+* Success feedback sau khi lưu.
+* Sau khi lưu có thể redirect về recommended jobs nếu hợp lý.
 
-Route gợi ý:
+### 9.4 First Login / Onboarding Preference
 
-```text
-/recruiter/assessments/:id/questions
-```
+Nếu docs có flow first login/preference:
 
-UI cần có:
+* Khi candidate chưa có preference, hiển thị onboarding card.
+* Không ép flow nếu API không yêu cầu.
+* Nếu hệ thống có flag `hasCompletedPreference` hoặc tương tự, dùng đúng field đó.
+* Có CTA “Thiết lập gợi ý việc làm”.
+* Sau khi hoàn tất, đưa candidate tới trang recommended jobs.
 
-* Danh sách câu hỏi.
-* Button thêm câu hỏi.
-* Edit/delete question.
-* Reorder nếu API hỗ trợ.
-* Preview câu hỏi.
-* Confirm trước khi xóa.
-* Empty state nếu chưa có câu hỏi.
+### 9.5 Feedback cho recommendation
 
-Question type nếu API có:
+Nếu API hỗ trợ feedback:
 
-* MULTIPLE_CHOICE
-* SINGLE_CHOICE
-* ESSAY
-* TRUE_FALSE
-* CODING
-* hoặc enum đúng trong `recruiter-assessment.md`.
+Implement action:
 
-Form tạo/sửa question:
-
-* questionText/content required.
-* type required.
-* score/point required nếu API có.
-* options required với multiple choice/single choice.
-* correctAnswer required nếu auto grading.
-* explanation nếu API có.
-* coding language/test cases nếu API có.
-* validation không cho tạo MCQ thiếu options.
-* validation không cho submit nếu không có correct answer trong auto-score question.
-
-### 4. Assign Assessment
-
-Nếu API có assign/gửi assessment:
-
-Route/modal gợi ý:
-
-```text
-/recruiter/assessments/:id/assign
-```
-
-hoặc modal từ list/detail.
-
-UI cần:
-
-* Chọn job/application/candidate theo API yêu cầu.
-* Hiển thị candidate info nếu assign theo application.
-* Deadline nếu API yêu cầu.
-* Message/instruction nếu API có.
-* Confirm trước khi gửi.
-* Loading khi submit.
-* Success feedback sau khi assign.
-* Không cho assign assessment chưa publish nếu nghiệp vụ yêu cầu hoặc API trả lỗi.
-
-### 5. Recruiter Assessment Detail
-
-Route gợi ý:
-
-```text
-/recruiter/assessments/:id
-```
-
-UI hiển thị:
-
-* Title.
-* Description.
-* Job liên quan.
-* Status.
-* Time limit.
-* Passing score.
-* Question count.
-* Created at/updated at.
-* Action buttons phù hợp trạng thái.
-* Danh sách câu hỏi preview.
-* Danh sách candidate/submission summary nếu API có.
-
-### 6. Recruiter Submissions / Results
-
-Nếu API có submissions:
-
-Route gợi ý:
-
-```text
-/recruiter/assessments/:id/submissions
-/recruiter/assessment-submissions/:submissionId
-```
-
-UI list:
-
-* Candidate name/email.
-* Job/application nếu có.
-* Status.
-* Score.
-* Passed/failed.
-* Submitted at.
-* Duration used nếu có.
-* Action view detail/grade.
-
-UI detail:
-
-* Candidate info.
-* Assessment info.
-* Total score.
-* Passing score.
-* Result badge.
-* Answers by question.
-* Correct/incorrect indication nếu API có.
-* Essay answer nếu có.
-* Manual grading form nếu API hỗ trợ.
-* Recruiter note/feedback nếu API hỗ trợ.
-
-### 7. Candidate Assessment List
-
-Nếu API có candidate side:
-
-Route gợi ý:
-
-```text
-/candidate/assessments
-```
+* Interested.
+* Not interested.
+* Hide this job.
+* Not relevant.
+* Save preference signal.
 
 UI:
 
-* Danh sách bài được giao.
-* Status:
+* Không làm rối job card.
+* Dùng menu nhỏ hoặc button gọn.
+* Sau feedback, update UI/refetch.
+* Xử lý lỗi 409/404/403.
+* Không xóa job khỏi UI nếu API không xác nhận thành công.
 
-  * NOT_STARTED
-  * IN_PROGRESS
-  * SUBMITTED
-  * EXPIRED
-  * PASSED
-  * FAILED
-  * hoặc enum đúng docs.
-* Job liên quan.
-* Deadline.
-* Time limit.
-* Button:
+## 10. Integration với Job module
 
-  * Start
-  * Continue
-  * View result nếu API cho phép.
+Tính năng recommendation phải reuse Job module nếu đã có:
 
-### 8. Candidate Take Assessment Page
+* Reuse JobCard nếu phù hợp.
+* Reuse JobDetail route.
+* Reuse save/favorite API nếu có.
+* Reuse apply job flow nếu đã có.
+* Reuse skill badge/status badge/pagination nếu đã có.
+* Không tạo job detail page mới riêng nếu `/jobs/:id` đã tồn tại.
+* Click recommended job phải đi tới job detail chuẩn.
 
-Nếu API có làm bài:
+## 11. Routing/Menu
 
-Route gợi ý:
+Thêm menu/entry hợp lý nếu project có navbar/sidebar/profile menu.
+
+Candidate:
 
 ```text
-/candidate/assessments/:id/take
+Việc làm gợi ý
+Gợi ý cho bạn
+Recommended Jobs
 ```
 
-Yêu cầu UX:
+Preference:
 
-* Hiển thị instruction trước khi bắt đầu nếu API có start endpoint.
-* Timer nếu có timeLimit.
-* Question navigation.
-* Save local state tạm thời nếu project cho phép, nhưng không gửi API ngoài docs.
-* Không tự auto-submit nếu API không hỗ trợ hoặc chưa chắc.
-* Confirm trước khi submit.
-* Disable submit khi thiếu required answers nếu nghiệp vụ yêu cầu.
-* Sau submit hiển thị success/result theo API.
-* Xử lý hết hạn/expired.
-* Cảnh báo rời trang nếu đang làm bài nếu project có pattern.
+```text
+Cài đặt gợi ý việc làm
+Job Preferences
+```
 
-Question UI:
+Không thêm menu cho recruiter/admin nếu docs không yêu cầu.
 
-* Single choice: radio.
-* Multiple choice: checkbox.
-* Essay: textarea.
-* True/False: radio.
-* Coding nếu có: editor đơn giản hoặc textarea nếu project chưa có code editor.
-* Không render question type chưa hỗ trợ một cách crash; hiển thị fallback rõ.
+## 12. UI Style bắt buộc
 
-## UI Style bắt buộc
+Bám theo `docs/ai-fe/ui-rules.md` và style WorkHub hiện tại.
 
-Bám theo `docs/ai-fe/ui-rules.md` và phong cách WorkHub/ITviec:
+Yêu cầu:
 
-* Clean, compact, chuyên nghiệp.
+* Phong cách website tìm việc chuyên nghiệp giống ITviec.
+* Clean, compact, thực tế.
 * Không gradient màu mè.
 * Không spacing quá lớn.
-* Không dashboard generic rối mắt.
-* Card/table rõ hierarchy.
-* Form dễ đọc.
-* Button CTA rõ.
-* Badge status dễ nhận biết.
-* Assessment-taking UI phải tập trung, ít nhiễu.
-* Không dùng emoji lạm dụng.
-* Không text demo/test.
+* Không dashboard generic.
+* Không text demo/fake.
+* Card job dễ scan.
+* Score/reason hiển thị rõ nhưng không lấn át job info.
+* CTA rõ: “Xem chi tiết”, “Ứng tuyển”, “Lưu việc”.
+* Empty state phải có hướng xử lý: cập nhật preference/tìm job khác.
+* Responsive tốt desktop/tablet/mobile.
 
-Gợi ý status badge:
-
-* Draft: xám.
-* Published/Active: xanh.
-* Closed/Expired: xám đậm.
-* Pending/In progress: vàng/cam.
-* Submitted/Completed: xanh.
-* Failed/Rejected: đỏ.
-
-Chỉ dùng nếu API không có label/color sẵn.
-
-## State Handling
+## 13. State Handling
 
 Bắt buộc xử lý:
 
 * Initial loading.
 * Submit loading.
-* Mutation loading.
-* Empty state.
+* Empty recommendation.
+* Empty preference.
 * API error.
 * Validation error.
-* Unauthorized 401.
-* Forbidden 403.
-* Not found 404.
-* Conflict 409.
-* Expired/closed assessment.
+* 401 unauthorized.
+* 403 forbidden.
+* 404 not found.
+* 409 conflict.
 * Network error.
 * Pagination state.
 * Filter state.
-* Refetch sau create/update/delete/assign/submit/grade.
+* Refetch sau update preference/feedback.
+* Null/undefined field từ API.
 
-Không để UI crash nếu field null/undefined.
+Không để UI crash nếu response thiếu field.
 
-## Integration với module khác
-
-Assessment có thể liên quan đến:
-
-* Job module.
-* Candidate application module.
-* Resume module.
-* Notification module nếu có.
-* ATS screening nếu assessment được tạo sau ATS.
-
-Yêu cầu:
-
-* Reuse job selector/service nếu đã có.
-* Reuse candidate/application data nếu đã có.
-* Không tạo duplicate page nếu application/job page đã tồn tại.
-* Có thể thêm CTA “Create Assessment” hoặc “Send Assessment” ở job/application detail nếu phù hợp và API hỗ trợ.
-* Không làm vỡ flow apply/job/resume hiện có.
-
-## Routing/Menu
-
-Thêm entry menu hợp lý nếu project có sidebar/navbar:
-
-Recruiter:
-
-```text
-Assessments
-Bài đánh giá
-```
-
-Candidate nếu API có:
-
-```text
-My Assessments
-Bài đánh giá của tôi
-```
-
-Admin nếu API có:
-
-```text
-Assessment Management
-```
-
-Không thêm menu nếu role không có quyền.
-
-## Documentation Update
+## 14. Documentation Update
 
 Sau khi code xong, cập nhật:
 
 ```text
-docs/ai-fe/modules/recruiter-assessment.md
+docs/ai-fe/modules/job-recommendation.md
 ```
 
 Nội dung update gồm:
@@ -596,18 +416,17 @@ Nội dung update gồm:
 * Component đã tạo/sửa.
 * Service/API function đã tạo/sửa.
 * Types/interfaces đã tạo/sửa.
-* Flow recruiter tạo/quản lý assessment.
-* Flow quản lý câu hỏi.
-* Flow assign assessment.
-* Flow candidate làm bài nếu có.
-* Flow recruiter xem/chấm submissions nếu có.
+* Flow candidate xem job recommendation.
+* Flow setup/update preference.
+* Flow feedback nếu có.
+* Integration với job detail/save/apply.
 * State/loading/error đã xử lý.
 * Role guard đã áp dụng.
 * Edge cases còn lưu ý.
 
 Không viết lan man. Chỉ ghi thay đổi thực tế để dev/AI agent sau maintain được.
 
-## Verification
+## 15. Verification
 
 Sau khi implement xong, chạy đúng package manager hiện tại.
 
@@ -629,13 +448,13 @@ Nếu lỗi:
 * Chạy lại.
 * Không bỏ qua lỗi TypeScript/build/lint.
 
-## Báo cáo cuối cùng
+## 16. Báo cáo cuối cùng
 
 Sau khi hoàn thành, báo cáo rõ:
 
 * Đã đọc những file docs nào.
 * Đã tạo/sửa những file nào.
-* Đã implement những route nào.
+* Đã implement route nào.
 * Đã tích hợp API nào.
 * Đã xử lý role guard nào.
 * Đã chạy command nào.
