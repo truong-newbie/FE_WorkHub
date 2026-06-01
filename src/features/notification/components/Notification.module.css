@@ -1,0 +1,260 @@
+.bellWrap {
+    position: relative;
+}
+
+.bellButton {
+    position: relative;
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    border: 1px solid #dee2e6;
+    border-radius: 50%;
+    background: #fff;
+    color: #495057;
+    cursor: pointer;
+}
+
+.bellButton:hover {
+    border-color: #f0a4ab;
+    color: #d91828;
+}
+
+.badge {
+    position: absolute;
+    top: -5px;
+    right: -7px;
+    min-width: 18px;
+    border: 2px solid #fff;
+    border-radius: 999px;
+    background: #ed1b2f;
+    color: #fff;
+    padding: 1px 4px;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    z-index: 1000;
+    width: min(420px, calc(100vw - 24px));
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(33, 37, 41, .13);
+}
+
+.dropdownHeader,
+.pageHeader,
+.filters,
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.dropdownHeader {
+    padding: 13px 14px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.dropdownHeader div {
+    display: grid;
+    gap: 2px;
+}
+
+.dropdownHeader span,
+.meta {
+    color: #858c96;
+    font-size: 11px;
+}
+
+.dropdownHeader button,
+.viewAll,
+.linkButton {
+    border: 0;
+    background: none;
+    color: #d91828;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.dropdownList {
+    max-height: 430px;
+    overflow-y: auto;
+}
+
+.item {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid #e1e5ea;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.compact {
+    border: 0;
+    border-bottom: 1px solid #edf0f2;
+    border-radius: 0;
+}
+
+.unread {
+    background: #fff8f8;
+}
+
+.itemMain {
+    display: grid;
+    min-width: 0;
+    flex: 1;
+    gap: 4px;
+    border: 0;
+    background: transparent;
+    color: #343a40;
+    cursor: pointer;
+    padding: 13px 14px;
+    text-align: left;
+}
+
+.itemHeading {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.itemHeading strong {
+    overflow: hidden;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.unreadDot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: #ed1b2f;
+}
+
+.content {
+    display: -webkit-box;
+    overflow: hidden;
+    color: #69727d;
+    font-size: 13px;
+    line-height: 1.45;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.typeLabel {
+    width: fit-content;
+    border-radius: 999px;
+    background: #f2f4f7;
+    color: #667085;
+    padding: 2px 7px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.deleteButton {
+    align-self: center;
+    border: 0;
+    background: transparent;
+    color: #a4abb4;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.deleteButton:hover {
+    color: #d91828;
+}
+
+.viewAll {
+    display: block;
+    padding: 12px 14px;
+    text-align: center;
+}
+
+.dropdownError {
+    margin: 0;
+    background: #fff4e5;
+    color: #8a4b08;
+    padding: 8px 14px;
+    font-size: 12px;
+}
+
+.empty {
+    margin: 0;
+    color: #737b87;
+    padding: 22px 14px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.page {
+    min-height: calc(100vh - 64px);
+    background: #f5f5f5;
+    padding: 24px;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.pageHeader {
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.pageHeader h1 {
+    color: #202124;
+    font-size: 28px;
+}
+
+.pageHeader p {
+    margin-top: 5px;
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.panel {
+    margin-bottom: 14px;
+    border: 1px solid #dee2e6;
+    border-radius: 9px;
+    background: #fff;
+    padding: 14px;
+}
+
+.filters {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.filters > * {
+    min-width: 180px;
+}
+
+.list {
+    display: grid;
+    gap: 9px;
+}
+
+@media (max-width: 640px) {
+    .page {
+        min-height: calc(100vh - 56px);
+        padding: 18px 14px;
+    }
+
+    .pageHeader,
+    .filters {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}

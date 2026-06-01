@@ -1,0 +1,385 @@
+.page {
+    min-height: calc(100vh - 64px);
+    background: #f5f5f5;
+    padding: 24px;
+}
+
+.container,
+.report {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.pageHeader,
+.panelHeader,
+.heroMeta,
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.pageHeader {
+    align-items: flex-start;
+    margin-bottom: 18px;
+}
+
+.eyebrow {
+    margin-bottom: 5px;
+    color: #ed1b2f;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.pageHeader h1,
+.scoreHero h1 {
+    color: #202124;
+    font-size: 28px;
+    line-height: 1.25;
+}
+
+.pageHeader p,
+.muted {
+    margin-top: 5px;
+    color: #6c757d;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.scoreHero,
+.panel,
+.breakdownCard,
+.rankingPanel {
+    border: 1px solid #dee2e6;
+    border-radius: 9px;
+    background: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.035);
+}
+
+.scoreHero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+}
+
+.heroMeta {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 12px;
+    color: #737b87;
+    font-size: 12px;
+}
+
+.heroMeta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.overallScore {
+    display: grid;
+    min-width: 152px;
+    gap: 3px;
+    border-left: 1px solid #e1e4e8;
+    padding-left: 20px;
+    text-align: right;
+}
+
+.overallScore span,
+.breakdownCard span {
+    color: #737b87;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.overallScore strong {
+    color: #ed1b2f;
+    font-size: 35px;
+}
+
+.overallScore small,
+.breakdownCard small {
+    color: #737b87;
+    font-size: 12px;
+}
+
+.breakdownGrid,
+.reportGrid {
+    display: grid;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.breakdownGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.reportGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.breakdownCard,
+.panel,
+.rankingPanel {
+    padding: 16px;
+}
+
+.breakdownCard strong {
+    display: block;
+    margin: 7px 0 4px;
+    color: #30343a;
+    font-size: 23px;
+}
+
+.panel {
+    margin-top: 14px;
+}
+
+.reportGrid .panel {
+    margin-top: 0;
+}
+
+.panelHeader {
+    justify-content: flex-start;
+    margin-bottom: 11px;
+    color: #505966;
+}
+
+.panelHeader h2 {
+    color: #30343a;
+    font-size: 17px;
+}
+
+.panelHeader span:not(.scoreBadge) {
+    margin-left: auto;
+    border-radius: 999px;
+    background: #f1f3f5;
+    padding: 3px 7px;
+    color: #68707b;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.skillTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.skillTags span {
+    border-radius: 4px;
+    padding: 5px 8px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.matched {
+    background: #ecfdf3;
+    color: #067647;
+}
+
+.missing {
+    background: #fef3f2;
+    color: #b42318;
+}
+
+.extra {
+    background: #eef4ff;
+    color: #175cd3;
+}
+
+.summary {
+    color: #565e69;
+    font-size: 14px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+.scoreBadge,
+.recommendationBadge,
+.explanationBadge,
+.processingBadge,
+.failedBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    border-radius: 999px;
+    padding: 5px 8px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.scoreBadge small {
+    font-size: 11px;
+}
+
+.recommendationPass {
+    background: #ecfdf3;
+    color: #067647;
+}
+
+.recommendationConsider,
+.explanationFallback {
+    background: #fff4e5;
+    color: #b54708;
+}
+
+.recommendationReject {
+    background: #fef3f2;
+    color: #b42318;
+}
+
+.recommendationPending {
+    background: #f2f4f7;
+    color: #475467;
+}
+
+.explanationAi {
+    background: #eef4ff;
+    color: #175cd3;
+}
+
+.insightList {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding-left: 18px;
+    color: #565e69;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.explanationMeta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+    color: #68707b;
+    font-size: 13px;
+}
+
+.summaryPreview {
+    display: -webkit-box;
+    overflow: hidden;
+    max-width: 330px;
+    color: #68707b;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 1.45;
+}
+
+.strong {
+    background: #ecfdf3;
+    color: #067647;
+}
+
+.good {
+    background: #eef4ff;
+    color: #175cd3;
+}
+
+.partial {
+    background: #fff4e5;
+    color: #b54708;
+}
+
+.weak,
+.failedBadge {
+    background: #fef3f2;
+    color: #b42318;
+}
+
+.pending {
+    background: #f2f4f7;
+    color: #475467;
+}
+
+.processingBadge {
+    background: #fff4e5;
+    color: #b54708;
+}
+
+.actions {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.detailLink {
+    color: #d91828;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.rankingPanel {
+    overflow-x: auto;
+}
+
+.rankingTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.rankingTable th,
+.rankingTable td {
+    border-bottom: 1px solid #e7eaee;
+    padding: 11px 9px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.rankingTable th {
+    color: #68707b;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.rankingTable td {
+    color: #3d4652;
+}
+
+.empty {
+    border: 1px dashed #cfd4da;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #68707b;
+    padding: 22px;
+    text-align: center;
+    font-size: 14px;
+}
+
+@media (max-width: 760px) {
+    .page {
+        min-height: calc(100vh - 56px);
+        padding: 18px 14px;
+    }
+
+    .scoreHero,
+    .pageHeader {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .overallScore {
+        border-top: 1px solid #e1e4e8;
+        border-left: 0;
+        padding-top: 13px;
+        padding-left: 0;
+        text-align: left;
+    }
+
+    .breakdownGrid,
+    .reportGrid {
+        grid-template-columns: 1fr;
+    }
+}

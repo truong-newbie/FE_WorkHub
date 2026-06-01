@@ -1,63 +1,199 @@
+/* ITviec-style Professional Job Portal Auth Layout */
+
 .authPage {
     min-height: 100vh;
-    background: #050505;
-    display: grid;
-    place-items: center;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 24px;
 }
 
-.panel {
-    width: min(100%, 380px);
-    border: 1px solid #333333;
-    border-radius: 8px;
-    background: #0f0f0f;
-    padding: 28px;
+/* Two-column layout for desktop */
+.authContainer {
+    width: 100%;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
 }
 
+/* Branding section - left side */
+.brandingSection {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.logo {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ed1b2f;
+    margin-bottom: 8px;
+}
+
+.tagline {
+    font-size: 24px;
+    font-weight: 600;
+    color: #212529;
+    line-height: 1.4;
+    margin-bottom: 16px;
+}
+
+.valueProposition {
+    font-size: 16px;
+    color: #6c757d;
+    line-height: 1.6;
+}
+
+.features {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.featureIcon {
+    color: #ed1b2f;
+    font-size: 20px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.featureText {
+    font-size: 15px;
+    color: #495057;
+    line-height: 1.5;
+}
+
+/* Form panel - right side */
+.panel {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Single column layout for simple forms */
+.authPageSimple {
+    min-height: 100vh;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.panelSimple {
+    width: 100%;
+    max-width: 440px;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Header */
 .header {
-    display: grid;
-    gap: 8px;
-    margin-bottom: 22px;
+    margin-bottom: 32px;
     text-align: center;
 }
 
 .header h1 {
-    color: #ffffff;
-    font-size: 26px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 8px;
 }
 
 .header p {
-    color: #b8b8b8;
-    font-size: 14px;
+    font-size: 15px;
+    color: #6c757d;
+    line-height: 1.5;
 }
 
+/* Form */
 .form {
-    display: grid;
-    gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .field {
-    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.field span {
-    color: #d8d8d8;
+.field label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #212529;
 }
 
 .field input,
 .field select {
-    background: #151515;
-    border-color: #3d3d3d;
-    color: #ffffff;
+    min-height: 44px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 15px;
+    color: #212529;
+    background: white;
+    transition: border-color 0.2s;
 }
 
+.field input:focus,
+.field select:focus {
+    outline: none;
+    border-color: #ed1b2f;
+    box-shadow: 0 0 0 3px rgba(237, 27, 47, 0.1);
+}
+
+.field input::placeholder {
+    color: #adb5bd;
+}
+
+/* Primary button - ITviec orange/red */
+.submitButton {
+    min-height: 48px;
+    background: #ed1b2f;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 8px;
+}
+
+.submitButton:hover:not(:disabled) {
+    background: #d91828;
+}
+
+.submitButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Divider */
 .divider {
     display: flex;
     align-items: center;
-    gap: 10px;
-    color: #9b9b9b;
-    font-size: 13px;
-    margin: 18px 0;
+    gap: 16px;
+    margin: 24px 0;
+    color: #6c757d;
+    font-size: 14px;
 }
 
 .divider::before,
@@ -65,28 +201,180 @@
     content: "";
     flex: 1;
     height: 1px;
-    background: #333333;
+    background: #dee2e6;
 }
 
+/* Social login buttons */
 .socialActions {
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.socialButton {
+    min-height: 48px;
+    background: white;
+    color: #212529;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 10px;
 }
 
+.socialButton:hover:not(:disabled) {
+    background: #f8f9fa;
+    border-color: #adb5bd;
+}
+
+.socialButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.socialIcon {
+    font-size: 20px;
+}
+
+/* Footer links */
 .footer {
-    margin-top: 18px;
-    color: #cfcfcf;
-    font-size: 14px;
+    margin-top: 24px;
     text-align: center;
+    font-size: 14px;
+    color: #6c757d;
 }
 
 .footer a {
-    color: #58a6ff;
-    font-weight: 700;
+    color: #ed1b2f;
+    font-weight: 600;
     text-decoration: none;
+    transition: color 0.2s;
 }
 
+.footer a:hover {
+    color: #d91828;
+    text-decoration: underline;
+}
+
+/* Step indicator for multi-step flows */
+.stepIndicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 32px;
+}
+
+.step {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e9ecef;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.stepActive {
+    background: #ed1b2f;
+    color: white;
+}
+
+.stepCompleted {
+    background: #28a745;
+    color: white;
+}
+
+.stepLine {
+    width: 40px;
+    height: 2px;
+    background: #e9ecef;
+}
+
+/* Secondary button */
+.secondaryButton {
+    min-height: 48px;
+    background: white;
+    color: #212529;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.secondaryButton:hover:not(:disabled) {
+    background: #f8f9fa;
+    border-color: #adb5bd;
+}
+
+.secondaryButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .authContainer {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .brandingSection {
+        display: none;
+    }
+
+    .panel {
+        padding: 32px 24px;
+    }
+
+    .panelSimple {
+        padding: 32px 24px;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+
+    .logo {
+        font-size: 28px;
+    }
+
+    .tagline {
+        font-size: 20px;
+    }
+}
+
+/* Utility classes */
 .fullWidth {
     width: 100%;
 }
 
+.textCenter {
+    text-align: center;
+}
+
+.mt8 {
+    margin-top: 8px;
+}
+
+.mt16 {
+    margin-top: 16px;
+}
+
+.mb16 {
+    margin-bottom: 16px;
+}
+
+.mb24 {
+    margin-bottom: 24px;
+}

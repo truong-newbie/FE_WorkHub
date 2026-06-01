@@ -1,0 +1,118 @@
+.empty {
+    border: 1px dashed #ced4da;
+    border-radius: 8px;
+    padding: 24px 16px;
+    text-align: center;
+}
+
+.empty h3 {
+    color: #343a40;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.empty p,
+.heading p {
+    color: #6c757d;
+    font-size: 13px;
+}
+
+.heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.eyebrow {
+    color: #ed1b2f !important;
+    font-weight: 700;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.heading h3 {
+    color: #212529;
+    font-size: 18px;
+    margin-bottom: 3px;
+}
+
+.details {
+    display: grid;
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.details div {
+    display: grid;
+    gap: 3px;
+}
+
+.details dt {
+    color: #6c757d;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.details dd {
+    color: #212529;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.reviewBox {
+    display: grid;
+    gap: 12px;
+    padding-top: 14px;
+    border-top: 1px solid #e9ecef;
+}
+
+.reviewBox label {
+    display: grid;
+    gap: 6px;
+    color: #262626;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.reviewBox small {
+    color: #6c757d;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.reviewBox textarea {
+    resize: vertical;
+    border: 1px solid #d7d7d7;
+    border-radius: 6px;
+    padding: 10px;
+    font: inherit;
+    line-height: 1.5;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.processed {
+    border-radius: 6px;
+    background: #f2f4f7;
+    color: #475467;
+    font-size: 13px;
+    padding: 10px;
+}
+
+@media (max-width: 480px) {
+    .heading,
+    .actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}

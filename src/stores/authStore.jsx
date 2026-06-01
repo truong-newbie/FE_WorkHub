@@ -5,6 +5,7 @@ import {
     clearAuthTokens,
     getAccessToken,
     getRefreshToken,
+    getUserId,
     setUserId,
     setAccessToken,
     setRefreshToken,
@@ -48,7 +49,10 @@ function normalizeRoles(authUser, loginResult) {
 export function AuthProvider({children}) {
     const [accessToken, setAccessTokenState] = useState(() => getAccessToken());
     const [refreshToken, setRefreshTokenState] = useState(() => getRefreshToken());
-    const [user, setUser] = useState(() => decodeUserFromToken(getAccessToken()));
+    const [user, setUser] = useState(() => {
+        const decodedUser = decodeUserFromToken(getAccessToken());
+        return decodedUser ? {...decodedUser, id: getUserId() || decodedUser.id || decodedUser.sub} : null;
+    });
     const [role, setRole] = useState(() => normalizeRoles(decodeUserFromToken(getAccessToken()))[0] || '');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -98,8 +102,24 @@ export function AuthProvider({children}) {
 
         setAccessTokenState(storedAccessToken);
         setRefreshTokenState(storedRefreshToken);
-        setUser(decodedUser);
+        setUser(decodedUser ? {...decodedUser, id: getUserId() || decodedUser.id || decodedUser.sub} : null);
         setRole(hydratedRoles[0] || '');
+    }, []);
+
+    const updateCurrentUser = useCallback((nextUser) => {
+        setUser((currentUser) => ({
+            ...currentUser,
+            ...nextUser,
+            id: nextUser?.id || currentUser?.id,
+        }));
+
+        if (nextUser?.id) {
+            setUserId(nextUser.id);
+        }
+
+        if (nextUser?.roleName || nextUser?.role) {
+            setRole(normalizeRole(nextUser.roleName || nextUser.role));
+        }
     }, []);
 
     const login = useCallback(async ({email, password}) => {
@@ -168,6 +188,7 @@ export function AuthProvider({children}) {
         logout,
         clearSession,
         hydrateAuthFromStorage,
+        updateCurrentUser,
     }), [
         accessToken,
         refreshToken,
@@ -182,6 +203,7 @@ export function AuthProvider({children}) {
         logout,
         clearSession,
         hydrateAuthFromStorage,
+        updateCurrentUser,
     ]);
 
     return (

@@ -1,0 +1,286 @@
+.page {
+    min-height: 100vh;
+    background: #f6f7f9;
+    padding: 28px;
+}
+
+.header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 1440px;
+    margin: 0 auto 18px;
+}
+
+.header h1 {
+    color: #171717;
+    font-size: 28px;
+    line-height: 1.2;
+}
+
+.header p,
+.panelHeader p {
+    color: #686c73;
+    margin-top: 4px;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 12px;
+    max-width: 1440px;
+    margin: 0 auto 18px;
+}
+
+.statCard,
+.panel {
+    border: 1px solid #e3e5e8;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.statCard {
+    display: grid;
+    gap: 6px;
+    padding: 14px;
+}
+
+.statCard span {
+    color: #686c73;
+    font-size: 13px;
+}
+
+.statCard strong {
+    color: #151515;
+    font-size: 24px;
+}
+
+.panel {
+    padding: 18px;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.filterActions {
+    display: flex;
+    align-items: end;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.contentGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(360px, 0.85fr);
+    gap: 18px;
+    max-width: 1440px;
+    margin: 18px auto 0;
+}
+
+.panelHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.panelHeader h2 {
+    color: #171717;
+    font-size: 20px;
+}
+
+.tableWrap {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 920px;
+}
+
+.table th,
+.table td {
+    border-bottom: 1px solid #eceef1;
+    padding: 12px 10px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.table th {
+    color: #555b64;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.userCell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.userCell div {
+    display: grid;
+    gap: 2px;
+}
+
+.userCell strong {
+    color: #202124;
+}
+
+.userCell span {
+    color: #686c73;
+    font-size: 13px;
+}
+
+.avatar,
+.avatarFallback {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+}
+
+.avatar {
+    object-fit: cover;
+}
+
+.avatarFallback {
+    display: grid;
+    place-items: center;
+    background: #155eef;
+    color: #ffffff;
+    font-weight: 800;
+}
+
+.roleBadge,
+.activeBadge,
+.lockedBadge,
+.deletedBadge {
+    display: inline-flex;
+    border-radius: 999px;
+    padding: 5px 9px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.roleBadge {
+    background: #eef4ff;
+    color: #155eef;
+}
+
+.activeBadge {
+    background: #ecfdf3;
+    color: #067647;
+}
+
+.lockedBadge {
+    background: #fff4e5;
+    color: #b54708;
+}
+
+.deletedBadge {
+    background: #fef3f2;
+    color: #b42318;
+}
+
+.rowActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.rowActions button {
+    min-height: 32px;
+    padding: 6px 9px;
+    font-size: 13px;
+}
+
+.userForm {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.fullRow {
+    grid-column: 1 / -1;
+}
+
+.textareaField {
+    display: grid;
+    gap: 6px;
+}
+
+.textareaField span {
+    color: #262626;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.textarea {
+    min-height: 86px;
+    resize: vertical;
+    border: 1px solid #d7d7d7;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font: inherit;
+}
+
+.formActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.empty {
+    color: #686c73;
+    text-align: center;
+}
+
+@media (max-width: 1180px) {
+    .statsGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .filters {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .contentGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .page {
+        padding: 18px;
+    }
+
+    .header {
+        display: grid;
+    }
+
+    .statsGrid,
+    .filters,
+    .userForm {
+        grid-template-columns: 1fr;
+    }
+
+    .filterActions,
+    .formActions {
+        justify-content: stretch;
+    }
+
+    .filterActions button,
+    .formActions button {
+        width: 100%;
+    }
+}

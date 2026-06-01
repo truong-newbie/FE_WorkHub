@@ -1,8 +1,7 @@
 import {useEffect, useState} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
-import Button from '../../components/ui/Button.jsx';
+import {FaLock, FaCheckCircle} from 'react-icons/fa';
 import ErrorMessage from '../../components/ui/ErrorMessage.jsx';
-import Input from '../../components/ui/Input.jsx';
 import {useToast} from '../../components/ui/useToast.js';
 import {resetPassword} from '../../services/authApi.js';
 import styles from './AuthPage.module.css';
@@ -49,12 +48,12 @@ export default function ResetPasswordPage() {
             });
             clearForgotPasswordEmail();
             showToast({
-                message: typeof result === 'string' ? result : 'Password changed successfully',
+                message: typeof result === 'string' ? result : 'Đổi mật khẩu thành công',
                 type: 'success',
             });
             navigate('/login', {replace: true});
         } catch (error) {
-            const message = error.message || 'Failed to reset password';
+            const message = error.message || 'Đổi mật khẩu thất bại';
             setErrorMessage(message);
             showToast({message, type: 'error'});
         } finally {
@@ -63,42 +62,69 @@ export default function ResetPasswordPage() {
     };
 
     return (
-        <main className={styles.authPage}>
-            <section className={styles.panel}>
+        <main className={styles.authPageSimple}>
+            <section className={styles.panelSimple}>
+                <div className={styles.stepIndicator}>
+                    <div className={`${styles.step} ${styles.stepCompleted}`}>1</div>
+                    <div className={styles.stepLine}></div>
+                    <div className={`${styles.step} ${styles.stepCompleted}`}>2</div>
+                    <div className={styles.stepLine}></div>
+                    <div className={`${styles.step} ${styles.stepActive}`}>3</div>
+                </div>
+
                 <div className={styles.header}>
-                    <h1>Reset Password</h1>
-                    <p>Create a new password for your WorkHub account.</p>
+                    <h1>Đặt lại mật khẩu</h1>
+                    <p>Tạo mật khẩu mới cho tài khoản WorkHub của bạn</p>
                 </div>
 
                 <form className={styles.form} onSubmit={handleSubmit}>
-                    <Input
-                        className={styles.field}
-                        label="New password"
-                        name="newPassword"
-                        type="password"
-                        autoComplete="new-password"
-                        value={newPassword}
-                        onChange={(event) => setNewPassword(event.target.value)}
-                        required
-                    />
-                    <Input
-                        className={styles.field}
-                        label="Confirm password"
-                        name="confirmPassword"
-                        type="password"
-                        autoComplete="new-password"
-                        value={confirmPassword}
-                        onChange={(event) => setConfirmPassword(event.target.value)}
-                        required
-                    />
-                    <ErrorMessage message={errorMessage}/>
-                    <Button className={styles.fullWidth} type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? 'Resetting...' : 'Reset password'}
-                    </Button>
+                    <div className={styles.field}>
+                        <label htmlFor="newPassword">
+                            <FaLock style={{display: 'inline', marginRight: '6px'}}/>
+                            Mật khẩu mới
+                        </label>
+                        <input
+                            id="newPassword"
+                            name="newPassword"
+                            type="password"
+                            autoComplete="new-password"
+                            placeholder="Tối thiểu 6 ký tự"
+                            value={newPassword}
+                            onChange={(event) => setNewPassword(event.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className={styles.field}>
+                        <label htmlFor="confirmPassword">
+                            <FaCheckCircle style={{display: 'inline', marginRight: '6px'}}/>
+                            Xác nhận mật khẩu
+                        </label>
+                        <input
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            type="password"
+                            autoComplete="new-password"
+                            placeholder="Nhập lại mật khẩu mới"
+                            value={confirmPassword}
+                            onChange={(event) => setConfirmPassword(event.target.value)}
+                            required
+                        />
+                    </div>
+
+                    {errorMessage && <ErrorMessage message={errorMessage}/>}
+
+                    <button
+                        type="submit"
+                        className={styles.submitButton}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? 'Đang đặt lại mật khẩu...' : 'Đặt lại mật khẩu'}
+                    </button>
                 </form>
 
                 <p className={styles.footer}>
-                    Back to <Link to="/login">login</Link>
+                    Quay lại <Link to="/login">đăng nhập</Link>
                 </p>
             </section>
         </main>

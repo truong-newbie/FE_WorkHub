@@ -1,9 +1,10 @@
 import {NavLink, useNavigate} from "react-router-dom";
 import styles from './sidebar.module.css';
-import {FaHome, FaUser, FaSignOutAlt, FaSearch} from 'react-icons/fa';
+import {FaHome, FaUser, FaSignOutAlt, FaSearch, FaUsers} from 'react-icons/fa';
 import {useEffect, useRef, useState} from 'react';
 import {searchUsers} from '../services/userApi.js';
 import {useToast} from './ui/useToast.js';
+import {useAuth} from '../stores/useAuth.js';
 
 export default function Sidebar({onLogout}) {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1250);
@@ -14,6 +15,8 @@ export default function Sidebar({onLogout}) {
 
     const navigate = useNavigate();
     const {showToast} = useToast();
+    const {roles} = useAuth();
+    const isAdmin = roles.includes('ADMIN');
 
     const handleSearch = async (e) => {
         const value = e.target.value;
@@ -70,6 +73,12 @@ export default function Sidebar({onLogout}) {
                             <NavLink to="/profile" className={styles.nav_item}>
                                 <FaUser className={styles.nav_icon}/>
                             </NavLink>
+
+                            {isAdmin && (
+                                <NavLink to="/admin/users" className={styles.nav_item}>
+                                    <FaUsers className={styles.nav_icon}/>
+                                </NavLink>
+                            )}
 
                             <NavLink to="/login" onClick={() => onLogout()} className={styles.nav_item}>
                                 <FaSignOutAlt className={styles.nav_icon}/>
@@ -136,6 +145,13 @@ export default function Sidebar({onLogout}) {
                             <FaUser className={styles.nav_icon}/>
                             {!isExpanded && <span className={styles.nav_text}>Profile</span>}
                         </NavLink>
+
+                        {isAdmin && (
+                            <NavLink to="/admin/users" className={styles.nav_item}>
+                                <FaUsers className={styles.nav_icon}/>
+                                {!isExpanded && <span className={styles.nav_text}>Users</span>}
+                            </NavLink>
+                        )}
 
                         <NavLink to="/login" onClick={() => onLogout()} className={styles.nav_item}>
                             <FaSignOutAlt className={styles.nav_icon}/>

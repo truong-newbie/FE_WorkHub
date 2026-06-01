@@ -1,12 +1,13 @@
 import {useState} from 'react';
-import {Link, useNavigate, useSearchParams} from 'react-router-dom';
-import Button from '../../components/ui/Button.jsx';
+import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom';
+import {FaCheckCircle, FaBriefcase, FaUsers, FaRocket} from 'react-icons/fa';
+import {FcGoogle} from 'react-icons/fc';
+import {FaFacebook} from 'react-icons/fa';
 import ErrorMessage from '../../components/ui/ErrorMessage.jsx';
-import Input from '../../components/ui/Input.jsx';
 import {getOAuthAuthorizeUrl} from '../../services/authApi.js';
 import {useAuth} from '../../stores/useAuth.js';
 import {useToast} from '../../components/ui/useToast.js';
-import {getRoleRedirectPath} from './authRedirects.js';
+import {getPostLoginRedirectPath} from './authRedirects.js';
 import styles from './AuthPage.module.css';
 
 export default function LoginPage() {
@@ -16,6 +17,7 @@ export default function LoginPage() {
     const [oauthProvider, setOauthProvider] = useState('');
 
     const navigate = useNavigate();
+    const location = useLocation();
     const [searchParams] = useSearchParams();
     const {login, isLoading} = useAuth();
     const {showToast} = useToast();
@@ -24,10 +26,15 @@ export default function LoginPage() {
         event.preventDefault();
         setErrorMessage('');
 
+        if (!email || !password) {
+            setErrorMessage('Email and password are required');
+            return;
+        }
+
         try {
             const result = await login({email, password});
             showToast({message: 'Logged in successfully', type: 'success'});
-            navigate(getRoleRedirectPath(result.role), {replace: true});
+            navigate(await getPostLoginRedirectPath(result.role, location.state?.from?.pathname), {replace: true});
         } catch (error) {
             const message = error.message || 'Login failed';
             setErrorMessage(message);
@@ -57,68 +64,128 @@ export default function LoginPage() {
 
     return (
         <main className={styles.authPage}>
-            <section className={styles.panel}>
-                <div className={styles.header}>
-                    <h1>WorkHub Login</h1>
-                    <p>Use your WorkHub account to continue.</p>
-                </div>
+            <div className={styles.authContainer}>
+                <section className={styles.brandingSection}>
+                    <div>
+                        <div className={styles.logo}>WorkHub</div>
+                        <h1 className={styles.tagline}>
+                            Tìm việc IT phù hợp, kết nối với nhà tuyển dụng uy tín
+                        </h1>
+                        <p className={styles.valueProposition}>
+                            Nền tảng tuyển dụng IT hàng đầu, kết nối ứng viên tài năng với các công ty công nghệ uy tín.
+                        </p>
+                    </div>
 
-                <form className={styles.form} onSubmit={handleLogin}>
-                    <ErrorMessage message={searchParams.get('error')}/>
-                    <Input
-                        className={styles.field}
-                        label="Email"
-                        name="email"
-                        type="email"
-                        autoComplete="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        required
-                    />
-                    <Input
-                        className={styles.field}
-                        label="Password"
-                        name="password"
-                        type="password"
-                        autoComplete="current-password"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        required
-                    />
-                    <ErrorMessage message={errorMessage}/>
-                    <Button className={styles.fullWidth} type="submit" disabled={isLoading}>
-                        {isLoading ? 'Logging in...' : 'Log in'}
-                    </Button>
-                </form>
+                    <div className={styles.features}>
+                        <div className={styles.feature}>
+                            <FaCheckCircle className={styles.featureIcon}/>
+                            <span className={styles.featureText}>
+                                Hàng nghìn việc làm IT từ các công ty hàng đầu
+                            </span>
+                        </div>
+                        <div className={styles.feature}>
+                            <FaBriefcase className={styles.featureIcon}/>
+                            <span className={styles.featureText}>
+                                Mức lương cạnh tranh và phúc lợi hấp dẫn
+                            </span>
+                        </div>
+                        <div className={styles.feature}>
+                            <FaUsers className={styles.featureIcon}/>
+                            <span className={styles.featureText}>
+                                Kết nối trực tiếp với nhà tuyển dụng
+                            </span>
+                        </div>
+                        <div className={styles.feature}>
+                            <FaRocket className={styles.featureIcon}/>
+                            <span className={styles.featureText}>
+                                Công cụ tìm kiếm thông minh và gợi ý việc làm phù hợp
+                            </span>
+                        </div>
+                    </div>
+                </section>
 
-                <div className={styles.divider}>or</div>
+                <section className={styles.panel}>
+                    <div className={styles.header}>
+                        <h1>Đăng nhập</h1>
+                        <p>Chào mừng bạn quay trở lại với WorkHub</p>
+                    </div>
 
-                <div className={styles.socialActions}>
-                    <Button
-                        className={styles.fullWidth}
-                        variant="secondary"
-                        disabled={Boolean(oauthProvider)}
-                        onClick={() => handleOAuthLogin('google')}
-                    >
-                        {oauthProvider === 'google' ? 'Opening Google...' : 'Continue with Google'}
-                    </Button>
-                    <Button
-                        className={styles.fullWidth}
-                        variant="secondary"
-                        disabled={Boolean(oauthProvider)}
-                        onClick={() => handleOAuthLogin('facebook')}
-                    >
-                        {oauthProvider === 'facebook' ? 'Opening Facebook...' : 'Continue with Facebook'}
-                    </Button>
-                </div>
+                    {searchParams.get('error') && (
+                        <ErrorMessage message={searchParams.get('error')}/>
+                    )}
 
-                <p className={styles.footer}>
-                    Do not have an account? <Link to="/register">Register</Link>
-                </p>
-                <p className={styles.footer}>
-                    <Link to="/forgot-password">Forgot password?</Link>
-                </p>
-            </section>
+                    <form className={styles.form} onSubmit={handleLogin}>
+                        <div className={styles.field}>
+                            <label htmlFor="email">Email</label>
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                autoComplete="email"
+                                placeholder="your.email@example.com"
+                                value={email}
+                                onChange={(event) => setEmail(event.target.value)}
+                                required
+                            />
+                        </div>
+
+                        <div className={styles.field}>
+                            <label htmlFor="password">Mật khẩu</label>
+                            <input
+                                id="password"
+                                name="password"
+                                type="password"
+                                autoComplete="current-password"
+                                placeholder="Nhập mật khẩu"
+                                value={password}
+                                onChange={(event) => setPassword(event.target.value)}
+                                required
+                            />
+                        </div>
+
+                        {errorMessage && <ErrorMessage message={errorMessage}/>}
+
+                        <button
+                            type="submit"
+                            className={styles.submitButton}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+                        </button>
+                    </form>
+
+                    <div className={styles.footer}>
+                        <Link to="/forgot-password">Quên mật khẩu?</Link>
+                    </div>
+
+                    <div className={styles.divider}>hoặc</div>
+
+                    <div className={styles.socialActions}>
+                        <button
+                            type="button"
+                            className={styles.socialButton}
+                            disabled={Boolean(oauthProvider)}
+                            onClick={() => handleOAuthLogin('google')}
+                        >
+                            <FcGoogle className={styles.socialIcon}/>
+                            {oauthProvider === 'google' ? 'Đang mở Google...' : 'Tiếp tục với Google'}
+                        </button>
+                        <button
+                            type="button"
+                            className={styles.socialButton}
+                            disabled={Boolean(oauthProvider)}
+                            onClick={() => handleOAuthLogin('facebook')}
+                        >
+                            <FaFacebook className={styles.socialIcon} style={{color: '#1877f2'}}/>
+                            {oauthProvider === 'facebook' ? 'Đang mở Facebook...' : 'Tiếp tục với Facebook'}
+                        </button>
+                    </div>
+
+                    <p className={styles.footer}>
+                        Chưa có tài khoản? <Link to="/register">Đăng ký ngay</Link>
+                    </p>
+                </section>
+            </div>
         </main>
     );
 }
