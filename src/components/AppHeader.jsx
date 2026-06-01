@@ -15,6 +15,7 @@ import {
 } from 'react-icons/fa';
 import {useAuth} from '../stores/useAuth.js';
 import NotificationBell from '../features/notification/components/NotificationBell.jsx';
+import CandidateChatbotWidget from '../features/chatbot/components/CandidateChatbotWidget.jsx';
 import styles from './AppHeader.module.css';
 
 export default function AppHeader({hideNavigation = false}) {
@@ -505,6 +506,7 @@ export default function AppHeader({hideNavigation = false}) {
                 </div>
             </header>
             {!hideNavigation && renderMobileNav()}
+            {isCandidate && <CandidateChatbotWidget/>}
         </>
     );
 }
